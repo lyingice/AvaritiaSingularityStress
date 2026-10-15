@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="AdditionalModuleElements">
+    <content url="file://$MODULE_DIR$/../.." dumb="true">
+      <excludeFolder url="file://$MODULE_DIR$/../../.gradlehome" />
+      <excludeFolder url="file://$MODULE_DIR$/../../.zcode" />
+      <excludeFolder url="file://$MODULE_DIR$/../../allapis" />
+      <excludeFolder url="file://$MODULE_DIR$/../../allapis/Create-mc1.21.1-dev/.idea" />
+      <excludeFolder url="file://$MODULE_DIR$/../../libs" />
+      <excludeFolder url="file://$MODULE_DIR$/../../run" />
+      <excludeFolder url="file://$MODULE_DIR$/../../run-server-verify" />
+    </content>
+  </component>
+</module>

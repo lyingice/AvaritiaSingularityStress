@@ -1,0 +1,90 @@
+plugins {
+    id 'eclipse'
+    id 'net.neoforged.moddev' version '2.0.141'
+}
+
+version = '0.1'
+base.archivesName = "AvaritiaSingularityStress"
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+sourceSets {
+    main {
+        resources {
+            // Generated resources come first so they override same-named main resources.
+            setSrcDirs([
+                    'src/generated/resources',
+                    'src/main/resources'
+            ])
+        }
+    }
+}
+neoForge {
+    version = "21.1.232"
+
+    runs {
+        client {
+            client()
+
+            def mcreatorJvmOptions = System.getenv('MCREATOR_JVM_OPTIONS')
+            if (mcreatorJvmOptions) {
+                mcreatorJvmOptions.split("\\s+").findAll { it.trim() }.each { arg ->
+                    jvmArgument(arg)
+                }
+            }
+        }
+        server {
+            server()
+        }
+        data {
+            data()
+
+            gameDirectory = file('run/datagen')
+
+            programArgument '--mod'
+            programArgument 'avaritia_singularity_stress'
+
+            programArgument '--output'
+            programArgument file('src/generated/resources').absolutePath
+
+            programArgument '--existing'
+            programArgument file('src/main/resources').absolutePath
+
+            programArgument '--existing'
+            programArgument file('../Avaritia-Integration/integrations/create/build/libs/AvaritiaIntegration-create-neoforge-1.21.1-1.0.1-release.jar').absolutePath
+
+            programArgument '--existing-mod'
+            programArgument 'create'
+
+            programArgument '--all'
+        }
+
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+    }
+
+    mods {
+        avaritia_singularity_stress {
+            sourceSet sourceSets.main
+        }
+    }
+}
+repositories {
+    maven { url = "https://maven.createmod.net" } // Create, Ponder, Flywheel
+    maven { url = "https://maven.ithundxr.dev/snapshots" } // Registrate
+}
+dependencies {
+    // 编译依赖:compileOnly 不进 datagen 运行类路径,FML 便不会加载它们;
+    // 需要运行时的模组(本模组自身、create/ponder/flywheel)另行声明
+    compileOnly fileTree(dir: 'libs', include: '*.jar')
+    implementation("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
+    implementation("net.createmod.ponder:ponder-neoforge:${ponder_version}+mc${minecraft_version}")
+    compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}")
+    runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
+    implementation("com.tterrag.registrate:Registrate:${registrate_version}")
+}
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
