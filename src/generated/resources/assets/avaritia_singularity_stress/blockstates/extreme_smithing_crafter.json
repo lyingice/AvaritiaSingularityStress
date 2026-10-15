@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=east,pointing=down": {
+      "model": "avaritia_singularity_stress:block/extreme_smithing_crafter/block",
+      "y": 90
+    },
+    "facing=east,pointing=left": {
+      "model": "avaritia_singularity_stress:block/extreme_smithing_crafter/block",
+      "y": 90
+    },
+    "facing=east,pointing=right": {
+      "model": "avaritia_singularity_stress:block/extreme_smithing_crafter/block",
+      "y": 90
+    },
+    "facing=east,pointing=up": {
+      "model": "avaritia_singularity_stress:block/extreme_smithing_crafter/block",
+      "y": 90
+    },
+    "facing=north,pointing=down": {
+      "model": "avaritia_singularity_stress:block/extreme_smithing_crafter/block"
+    },
+    "facing=north,pointing=left": {
+      "model": "avaritia_singularity_stress:block/extreme_smithing_crafter/block"
+    },
+    "facing=north,pointing=right": {
+      "model": "avaritia_singularity_stress:block/extreme_smithing_crafter/block"
+    },
+    "facing=north,pointing=up": {
+      "model": "avaritia_singularity_stress:block/extreme_smithing_crafter/block"
+    },
+    "facing=south,pointing=down": {
+      "model": "avaritia_singularity_stress:block/extreme_smithing_crafter/block",
+      "y": 180
+    },
+    "facing=south,pointing=left": {
+      "model": "avaritia_singularity_stress:block/extreme_smithing_crafter/block",
+      "y": 180
+    },
+    "facing=south,pointing=right": {
+      "model": "avaritia_singularity_stress:block/extreme_smithing_crafter/block",
+      "y": 180
+    },
+    "facing=south,pointing=up": {
+      "model": "avaritia_singularity_stress:block/extreme_smithing_crafter/block",
+      "y": 180
+    },
+    "facing=west,pointing=down": {
+      "model": "avaritia_singularity_stress:block/extreme_smithing_crafter/block",
+      "y": 270
+    },
+    "facing=west,pointing=left": {
+      "model": "avaritia_singularity_stress:block/extreme_smithing_crafter/block",
+      "y": 270
+    },
+    "facing=west,pointing=right": {
+      "model": "avaritia_singularity_stress:block/extreme_smithing_crafter/block",
+      "y": 270
+    },
+    "facing=west,pointing=up": {
+      "model": "avaritia_singularity_stress:block/extreme_smithing_crafter/block",
+      "y": 270
+    }
+  }
+}

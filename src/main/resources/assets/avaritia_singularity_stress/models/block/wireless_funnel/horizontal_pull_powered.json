@@ -1,0 +1,11 @@
+{
+  "parent": "create:block/funnel/block_horizontal",
+  "textures": {
+		"back": "avaritia_singularity_stress:block/machine/wireless/funnel_back",
+    "base": "avaritia_singularity_stress:block/machine/wireless/funnel_base",
+    "block": "avaritia_singularity_stress:block/machine/wireless/funnel_inner",
+    "direction": "avaritia_singularity_stress:block/machine/wireless/funnel_pull",
+    "particle": "avaritia_singularity_stress:block/machine/wireless/funnel_inner",
+    "redstone": "avaritia_singularity_stress:block/machine/wireless/funnel_redstone_on"
+  }
+}

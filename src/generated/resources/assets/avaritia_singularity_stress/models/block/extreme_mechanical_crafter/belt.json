@@ -1,0 +1,7 @@
+{
+  "parent": "create:block/mechanical_crafter/belt",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "5": "avaritia_integration:block/create/crystal_matrix_casing"
+  }
+}

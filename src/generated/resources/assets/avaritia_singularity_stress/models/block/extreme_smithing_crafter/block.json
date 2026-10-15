@@ -1,0 +1,12 @@
+{
+  "parent": "create:block/mechanical_crafter/block",
+  "render_type": "minecraft:cutout_mipped",
+  "textures": {
+    "3": "avaritia_singularity_stress:block/extreme_smithing_crafter/crafter_thingies",
+    "4": "avaritia_singularity_stress:block/extreme_smithing_crafter/crafter_side",
+    "5": "avaritia_integration:block/create/crystal_matrix_casing",
+    "7": "avaritia_singularity_stress:block/crystal_block",
+    "8": "avaritia_integration:block/create/matrix_mixer_base_inside",
+    "particle": "avaritia_integration:block/create/crystal_matrix_casing"
+  }
+}

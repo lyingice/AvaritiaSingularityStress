@@ -1,0 +1,10 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "committee.nova.avaritia_singularity_stress.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": ["RotationPropagatorMixin"],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

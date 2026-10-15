@@ -1,0 +1,13 @@
+{
+  "parent": "create:block/rotation_speed_controller/item",
+  "textures": {
+    "0": "avaritia_singularity_stress:block/singularity_rotation_speed_controller/shaft",
+    "1_0": "avaritia_singularity_stress:block/singularity_rotation_speed_controller/controller_body",
+    "1_5": "avaritia_singularity_stress:block/singularity_rotation_speed_controller/controller_top",
+    "3": "avaritia_singularity_stress:block/singularity_rotation_speed_controller/shaft_top",
+    "4": "avaritia_singularity_stress:block/singularity_rotation_speed_controller/gearbox",
+    "7": "avaritia_singularity_stress:block/singularity_rotation_speed_controller/funnel",
+    "9": "avaritia_singularity_stress:block/singularity_rotation_speed_controller/base",
+    "particle": "avaritia_singularity_stress:block/singularity_rotation_speed_controller/gearbox"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "avaritia_singularity_stress:item/wireless_frequency_card"
+  }
+}

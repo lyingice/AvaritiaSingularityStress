@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "axis=y": { "model": "avaritia_singularity_stress:block/singularity_stabilizer" },
+    "axis=z": { "model": "avaritia_singularity_stress:block/singularity_stabilizer", "x": 90 },
+    "axis=x": { "model": "avaritia_singularity_stress:block/singularity_stabilizer", "x": 90, "y": 90 }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "_comment": "B10 无线应力传输器。只有一个接入面:模型南面(south)用 bridge_port 贴图,它始终落在 FACING 的反面(见 WirelessStressBridgeBlock.hasShaftTowards);其余五面是外壳(bridge_shell)。",
+  "parent": "block/block",
+  "textures": {
+    "particle": "avaritia_singularity_stress:block/machine/wireless/bridge_shell",
+    "all": "avaritia_singularity_stress:block/machine/wireless/bridge_shell",
+    "port": "avaritia_singularity_stress:block/machine/wireless/bridge_port"
+  },
+  "elements": [
+    { "from": [0,0,0], "to": [16,16,16],
+      "faces": {
+        "down":  { "texture": "#all", "cullface": "down" },
+        "up":    { "texture": "#all", "cullface": "up" },
+        "north": { "texture": "#all", "cullface": "north" },
+        "south": { "texture": "#port", "cullface": "south" },
+        "west":  { "texture": "#all", "cullface": "west" },
+        "east":  { "texture": "#all", "cullface": "east" }
+      } }
+  ]
+}

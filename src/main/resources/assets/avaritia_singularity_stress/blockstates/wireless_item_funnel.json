@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "facing=down,extracting=true,powered=true": [ { "model": "avaritia_singularity_stress:block/wireless_funnel/vertical_push_powered", "x": 180, "y": 180 } ],
+    "facing=up,extracting=true,powered=true": [ { "model": "avaritia_singularity_stress:block/wireless_funnel/vertical_push_powered", "y": 180 } ],
+    "facing=north,extracting=true,powered=true": [ { "model": "avaritia_singularity_stress:block/wireless_funnel/horizontal_push_powered", "y": 0 } ],
+    "facing=east,extracting=true,powered=true": [ { "model": "avaritia_singularity_stress:block/wireless_funnel/horizontal_push_powered", "y": 90 } ],
+    "facing=south,extracting=true,powered=true": [ { "model": "avaritia_singularity_stress:block/wireless_funnel/horizontal_push_powered", "y": 180 } ],
+    "facing=west,extracting=true,powered=true": [ { "model": "avaritia_singularity_stress:block/wireless_funnel/horizontal_push_powered", "y": 270 } ],
+    "facing=down,extracting=true,powered=false": [ { "model": "avaritia_singularity_stress:block/wireless_funnel/vertical_push_unpowered", "x": 180, "y": 180 } ],
+    "facing=up,extracting=true,powered=false": [ { "model": "avaritia_singularity_stress:block/wireless_funnel/vertical_push_unpowered", "y": 180 } ],
+    "facing=north,extracting=true,powered=false": [ { "model": "avaritia_singularity_stress:block/wireless_funnel/horizontal_push_unpowered", "y": 0 } ],
+    "facing=east,extracting=true,powered=false": [ { "model": "avaritia_singularity_stress:block/wireless_funnel/horizontal_push_unpowered", "y": 90 } ],
+    "facing=south,extracting=true,powered=false": [ { "model": "avaritia_singularity_stress:block/wireless_funnel/horizontal_push_unpowered", "y": 180 } ],
+    "facing=west,extracting=true,powered=false": [ { "model": "avaritia_singularity_stress:block/wireless_funnel/horizontal_push_unpowered", "y": 270 } ],
+    "facing=down,extracting=false,powered=true": [ { "model": "avaritia_singularity_stress:block/wireless_funnel/vertical_pull_powered", "x": 180, "y": 180 } ],
+    "facing=up,extracting=false,powered=true": [ { "model": "avaritia_singularity_stress:block/wireless_funnel/vertical_pull_powered", "y": 180 } ],
+    "facing=north,extracting=false,powered=true": [ { "model": "avaritia_singularity_stress:block/wireless_funnel/horizontal_pull_powered", "y": 0 } ],
+    "facing=east,extracting=false,powered=true": [ { "model": "avaritia_singularity_stress:block/wireless_funnel/horizontal_pull_powered", "y": 90 } ],
+    "facing=south,extracting=false,powered=true": [ { "model": "avaritia_singularity_stress:block/wireless_funnel/horizontal_pull_powered", "y": 180 } ],
+    "facing=west,extracting=false,powered=true": [ { "model": "avaritia_singularity_stress:block/wireless_funnel/horizontal_pull_powered", "y": 270 } ],
+    "facing=down,extracting=false,powered=false": [ { "model": "avaritia_singularity_stress:block/wireless_funnel/vertical_pull_unpowered", "x": 180, "y": 180 } ],
+    "facing=up,extracting=false,powered=false": [ { "model": "avaritia_singularity_stress:block/wireless_funnel/vertical_pull_unpowered", "y": 180 } ],
+    "facing=north,extracting=false,powered=false": [ { "model": "avaritia_singularity_stress:block/wireless_funnel/horizontal_pull_unpowered", "y": 0 } ],
+    "facing=east,extracting=false,powered=false": [ { "model": "avaritia_singularity_stress:block/wireless_funnel/horizontal_pull_unpowered", "y": 90 } ],
+    "facing=south,extracting=false,powered=false": [ { "model": "avaritia_singularity_stress:block/wireless_funnel/horizontal_pull_unpowered", "y": 180 } ],
+    "facing=west,extracting=false,powered=false": [ { "model": "avaritia_singularity_stress:block/wireless_funnel/horizontal_pull_unpowered", "y": 270 } ]
+  }
+}
+

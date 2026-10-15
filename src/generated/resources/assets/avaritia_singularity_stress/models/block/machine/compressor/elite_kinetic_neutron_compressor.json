@@ -1,0 +1,13 @@
+{
+  "parent": "minecraft:block/cube",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "down": "avaritia_singularity_stress:block/machine/compressor/frame",
+    "east": "avaritia_singularity_stress:block/machine/compressor/double_compressor_side_right",
+    "north": "avaritia_singularity_stress:block/machine/compressor/double_compressor_front",
+    "particle": "avaritia_singularity_stress:block/machine/compressor/double_compressor_front",
+    "south": "avaritia_singularity_stress:block/machine/compressor/frame_back",
+    "up": "avaritia_singularity_stress:block/machine/compressor/compressor_top_2",
+    "west": "avaritia_singularity_stress:block/machine/compressor/double_compressor_side_left"
+  }
+}

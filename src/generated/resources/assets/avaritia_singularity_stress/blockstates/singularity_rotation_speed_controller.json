@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "avaritia_singularity_stress:block/singularity_rotation_speed_controller/block",
+      "y": 90
+    },
+    "axis=z": {
+      "model": "avaritia_singularity_stress:block/singularity_rotation_speed_controller/block"
+    }
+  }
+}

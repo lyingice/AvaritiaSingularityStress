@@ -1,0 +1,37 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="MIT license"
+
+[[mods]]
+modId="avaritia_singularity_stress"
+version="1.0.0"
+displayName="AvaritiaSingularityStress"
+displayURL="unlocked"
+credits="暂无"
+authors="lying_ice"
+
+# Start of user code block mod configuration
+# End of user code block mod configuration
+
+[[mixins]]
+config = "avaritia_singularity_stress.mixins.json"
+
+[[dependencies.avaritia_singularity_stress]]
+    modId="neoforge"
+    type="required"
+    versionRange="[21.1.232,)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.avaritia_singularity_stress]]
+    modId="minecraft"
+    type="required"
+    versionRange="[1.21.1]"
+    ordering="AFTER"
+    side="BOTH"
+
+
+
+
+# Start of user code block dependencies configuration
+# End of user code block dependencies configuration

@@ -1,0 +1,16 @@
+﻿{
+  "variants": {
+    "facing=down,output=true,powered=false":  { "model": "avaritia_singularity_stress:block/wireless_stress_bridge", "x": 90 },
+    "facing=up,output=true,powered=false":    { "model": "avaritia_singularity_stress:block/wireless_stress_bridge", "x": 270 },
+    "facing=north,output=true,powered=false": { "model": "avaritia_singularity_stress:block/wireless_stress_bridge" },
+    "facing=south,output=true,powered=false": { "model": "avaritia_singularity_stress:block/wireless_stress_bridge", "y": 180 },
+    "facing=west,output=true,powered=false":  { "model": "avaritia_singularity_stress:block/wireless_stress_bridge", "y": 270 },
+    "facing=east,output=true,powered=false":  { "model": "avaritia_singularity_stress:block/wireless_stress_bridge", "y": 90 },
+    "facing=down,output=false,powered=false":  { "model": "avaritia_singularity_stress:block/wireless_stress_bridge", "x": 90 },
+    "facing=up,output=false,powered=false":    { "model": "avaritia_singularity_stress:block/wireless_stress_bridge", "x": 270 },
+    "facing=north,output=false,powered=false": { "model": "avaritia_singularity_stress:block/wireless_stress_bridge" },
+    "facing=south,output=false,powered=false": { "model": "avaritia_singularity_stress:block/wireless_stress_bridge", "y": 180 },
+    "facing=west,output=false,powered=false":  { "model": "avaritia_singularity_stress:block/wireless_stress_bridge", "y": 270 },
+    "facing=east,output=false,powered=false":  { "model": "avaritia_singularity_stress:block/wireless_stress_bridge", "y": 90 }
+  }
+}

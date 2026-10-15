@@ -1,0 +1,20 @@
+{
+  "_comment": "B11 无线流体传输器。接入面 = FACING 指向的那一面(north),用 create:block/brass_gearbox(铜齿轮箱)贴图,提示管道要贴在这里；其余五面是外壳。",
+  "parent": "block/block",
+  "textures": {
+    "particle": "create:block/brass_block",
+    "all": "create:block/brass_block",
+    "port": "create:block/brass_gearbox"
+  },
+  "elements": [
+    { "from": [0,0,0], "to": [16,16,16],
+      "faces": {
+        "down":  { "texture": "#all", "cullface": "down" },
+        "up":    { "texture": "#all", "cullface": "up" },
+        "north": { "texture": "#port", "cullface": "north" },
+        "south": { "texture": "#all", "cullface": "south" },
+        "west":  { "texture": "#all", "cullface": "west" },
+        "east":  { "texture": "#all", "cullface": "east" }
+      } }
+  ]
+}

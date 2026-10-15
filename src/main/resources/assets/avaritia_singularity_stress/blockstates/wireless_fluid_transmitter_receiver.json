@@ -1,0 +1,16 @@
+﻿{
+  "variants": {
+    "facing=down,output=true,powered=false":  { "model": "avaritia_singularity_stress:block/wireless_fluid_transmitter", "x": 90 },
+    "facing=up,output=true,powered=false":    { "model": "avaritia_singularity_stress:block/wireless_fluid_transmitter", "x": 270 },
+    "facing=north,output=true,powered=false": { "model": "avaritia_singularity_stress:block/wireless_fluid_transmitter" },
+    "facing=south,output=true,powered=false": { "model": "avaritia_singularity_stress:block/wireless_fluid_transmitter", "y": 180 },
+    "facing=west,output=true,powered=false":  { "model": "avaritia_singularity_stress:block/wireless_fluid_transmitter", "y": 270 },
+    "facing=east,output=true,powered=false":  { "model": "avaritia_singularity_stress:block/wireless_fluid_transmitter", "y": 90 },
+    "facing=down,output=false,powered=false":  { "model": "avaritia_singularity_stress:block/wireless_fluid_transmitter", "x": 90 },
+    "facing=up,output=false,powered=false":    { "model": "avaritia_singularity_stress:block/wireless_fluid_transmitter", "x": 270 },
+    "facing=north,output=false,powered=false": { "model": "avaritia_singularity_stress:block/wireless_fluid_transmitter" },
+    "facing=south,output=false,powered=false": { "model": "avaritia_singularity_stress:block/wireless_fluid_transmitter", "y": 180 },
+    "facing=west,output=false,powered=false":  { "model": "avaritia_singularity_stress:block/wireless_fluid_transmitter", "y": 270 },
+    "facing=east,output=false,powered=false":  { "model": "avaritia_singularity_stress:block/wireless_fluid_transmitter", "y": 90 }
+  }
+}

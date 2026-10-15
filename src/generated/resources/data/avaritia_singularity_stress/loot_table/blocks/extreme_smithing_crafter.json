@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "avaritia_singularity_stress:extreme_smithing_crafter"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "avaritia_singularity_stress:blocks/extreme_smithing_crafter"
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "avaritia_singularity_stress:block/machine/compressor/dense_kinetic_neutron_compressor",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "avaritia_singularity_stress:block/machine/compressor/dense_kinetic_neutron_compressor"
+    },
+    "facing=south": {
+      "model": "avaritia_singularity_stress:block/machine/compressor/dense_kinetic_neutron_compressor",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "avaritia_singularity_stress:block/machine/compressor/dense_kinetic_neutron_compressor",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "create:block/cogwheel_shaftless",
+  "textures": {
+    "1_2": "avaritia_singularity_stress:block/neutron_cogwheel",
+    "particle": "avaritia_singularity_stress:block/neutron_cogwheel"
+  }
+}

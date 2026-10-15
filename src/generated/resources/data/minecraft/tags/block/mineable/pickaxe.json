@@ -1,0 +1,16 @@
+{
+  "values": [
+    "avaritia_singularity_stress:extreme_mechanical_crafter",
+    "avaritia_singularity_stress:extreme_smithing_crafter",
+    "avaritia_singularity_stress:singularity_rotation_speed_controller",
+    "avaritia_singularity_stress:singularity_stabilizer",
+    "avaritia_singularity_stress:kinetic_neutron_collector",
+    "avaritia_singularity_stress:dense_kinetic_neutron_collector",
+    "avaritia_singularity_stress:elite_kinetic_neutron_collector",
+    "avaritia_singularity_stress:ultimate_kinetic_neutron_collector",
+    "avaritia_singularity_stress:kinetic_neutron_compressor",
+    "avaritia_singularity_stress:dense_kinetic_neutron_compressor",
+    "avaritia_singularity_stress:elite_kinetic_neutron_compressor",
+    "avaritia_singularity_stress:ultimate_kinetic_neutron_compressor"
+  ]
+}
