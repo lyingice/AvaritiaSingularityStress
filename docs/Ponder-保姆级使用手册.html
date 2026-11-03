@@ -1,0 +1,1023 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ponder 保姆级使用手册</title><style>
+:root{--bg:#0f1419;--panel:#161d26;--fg:#e6edf3;--muted:#9aa7b4;--line:#263241;--accent:#4ea1ff;--code-bg:#0b1016}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.78 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--fg)}
+.wrap{display:flex;max-width:1400px;margin:0 auto}
+nav{position:sticky;top:0;align-self:flex-start;height:100vh;overflow:auto;width:300px;flex:0 0 300px;padding:24px 16px;border-right:1px solid var(--line);background:var(--panel)}
+nav h4{margin:0 0 10px;font-size:13px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+nav a{display:block;color:var(--muted);text-decoration:none;padding:3px 0;font-size:13px;line-height:1.5}
+nav a:hover{color:var(--accent)}
+nav a.l3{padding-left:14px;font-size:12.5px}
+main{flex:1;min-width:0;padding:36px 48px 120px}
+h1{font-size:30px;border-bottom:2px solid var(--line);padding-bottom:12px}
+h2{margin-top:48px;font-size:23px;border-bottom:1px solid var(--line);padding-bottom:8px}
+h3{margin-top:32px;font-size:18px;color:#cfe3ff}
+h4{font-size:15px;color:#cfe3ff}
+p{margin:12px 0}
+a{color:var(--accent)}
+code{background:var(--code-bg);border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:13px;font-family:"Cascadia Code",Consolas,monospace}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:8px;padding:14px 16px;overflow:auto;margin:16px 0}
+pre.code code{background:none;border:none;padding:0;font-size:13px;line-height:1.6;display:block;white-space:pre}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:7px 11px;text-align:left;vertical-align:top}
+th{background:var(--panel);color:#cfe3ff;font-weight:600}
+tr:nth-child(even) td{background:#121a22}
+blockquote{margin:16px 0;padding:10px 16px;border-left:3px solid var(--accent);background:#121a22;color:var(--muted);border-radius:0 6px 6px 0}
+blockquote p{margin:6px 0}
+hr{border:none;border-top:1px solid var(--line);margin:32px 0}
+ul,ol{padding-left:24px}
+li{margin:4px 0}
+h1,h2,h3,h4{scroll-margin-top:20px}
+</style></head><body><div class="wrap"><nav><h4>目录</h4><a class="l1" href="#ponder-思索-保姆级使用手册">Ponder「思索」保姆级使用手册</a><a class="l2" href="#0-先花-5-分钟搞清楚要用的是什么">0. 先花 5 分钟搞清楚要用的是什么</a><a class="l3" href="#0-1-ponder-是干什么的">0.1 Ponder 是干什么的</a><a class="l3" href="#0-2-ponder-不是什么-避免走错路">0.2 Ponder 不是什么（避免走错路）</a><a class="l3" href="#0-3-你最终会产出-4-个东西">0.3 你最终会产出 4 个东西</a><a class="l2" href="#1-30-分钟跑通第一个场景">1. 30 分钟跑通第一个场景</a><a class="l3" href="#1-1-第一步-加依赖">1.1 第一步：加依赖</a><a class="l3" href="#1-2-第二步-写入口类-ponderplugin">1.2 第二步：写入口类（PonderPlugin）</a><a class="l3" href="#1-3-第三步-把插件挂上去-客户端-fmlclientsetupevent">1.3 第三步：把插件挂上去（客户端、FMLClientSetupEvent）</a><a class="l3" href="#1-4-第四步-写第一个剧本">1.4 第四步：写第一个剧本</a><a class="l3" href="#1-5-第五步-准备结构文件-nbt">1.5 第五步：准备结构文件（.nbt）</a><a class="l3" href="#1-6-第六步-进游戏验证">1.6 第六步：进游戏验证</a><a class="l3" href="#1-7-第一个场景的自检清单">1.7 第一个场景的自检清单</a><a class="l2" href="#2-心智模型-ponder-到底怎么跑-不懂这段-后面全是玄学">2. 心智模型：Ponder 到底怎么跑（不懂这段，后面全是玄学）</a><a class="l3" href="#2-1-三段式-注册-编译-播放">2.1 三段式：注册 → 编译 → 播放</a><a class="l3" href="#2-2-时间轴-tick-idle-keyframe">2.2 时间轴：tick、idle、keyframe</a><a class="l3" href="#2-3-坐标系与底板-99-的-机器歪了-都在这">2.3 坐标系与底板（99% 的「机器歪了」都在这）</a><a class="l3" href="#2-4-元素-element-与-elementlink">2.4 元素（Element）与 ElementLink</a><a class="l3" href="#2-5-场景里没有-玩家">2.5 场景里没有「玩家」</a><a class="l3" href="#2-6-客户端限定与两端分离">2.6 客户端限定与两端分离</a><a class="l2" href="#3-api-地图-按-我要做什么-查">3. API 地图（按「我要做什么」查）</a><a class="l3" href="#3-1-顶层-scenebuilder">3.1 顶层：SceneBuilder</a><a class="l3" href="#3-2-world-worldinstructions">3.2 world()：WorldInstructions</a><a class="l3" href="#3-3-overlay-overlayinstructions">3.3 overlay()：OverlayInstructions</a><a class="l3" href="#3-4-effects-effectinstructions">3.4 effects()：EffectInstructions</a><a class="l3" href="#3-5-special-specialinstructions">3.5 special()：SpecialInstructions</a><a class="l3" href="#3-6-debug-debuginstructions">3.6 debug()：DebugInstructions</a><a class="l3" href="#3-7-选址三件套-scenebuildingutil">3.7 选址三件套：SceneBuildingUtil</a><a class="l2" href="#4-分镜实操-每个动作怎么做-可抄代码-坑">4. 分镜实操：每个动作怎么做（可抄代码 + 坑）</a><a class="l3" href="#4-1-开场三件套">4.1 开场三件套</a><a class="l3" href="#4-2-显示结构-三种-浮现-方式">4.2 显示结构：三种「浮现」方式</a><a class="l3" href="#4-3-移动-旋转结构">4.3 移动 / 旋转结构</a><a class="l3" href="#4-4-改方块">4.4 改方块</a><a class="l3" href="#4-5-方块实体-实体-掉落物">4.5 方块实体、实体、掉落物</a><a class="l3" href="#4-6-文字-最重要的表现手段">4.6 文字（最重要的表现手段）</a><a class="l3" href="#4-7-高亮-轮廓-线">4.7 高亮 / 轮廓 / 线</a><a class="l3" href="#4-8-玩家操作提示-手势">4.8 玩家操作提示（手势）</a><a class="l3" href="#4-9-特效">4.9 特效</a><a class="l3" href="#4-10-镜头">4.10 镜头</a><a class="l3" href="#4-11-收尾">4.11 收尾</a><a class="l2" href="#5-结构文件-nbt-的制作-最容易翻车的一章">5. 结构文件 .nbt 的制作（最容易翻车的一章）</a><a class="l3" href="#5-1-硬规则-源码级">5.1 硬规则（源码级）</a><a class="l3" href="#5-2-用结构方块导出-推荐流程-照着做">5.2 用结构方块导出（推荐流程，照着做）</a><a class="l3" href="#5-3-坐标系对齐表-照着填就不会歪">5.3 坐标系对齐表（照着填就不会歪）</a><a class="l3" href="#5-4-方块实体的数据">5.4 方块实体的数据</a><a class="l3" href="#5-5-失败症状对照表">5.5 失败症状对照表</a><a class="l3" href="#5-6-没有结构文件时的降级方案-纯代码搭">5.6 没有结构文件时的降级方案（纯代码搭）</a><a class="l2" href="#6-本地化-中文标题与台词-第二大翻车点">6. 本地化：中文标题与台词（第二大翻车点）</a><a class="l3" href="#6-1-真相-你写在代码里的文字-平时根本不会显示">6.1 真相：你写在代码里的文字平时根本不会显示</a><a class="l3" href="#6-2-key-规则表-照抄即可">6.2 key 规则表（照抄即可）</a><a class="l3" href="#6-3-落地方式-a-手写-lang-最简单">6.3 落地方式 A：手写 lang（最简单）</a><a class="l3" href="#6-4-落地方式-b-datagen-自动生成-推荐给要维护的项目">6.4 落地方式 B：datagen 自动生成（推荐给要维护的项目）</a><a class="l3" href="#6-5-编辑模式-开发期神器">6.5 编辑模式（开发期神器）</a><a class="l3" href="#6-6-语言问题速查">6.6 语言问题速查</a><a class="l2" href="#7-标签-索引-排序-排除">7. 标签、索引、排序、排除</a><a class="l3" href="#7-1-注册一个标签">7.1 注册一个标签</a><a class="l3" href="#7-2-一个剧本给多个组件共用">7.2 一个剧本给多个组件共用</a><a class="l3" href="#7-3-场景顺序">7.3 场景顺序</a><a class="l3" href="#7-4-高亮标签">7.4 高亮标签</a><a class="l3" href="#7-5-排除索引项-indexexclusions">7.5 排除索引项（indexExclusions）</a><a class="l3" href="#7-6-热重载">7.6 热重载</a><a class="l2" href="#8-调试与排错速查表">8. 调试与排错速查表</a><a class="l3" href="#8-1-三分钟定位法">8.1 三分钟定位法</a><a class="l3" href="#8-2-症状-原因-修法-总表">8.2 症状 → 原因 → 修法 总表</a><a class="l3" href="#8-3-有用的日志-命令">8.3 有用的日志/命令</a><a class="l2" href="#9-完整实战-给本模组的-动能中子收集器-写一个思索场景">9. 完整实战：给本模组的「动能中子收集器」写一个思索场景</a><a class="l3" href="#9-1-先设计分镜-写代码前必做">9.1 先设计分镜（写代码前必做）</a><a class="l3" href="#9-2-注册三件套-plugin-客户端挂载">9.2 注册三件套（Plugin + 客户端挂载）</a><a class="l3" href="#9-3-剧本全文-示例-1-只用-ponder-原生-api">9.3 剧本全文（示例 1：只用 Ponder 原生 API）</a><a class="l3" href="#9-4-剧本全文-示例-2-create-增强版">9.4 剧本全文（示例 2：Create 增强版）</a><a class="l3" href="#9-5-create-专属能力速查-createscenebuilder">9.5 Create 专属能力速查（CreateSceneBuilder）</a><a class="l3" href="#9-6-场景需要补的资产清单">9.6 场景需要补的资产清单</a><a class="l2" href="#10-版本与移植">10. 版本与移植</a><a class="l3" href="#10-1-本仓库事实-已验证">10.1 本仓库事实（已验证）</a><a class="l3" href="#10-2-1-20-1-1-21-1-逐项差异-对两个真实-jar-做了-javap-逐个-diff">10.2 1.20.1 ↔ 1.21.1 逐项差异（对两个真实 jar 做了 javap 逐个 diff）</a><a class="l3" href="#10-3-从-create-0-5-x-老教程移植时">10.3 从 Create 0.5.x 老教程移植时</a><a class="l3" href="#10-4-依赖写法-各平台">10.4 依赖写法（各平台）</a><a class="l2" href="#11-证据清单-每条结论的出处">11. 证据清单（每条结论的出处）</a><a class="l3" href="#11-1-本手册验证过的命令">11.1 本手册验证过的命令</a><a class="l3" href="#11-2-逐条结论-源码位置-反编译后的类">11.2 逐条结论 → 源码位置（反编译后的类）</a><a class="l3" href="#11-3-本手册没能验证的部分-老实交代">11.3 本手册没能验证的部分（老实交代）</a><a class="l2" href="#附录-a-文件清单">附录 A：文件清单</a><a class="l2" href="#附录-b-一页速查卡">附录 B：一页速查卡</a></nav><main><h1 id="ponder-思索-保姆级使用手册">Ponder「思索」保姆级使用手册</h1>
+<blockquote><p>适用环境（就是本仓库的真实环境，逐条核对过）</p>
+<table><thead><tr><th>项目</th><th>版本 / 坐标</th><th>证据</th></tr></thead><tbody>
+<tr><td>Minecraft</td><td>1.21.1</td><td><code>gradle.properties</code></td></tr>
+<tr><td>NeoForge</td><td>21.1.232</td><td><code>build.gradle</code></td></tr>
+<tr><td>Create</td><td>6.0.10-280</td><td><code>gradle.properties</code></td></tr>
+<tr><td>Ponder</td><td><code>net.createmod.ponder:ponder-neoforge:1.0.82+mc1.21.1</code></td><td><code>gradle.properties</code> + gradle 缓存里的 jar</td></tr>
+<tr><td>Create 源码参照</td><td><code>allapis/Create-mc1.21.1-dev</code>（同代 1.21.1，ponder 1.0.85）</td><td>仓库内</td></tr>
+</tbody></table>
+<p>本手册里所有「API 名字 / 参数 / lang key / 资源路径」都不是猜的： 是对 <code>ponder-neoforge-1.0.82+mc1.21.1.jar</code> 做 <code>javap</code> + 反编译、再和 Create 的实际调用对照后写下的。 第 11 章列了每一条结论的出处，怀疑时按出处自查。</p></blockquote>
+<hr/>
+<h2 id="0-先花-5-分钟搞清楚要用的是什么">0. 先花 5 分钟搞清楚要用的是什么</h2>
+<h3 id="0-1-ponder-是干什么的">0.1 Ponder 是干什么的</h3>
+<p>Ponder（中文名「思索」）是 Create 团队做的<strong>可交互动画教程播放器</strong>，不是文档系统：</p>
+<ul><li>玩家在物品栏里<strong>按住 <code>W</code> 键</strong>（默认键位，代码里是 keyCode 87）悬停在某个物品上，游戏就把这个物品对应的「思索场景」播放出来；</li><li>场景本身是一段<strong>脚本化的动画</strong>：底板上逐块冒出机器、旋转、文字提示、粒子、玩家操作手势；</li><li>播放器带进度条，可以拖回去看任意关键帧（keyframe）。</li></ul>
+<p>你要做的是：<strong>写一段 Java 剧本 + 提供一张结构文件 + 一句语言文本</strong>，剩下的渲染、播放、索引界面由 Ponder 负责。</p>
+<h3 id="0-2-ponder-不是什么-避免走错路">0.2 Ponder 不是什么（避免走错路）</h3>
+<ul><li>不是 GUI 框架：它是<strong>渲染层自绘</strong>的，无法在里面放 Button/Label；要交互 UI 走原版 Screen。</li><li>不是服务端系统：整个库是<strong>客户端专用</strong>的（<code>@Mod(dist = Dist.CLIENT)</code>），随便 import 到 common 代码里就会让专有服务器崩。</li><li>不是「实时跑机器」：场景里的方块实体是<strong>虚拟</strong>的（<code>PonderLevel</code>），不会真的产出物品。机器的表现只能是「你手写出来的样子」。</li></ul>
+<h3 id="0-3-你最终会产出-4-个东西">0.3 你最终会产出 4 个东西</h3>
+<pre class="code"><code class="lang-text">你的模组
+├─ src/main/java/&lt;包&gt;/ponder/MyPonderPlugin.java        ← 入口（告诉 Ponder 你有场景）
+├─ src/main/java/&lt;包&gt;/ponder/MyScenes.java              ← 剧本（真正的动画）
+├─ src/main/resources/assets/&lt;modid&gt;/ponder/&lt;id&gt;.nbt    ← 结构（场景里摆好的一堆方块）
+└─ src/main/resources/assets/&lt;modid&gt;/lang/en_us.json    ← 文本（标题和每一句台词）</code></pre>
+<blockquote><p>本仓库已经写好一份<strong>能直接编译</strong>的示例，第 9 章整份贴出，源文件在 <code>docs/ponder-example/java/...</code>。 编译验证记录见第 11 章「证据清单」。</p></blockquote>
+<hr/>
+<h2 id="1-30-分钟跑通第一个场景">1. 30 分钟跑通第一个场景</h2>
+<p>下面按顺序做，每一步都给了「怎么确认这一步做对了」。</p>
+<h3 id="1-1-第一步-加依赖">1.1 第一步：加依赖</h3>
+<p><code>build.gradle</code> 里（本仓库已经加好了，见文件对应行）：</p>
+<pre class="code"><code class="lang-gradle">repositories {
+    maven { url = &quot;https://maven.createmod.net&quot; }        // Create / Ponder / Flywheel
+    maven { url = &quot;https://maven.ithundxr.dev/snapshots&quot; } // Registrate
+}
+
+dependencies {
+    // Ponder 本体：neoForge 版本要写 +mc&lt;MC版本&gt;
+    implementation(&quot;net.createmod.ponder:ponder-neoforge:${ponder_version}+mc${minecraft_version}&quot;)
+}</code></pre>
+<p><code>gradle.properties</code>：</p>
+<pre class="code"><code class="lang-properties">minecraft_version = 1.21.1
+ponder_version = 1.0.82</code></pre>
+<p><strong>怎么确认</strong>：<code>./gradlew dependencies --configuration compileClasspath | grep ponder</code> 能看到 <code>net.createmod.ponder:ponder-neoforge:1.0.82+mc1.21.1</code>。</p>
+<blockquote><p>坑：只写 <code>1.0.82</code> 不写 <code>+mc1.21.1</code>，坐标解析不到（该 artifact 的版本号就是这个完整字符串）。</p></blockquote>
+<h3 id="1-2-第二步-写入口类-ponderplugin">1.2 第二步：写入口类（PonderPlugin）</h3>
+<p>Ponder 只有一个扩展点：<code>net.createmod.ponder.api.registration.PonderPlugin</code>。它一共 <strong>6 个方法</strong>， 只有 <code>getModId()</code> 是抽象方法（必须实现），其余 5 个都是 <code>default</code>（要哪个写哪个）：</p>
+<table><thead><tr><th>方法</th><th>用途</th></tr></thead><tbody>
+<tr><td><code>getModId()</code></td><td><strong>必须</strong>。返回你的 modid</td></tr>
+<tr><td><code>registerScenes(helper)</code></td><td>注册场景（见 1.2/7.2）</td></tr>
+<tr><td><code>registerTags(helper)</code></td><td>注册索引标签（见第 7 章）</td></tr>
+<tr><td><code>registerSharedText(helper)</code></td><td>注册可复用文案（见 4.6）</td></tr>
+<tr><td><code>onPonderLevelRestore(PonderLevel)</code></td><td>结构落位后的一次性修正钩子（多部件方块实体才需要，Create 用它修动能控制器）</td></tr>
+<tr><td><code>indexExclusions(helper)</code></td><td>把某些物品从索引里排除（见 7.5）</td></tr>
+</tbody></table>
+<pre class="code"><code class="lang-java">package com.example.mymod.ponder;
+
+import net.createmod.ponder.api.registration.PonderPlugin;
+import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
+import net.createmod.ponder.api.registration.PonderTagRegistrationHelper;
+import net.createmod.ponder.api.registration.SharedTextRegistrationHelper;
+import net.minecraft.resources.ResourceLocation;
+
+public class MyPonderPlugin implements PonderPlugin {
+
+    public static final MyPonderPlugin INSTANCE = new MyPonderPlugin();
+
+    @Override
+    public String getModId() {
+        return &quot;mymod&quot;;          // ← 必须是你的 modid，lang key 前缀、schematic 命名空间都靠它
+    }
+
+    @Override
+    public void registerScenes(PonderSceneRegistrationHelper&lt;ResourceLocation&gt; helper) {
+        MyScenes.register(helper);      // ← 场景注册在这里集中
+    }
+
+    @Override
+    public void registerTags(PonderTagRegistrationHelper&lt;ResourceLocation&gt; helper) {
+        MyScenes.registerTags(helper);  // ← 索引页分类（可以不要）
+    }
+
+    @Override
+    public void registerSharedText(SharedTextRegistrationHelper helper) {
+        helper.registerSharedText(&quot;needs_rotation&quot;, &quot;This machine needs rotational force&quot;);
+    }
+}</code></pre>
+<p><strong>三个方法的区别</strong>（很多人混）：</p>
+<table><thead><tr><th>方法</th><th>什么时候被调用</th><th>里面能写什么</th></tr></thead><tbody>
+<tr><td><code>registerScenes</code></td><td>注册阶段（首次打开思索界面 / <code>/ponder reload</code>）</td><td>只用 <code>helper.addStoryBoard(...)</code>，<strong>不要</strong>碰世界、不要 new ItemStack 以外的东西</td></tr>
+<tr><td><code>registerTags</code></td><td>同上，紧跟 scenes 之后</td><td>只注册标签，标签要能被 scenes 引用，所以必须在 scenes 之后</td></tr>
+<tr><td><code>registerSharedText</code></td><td>同上，最后</td><td>只登记「可复用台词」，供 <code>.sharedText("key")</code> 用</td></tr>
+</tbody></table>
+<p><strong>重要</strong>：这三个方法会被<strong>反复调用</strong>（每次 <code>/ponder reload</code>、每次切换世界都可能触发）。所以：</p>
+<ul><li>❌ 不要在里面对自己的静态 List <code>add</code>（会越加越多 → 场景重复 N 次）</li><li>❌ 不要在里面读注册表之外的东西</li><li>✅ 全部写成幂等的「声明式登记」</li></ul>
+<h3 id="1-3-第三步-把插件挂上去-客户端-fmlclientsetupevent">1.3 第三步：把插件挂上去（客户端、FMLClientSetupEvent）</h3>
+<pre class="code"><code class="lang-java">package com.example.mymod.ponder;
+
+import net.createmod.ponder.foundation.PonderIndex;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+
+@EventBusSubscriber(modid = &quot;mymod&quot;, value = Dist.CLIENT)   // ← value = Dist.CLIENT 是硬要求
+public final class MyPonderClientSetup {
+
+    @SubscribeEvent
+    public static void onClientSetup(FMLClientSetupEvent event) {
+        event.enqueueWork(() -&gt; PonderIndex.addPlugin(MyPonderPlugin.INSTANCE));
+    }
+}</code></pre>
+<p>Create 自己也是这么做的（<code>CreateClient</code> 里 <code>PonderIndex.addPlugin(new CreatePonderPlugin());</code>，见第 11 章出处）。</p>
+<p><strong>怎么确认</strong>：启动客户端后在 <code>logs/latest.log</code> 里搜 <code>Registering Ponder Scenes took</code>——出现这行说明注册跑过了。 （首次打开思索界面/执行 <code>/ponder reload</code> 时才会打印。）</p>
+<blockquote><p>坑 1：放在 mod 构造器或 <code>FMLCommonSetupEvent</code> 里 → 专有服务器启动时加载 <code>net.minecraft.client.*</code> → <code>NoClassDefFoundError</code> 直接崩。必须 <code>Dist.CLIENT</code>。 坑 2：放在 <code>FMLClientSetupEvent</code> 之外（比如第一次按键才注册）→ 玩家第一次按住 W 时索引还没建好，悬停没反应。</p></blockquote>
+<h3 id="1-4-第四步-写第一个剧本">1.4 第四步：写第一个剧本</h3>
+<p>剧本就是一个静态方法，签名<strong>必须</strong>是 <code>(SceneBuilder, SceneBuildingUtil)</code>：</p>
+<pre class="code"><code class="lang-java">package com.example.mymod.ponder;
+
+import net.createmod.ponder.api.scene.SceneBuilder;
+import net.createmod.ponder.api.scene.SceneBuildingUtil;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+
+public class MyScenes {
+
+    public static void firstScene(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title(&quot;my_first&quot;, &quot;My first ponder scene&quot;);   // ① 标题（同时决定 lang key 前缀）
+        scene.configureBasePlate(0, 0, 5);                  // ② 底板：5x5，从 (0,0,0) 起
+        scene.idle(5);
+
+        scene.world().showSection(util.select().layer(0), Direction.UP);   // ③ 显现第 0 层
+        scene.idle(5);
+
+        BlockPos machine = util.grid().at(2, 1, 2);
+        scene.world().showSection(util.select().position(machine), Direction.DOWN);
+        scene.idle(10);
+
+        scene.overlay().showText(60)                        // ④ 显示 60 tick（=3 秒）的文字
+             .text(&quot;This is a machine&quot;)
+             .attachKeyFrame()                              //    并在这一句挂一个关键帧
+             .placeNearTarget()
+             .pointAt(util.vector().blockSurface(machine, Direction.NORTH));
+        scene.idle(60);
+
+        scene.effects().indicateSuccess(machine);
+        scene.idle(20);
+
+        scene.markAsFinished();                              // ⑤ 收尾
+    }
+}</code></pre>
+<p><strong>逐行说明</strong>（这几行是 90% 场景的开头模板）：</p>
+<table><thead><tr><th>行</th><th>作用</th><th>不写会怎样</th></tr></thead><tbody>
+<tr><td><code>title(id, text)</code></td><td>设置 lang key 的 scene id 与默认标题</td><td>不写 → scene id 变成 <code>&lt;ns&gt;:missing_title</code>，标题显示成 key</td></tr>
+<tr><td><code>configureBasePlate(x,z,size)</code></td><td>阴影底板的位置与边长（世界坐标）</td><td>不写 → 底板按结构边界自动算，通常偏</td></tr>
+<tr><td><code>idle(n)</code></td><td>让<strong>指令队列</strong>停 n tick（20 tick = 1 秒）</td><td>所有动作会挤在同一 tick 内</td></tr>
+<tr><td><code>world().showSection(sel, dir)</code></td><td>让选区内方块带方向动画「浮现」</td><td>不调用 → 场景里空空如也</td></tr>
+<tr><td><code>overlay().showText(ticks)</code></td><td>文字气泡</td><td>—</td></tr>
+<tr><td><code>markAsFinished()</code></td><td>宣布结束：停止计时 + 标记 finished（源码 <code>stopCounting()</code> + <code>setFinished(true)</code>）</td><td>场景停在最后一帧，标题栏不出现结束态</td></tr>
+</tbody></table>
+<h3 id="1-5-第五步-准备结构文件-nbt">1.5 第五步：准备结构文件（.nbt）</h3>
+<p>这是<strong>唯一必须动手做的美术活</strong>。最小可行做法（详细版见第 5 章）：</p>
+<ol><li>开创造超平坦世界，按你的剧本把机器搭在<strong>地面 y=0 之上</strong>，让它的<strong>最下一层方块贴 y=0</strong>；</li><li>拿<strong>结构方块</strong>（<code>/give @s structure_block</code>）框住它，模式 <code>SAVE</code>，名称填 <code>my_first</code>，保存；</li><li>到存档目录 <code>saves/&lt;世界名&gt;/generated/minecraft/structures/my_first.nbt</code> 把文件拷出来；</li><li>放到 <code>src/main/resources/assets/mymod/ponder/my_first.nbt</code>（<strong>目录名是 <code>ponder</code>，这是 Ponder 硬编码的</strong>）。</li></ol>
+<p><strong>怎么确认路径对了</strong>：进游戏 <code>/ponder &lt;你的物品id&gt;</code>，如果日志里出现 <code>Ponder schematic missing: mymod:ponder/my_first.nbt</code> → 路径或名字写错了。 （这行日志是 Ponder 自己的报错，见第 11 章出处。）</p>
+<h3 id="1-6-第六步-进游戏验证">1.6 第六步：进游戏验证</h3>
+<table><thead><tr><th>操作</th><th>结果</th></tr></thead><tbody>
+<tr><td><code>/ponder index</code></td><td>打开思索总索引（所有注册过的条目）</td></tr>
+<tr><td><code>/ponder tags</code></td><td>按标签分类的索引</td></tr>
+<tr><td><code>/ponder &lt;物品或方块 id&gt;</code></td><td>直接播放该组件的场景，例如 <code>/ponder mymod:my_machine</code></td></tr>
+<tr><td><code>/ponder reload</code></td><td>热重载所有插件（改完剧本不用重启游戏）</td></tr>
+<tr><td>物品栏里按住 <code>W</code> 悬停物品</td><td>正常的玩家入口（需要该物品已被注册为组件）</td></tr>
+</tbody></table>
+<p><code>/ponder &lt;id&gt;</code> 里的 <code>&lt;id&gt;</code> 是<strong>组件 id</strong>（你注册 <code>addStoryBoard(组件, ...)</code> 时的那个 key），不是剧本 id。这一条搞错的人非常多，见第 2.1 节。</p>
+<blockquote><p>两个关于命令本身的事实（对开服/联机有用）：</p>
+<ol><li><code>/ponder</code> 是<strong>服务端命令</strong>（根权限等级 0，任何玩家可用；带 targets 的形态要权限 2）。</li></ol>
+<p>它靠「服务端发自定义包 → 客户端跳 UI」工作，所以联机时也能用，你的 mod 不需要也不应该再注册 <code>/ponder</code>。</p>
+<ol><li><code>&lt;id&gt;</code> 找不到时只打一行 <code>Logger.error</code>（<code>Could not find ponder scenes for item: ...</code>），<strong>不弹任何提示</strong>，</li></ol>
+<p>所以「敲了没反应」= id 拼错或没注册。</p></blockquote>
+<h3 id="1-7-第一个场景的自检清单">1.7 第一个场景的自检清单</h3>
+<ul><li>☐ 日志有 <code>Registering Ponder Scenes took</code>，没有 <code>schematic missing</code></li><li>☐ <code>/ponder &lt;组件id&gt;</code> 能打开界面，底板和机器都在</li><li>☐ 标题不是 <code>mymod.ponder.my_first.header</code> 这种原始 key（若出现 → 第 6 章 lang）</li><li>☐ 文字第二句不是 <code>...text_2</code> 原文（同上）</li><li>☐ 进度条能拖回关键帧（<code>attachKeyFrame</code> 生效）</li><li>☐ 专有服务器启动不崩（客户端类没有泄漏）</li></ul>
+<hr/>
+<h2 id="2-心智模型-ponder-到底怎么跑-不懂这段-后面全是玄学">2. 心智模型：Ponder 到底怎么跑（不懂这段，后面全是玄学）</h2>
+<h3 id="2-1-三段式-注册-编译-播放">2.1 三段式：注册 → 编译 → 播放</h3>
+<pre class="code"><code class="lang-text">[1] 注册（客户端启动 / /ponder reload 时）
+    PonderIndex.addPlugin(你的插件)
+      └─ registerScenes(helper)   ← 你写：addStoryBoard(组件id, 剧本id, 你的剧本方法, 标签...)
+      └─ registerTags(helper)     ← 你写：registerTag(...)
+      └─ registerSharedText(...)  ← 你写：registerSharedText(&quot;key&quot;, &quot;默认文本&quot;)
+
+[2] 编译（玩家打开某组件的思索界面时，一次性）
+    PonderSceneRegistry.compile(组件id)
+      ├─ loadSchematic(剧本id) → assets/&lt;ns&gt;/ponder/&lt;剧本id&gt;.nbt  ← 结构文件在这里被读
+      ├─ StructureTemplate.placeInWorld(PonderLevel)              ← 结构被摆进虚拟世界
+      └─ 你的剧本方法被调用一次 → 把动作录成指令队列(schedule)
+          （此时 showText 的文本被登记：text_1, text_2 ...）
+
+[3] 播放（每客户端 tick 20 次/秒）
+    PonderScene.tick()
+      ├─ 推进当前指令（DelayInstruction 会卡住队列）
+      ├─ 渲染 over/outlines/particles
+      └─ 进度条 = currentTime / totalTime</code></pre>
+<p><strong>这里有三条极其重要的推论</strong>，新手 90% 的「为什么不生效」都出在这三条：</p>
+<ol><li><strong>你的剧本方法只在打开界面时跑一次，不是每帧跑</strong>。</li></ol>
+<p>   → 里面写 <code>Math.random()</code>、<code>System.currentTimeMillis()</code>、读玩家位置，都只采样一次；    → 想让某个东西「一直转」，不能用循环 + idle 拼（那是逐帧手摆动画），要用「一次性指令 + 让虚拟世界自己 tick」。    （<code>PonderLevel.tick()</code> 每 tick 都在跑，所以结构里的方块实体/粒子会自然动。）</p>
+<ol><li><strong>结构文件是「一次性快照」</strong>。你在剧本里 <code>showSection</code>/<code>setBlock</code> 操作的都是这份拷贝；</li></ol>
+<p>   <code>restoreBlocks</code>/<code>restore</code> 会把备份还原回去（备份点在结构摆好之后建立）。</p>
+<ol><li><strong>指令队列是严格串行的</strong>。<code>idle(n)</code> 就是一个「阻塞 n tick 的延时指令」，</li></ol>
+<p>   它后面的所有指令都得等它；你没写 <code>idle</code> 的两个动作会挤在同一 tick 发生。</p>
+<h3 id="2-2-时间轴-tick-idle-keyframe">2.2 时间轴：tick、idle、keyframe</h3>
+<table><thead><tr><th>概念</th><th>含义</th><th>实操建议</th></tr></thead><tbody>
+<tr><td>1 tick</td><td>1/20 秒</td><td>文字停留的最小单位</td></tr>
+<tr><td><code>idle(20)</code></td><td>停 1 秒</td><td>动作之间的呼吸：<code>idle(5)</code>～<code>idle(10)</code></td></tr>
+<tr><td><code>idleSeconds(2)</code></td><td>= <code>idle(40)</code></td><td>只在长停顿用</td></tr>
+<tr><td><code>showText(60)</code></td><td>文字<strong>存活</strong> 60 tick，<strong>不阻塞</strong></td><td>文字显示时长与后面 <code>idle(60)</code> 要配对</td></tr>
+<tr><td><code>attachKeyFrame()</code></td><td>在这一句上打<strong>关键帧</strong>：玩家能把进度条拖回这里</td><td>每个「新知识点」一句，一个场景 3～6 个</td></tr>
+<tr><td><code>addKeyframe()</code></td><td>手动打关键帧（不依附文字）</td><td>用于「结构出现」的节点</td></tr>
+<tr><td><code>addLazyKeyframe()</code></td><td>延迟型关键帧（源码：记录时刻 = 当前 + <strong>6 tick</strong>）</td><td><code>attachKeyFrame()</code> 内部用的就是它；想精确控制落点就手写 <code>addKeyframe()</code></td></tr>
+</tbody></table>
+<blockquote><p><strong>为什么需要关键帧</strong>：玩家可以点「Think Back」往回跳。跳转依赖 <code>keyframeTimes</code>。 反编译源码里 <code>PonderScene.markKeyframe</code> 只有在 <code>!stoppedCounting</code> 时才记录， 而 <code>seekToTime</code> 不允许往回跳（<code>Cannot seek backwards</code>）——所以播放器内部是靠「重放到关键帧」实现的。 实操经验：<strong>文字密度 = 关键帧密度</strong>，一个场景 3～6 个关键帧最舒服。</p></blockquote>
+<p><strong>节奏模板</strong>（可直接套）：</p>
+<pre class="code"><code class="lang-text">idle(5)              开场定格
+呈现结构           idle(10)
+第一句文字(60)      idle(60)
+新动作             idle(20)
+第二句文字(60)      idle(60)
+...
+markAsFinished()</code></pre>
+<h3 id="2-3-坐标系与底板-99-的-机器歪了-都在这">2.3 坐标系与底板（99% 的「机器歪了」都在这）</h3>
+<p>Ponder 场景用的就是<strong>普通的方块坐标系</strong>，但有三件事要同时对齐：</p>
+<ol><li><strong>结构文件的原点</strong>：结构 NBT 的最小角被摆在场景的 <code>(0,0,0)</code>。所以存档里搭的东西，</li></ol>
+<p>   最下一层要贴地（y=0 是场景地面）。</p>
+<ol><li><strong>底板</strong>：<code>configureBasePlate(xOffset, zOffset, size)</code> 画一块 <code>size × size</code> 的阴影平台，</li></ol>
+<p>   从 <code>(xOffset, 0, zOffset)</code> 开始。<code>showBasePlate()</code> 会把它当作一个 section「浮现」出来    （源码里就是 <code>select().cuboid(new BlockPos(xOffset,0,zOffset), new Vec3i(size-1,0,size-1))</code>）。</p>
+<ol><li><strong>相机默认视角</strong>：<code>←35° 俯角 / 145° 水平</code>，看向 <code>(0,4,0)</code> 附近（<code>PointOfInterest</code> 初值）。</li></ol>
+<p>对齐口诀：</p>
+<pre class="code"><code class="lang-text">结构里机器放在 (2,1,2) 附近（size=5 时是正中心）
+底板参数写 (0, 0, 5)
+相机不用调，默认就好看
+要挪视角：scaleSceneView(放大) / setSceneOffsetY(上下) / rotateCameraY(左右转)</code></pre>
+<table><thead><tr><th>方法</th><th>作用</th><th>常用值</th></tr></thead><tbody>
+<tr><td><code>scaleSceneView(float)</code></td><td>整体缩放</td><td><code>1</code>（默认）、<code>1.5</code>（近景机器）、<code>0.8</code>（大结构）</td></tr>
+<tr><td><code>setSceneOffsetY(float)</code></td><td>场景上下平移（相对屏幕）</td><td><code>-1</code>（结构偏高时往下压）</td></tr>
+<tr><td><code>removeShadow()</code></td><td>去掉底板阴影</td><td>极少数「悬浮场景」才用</td></tr>
+<tr><td><code>rotateCameraY(float)</code></td><td>水平旋转视角（指令，可中途调用）</td><td><code>-30</code>、<code>90</code></td></tr>
+<tr><td><code>configureBasePlate</code> / <code>showBasePlate</code></td><td>见上</td><td>—</td></tr>
+</tbody></table>
+<h3 id="2-4-元素-element-与-elementlink">2.4 元素（Element）与 ElementLink</h3>
+<p>场景里「能动的东西」都是元素：</p>
+<table><thead><tr><th>元素</th><th>是什么</th><th>你怎么拿到</th></tr></thead><tbody>
+<tr><td><code>WorldSectionElement</code></td><td>一组方块（可以整体移动/旋转/淡入淡出）</td><td><code>world().showIndependentSection(sel, dir)</code> 返回 <code>ElementLink&lt;WorldSectionElement&gt;</code></td></tr>
+<tr><td><code>TextWindowElement</code></td><td>文字气泡</td><td><code>overlay().showText(n)</code> 返回 <code>TextElementBuilder</code>（一般不用留引用）</td></tr>
+<tr><td><code>InputWindowElement</code></td><td>鼠标/键盘操作提示</td><td><code>overlay().showControls(...)</code></td></tr>
+<tr><td><code>EntityElement</code></td><td>实体</td><td><code>world().createEntity(...)</code> / <code>createItemEntity(...)</code></td></tr>
+<tr><td><code>AnimatedSceneElement</code></td><td>动画元素基类</td><td><code>special().createBirb(...)</code>、<code>createCart(...)</code></td></tr>
+<tr><td><code>BeltItemElement</code>（Create）</td><td>传送带上的物品</td><td><code>CreateSceneBuilder.world().createItemOnBelt(...)</code></td></tr>
+</tbody></table>
+<p><strong><code>ElementLink&lt;T&gt;</code> 是句柄</strong>，不是对象本身。用法：</p>
+<pre class="code"><code class="lang-java">ElementLink&lt;WorldSectionElement&gt; link =
+        scene.world().showIndependentSection(util.select().fromTo(2,1,2, 2,4,2), Direction.DOWN);
+scene.idle(20);
+scene.world().moveSection(link, util.vector().of(0, 1, 0), 20);    // 20 tick 内上移 1 格
+scene.world().rotateSection(link, 0, 45, 0, 40);                   // 40 tick 内水平转 45°
+scene.world().configureCenterOfRotation(link, util.vector().centerOf(2, 1, 2)); // 转轴（不设会绕奇怪的地方转）
+scene.world().configureStabilization(link, util.vector().of(0, 1, 0));         // 反向补偿，让结构看起来只转不飘</code></pre>
+<p><strong>把句柄还原成元素</strong>（进阶，80% 的场景用不到）：</p>
+<pre class="code"><code class="lang-java">PonderScene s = scene.getScene();                 // SceneBuilder -&gt; PonderScene
+WorldSectionElement el = s.resolve(link);          // 拿到元素实例
+s.runWith(link, e -&gt; { /* ... */ });               // 直接对元素操作</code></pre>
+<blockquote><p>坑：<code>moveSection</code> / <code>rotateSection</code> 的时长参数是 <strong>tick</strong>，不是秒。写 <code>2</code> 不是「2 秒」而是「2 tick = 0.1 秒」，看起来像瞬移。 坑 2：<code>rotateSection</code> 不配 <code>configureCenterOfRotation</code>，结构会绕底板原点画大圈。</p></blockquote>
+<h3 id="2-5-场景里没有-玩家">2.5 场景里没有「玩家」</h3>
+<ul><li>没有真实玩家实体；想表现「玩家右键」，只能用 <code>overlay().showControls(...)</code> + <code>.rightClick().withItem(stack)</code> 画手势。</li><li>实体可以用 <code>world().createEntity(...)</code> 造，但它们是<strong>假实体</strong>（<code>PonderLevel</code> 里的 spawn），不会跟你交互。</li><li><code>scene.getWorld()</code> 拿到 <code>PonderLevel</code>：可以 <code>getBlockState</code>/<code>setBlock</code>/<code>addParticle</code>/<code>setMask</code>，但<strong>别在里面做逻辑分支等 tick 结果</strong>——剧本是编译期跑的。</li></ul>
+<h3 id="2-6-客户端限定与两端分离">2.6 客户端限定与两端分离</h3>
+<table><thead><tr><th>事实</th><th>影响</th></tr></thead><tbody>
+<tr><td>Ponder 的所有类都是客户端类</td><td>你的 <code>PonderPlugin</code> 实现类<strong>只能</strong>在 <code>Dist.CLIENT</code> 的代码路径里被 new</td></tr>
+<tr><td><code>PonderPlugin.registerScenes</code> 在客户端跑</td><td>里面不要访问服务端状态</td></tr>
+<tr><td><code>@EventBusSubscriber(value = Dist.CLIENT)</code></td><td>挂载入口的正确姿势</td></tr>
+<tr><td>专有服务器没有 Ponder</td><td>你的 surplus 调用必须 <code>DistExecutor</code>/<code>@EventBusSubscriber(Dist.CLIENT)</code> 隔离，否则崩服</td></tr>
+</tbody></table>
+<p><strong>稳妥写法</strong>：所有 Ponder 相关代码放在 <code>&lt;包&gt;.ponder</code> 子包，并且<strong>只</strong>被一个 <code>Dist.CLIENT</code> 的事件类引用。 这样即使专有服务器加载你的 mod，也不会碰到这些类。</p>
+<hr/>
+<h2 id="3-api-地图-按-我要做什么-查">3. API 地图（按「我要做什么」查）</h2>
+<blockquote><p>完整逐方法说明见附录 <code>docs/ponder-api/</code>（scene / element / registration / foundation 四份）。 这里只给「你要的能力 → 对应方法」索引。</p></blockquote>
+<h3 id="3-1-顶层-scenebuilder">3.1 顶层：<code>SceneBuilder</code></h3>
+<table><thead><tr><th>我想…</th><th>方法</th></tr></thead><tbody>
+<tr><td>设标题</td><td><code>title(String sceneId, String title)</code></td></tr>
+<tr><td>设底板</td><td><code>configureBasePlate(int x, int z, int size)</code> / <code>showBasePlate()</code></td></tr>
+<tr><td>缩放/平移/去阴影</td><td><code>scaleSceneView(float)</code> / <code>setSceneOffsetY(float)</code> / <code>removeShadow()</code></td></tr>
+<tr><td>等待</td><td><code>idle(int ticks)</code> / <code>idleSeconds(int s)</code></td></tr>
+<tr><td>打关键帧</td><td><code>addKeyframe()</code> / <code>addLazyKeyframe()</code></td></tr>
+<tr><td>转视角</td><td><code>rotateCameraY(float deg)</code></td></tr>
+<tr><td>结束</td><td><code>markAsFinished()</code> / <code>setNextUpEnabled(boolean)</code></td></tr>
+<tr><td>塞任意指令</td><td><code>addInstruction(Consumer&lt;PonderScene&gt;)</code></td></tr>
+</tbody></table>
+<h3 id="3-2-world-worldinstructions">3.2 <code>world()</code>：<code>WorldInstructions</code></h3>
+<p><strong>结构</strong>（区块）</p>
+<table><thead><tr><th>我要</th><th>方法</th></tr></thead><tbody>
+<tr><td>显示一块结构（融入底板）</td><td><code>showSection(Selection, Direction)</code></td></tr>
+<tr><td>显示并合并到已有大区块</td><td><code>showSectionAndMerge(Selection, Direction, ElementLink&lt;WorldSectionElement&gt;)</code></td></tr>
+<tr><td>独立区块（能整体移动/旋转）</td><td><code>showIndependentSection(Selection, Direction)</code> → <code>ElementLink</code></td></tr>
+<tr><td>立刻显示（无动画）</td><td><code>showIndependentSectionImmediately(Selection)</code></td></tr>
+<tr><td>藏起来</td><td><code>hideSection(Selection, Direction)</code> / <code>hideIndependentSection(link, Direction)</code></td></tr>
+<tr><td>把一个选区「拆」成独立区块</td><td><code>makeSectionIndependent(Selection)</code> → <code>ElementLink</code></td></tr>
+<tr><td>粘到某个区块上一起动</td><td><code>glueBlockOnto(BlockPos, Direction, ElementLink)</code></td></tr>
+<tr><td>平移</td><td><code>moveSection(link, Vec3 offset, int ticks)</code></td></tr>
+<tr><td>旋转</td><td><code>rotateSection(link, double x, double y, double z, int ticks)</code></td></tr>
+<tr><td>转轴 / 反向补偿</td><td><code>configureCenterOfRotation(link, Vec3)</code> / <code>configureStabilization(link, Vec3)</code></td></tr>
+</tbody></table>
+<p><strong>方块</strong></p>
+<table><thead><tr><th>我要</th><th>方法</th></tr></thead><tbody>
+<tr><td>放一个方块</td><td><code>setBlock(BlockPos, BlockState, boolean spawnParticles)</code></td></tr>
+<tr><td>批量放</td><td><code>setBlocks(Selection, BlockState, boolean)</code></td></tr>
+<tr><td>替换（保留方块实体数据）</td><td><code>replaceBlocks(Selection, BlockState, boolean)</code></td></tr>
+<tr><td>改状态</td><td><code>modifyBlock(BlockPos, UnaryOperator&lt;BlockState&gt;, boolean)</code> / <code>modifyBlocks(Selection, ...)</code></td></tr>
+<tr><td>循环切属性（比如 facing）</td><td><code>cycleBlockProperty(BlockPos, Property&lt;?&gt;)</code></td></tr>
+<tr><td>敲掉</td><td><code>destroyBlock(BlockPos)</code></td></tr>
+<tr><td>挖坏进度条</td><td><code>incrementBlockBreakingProgress(BlockPos)</code></td></tr>
+<tr><td>红石开关</td><td><code>toggleRedstonePower(Selection)</code></td></tr>
+<tr><td>还原</td><td><code>restoreBlocks(Selection)</code></td></tr>
+</tbody></table>
+<p><strong>方块实体 / 实体</strong></p>
+<table><thead><tr><th>我要</th><th>方法</th></tr></thead><tbody>
+<tr><td>改 BE 的字段</td><td><code>modifyBlockEntity(BlockPos, Class&lt;T&gt;, Consumer&lt;T&gt;)</code></td></tr>
+<tr><td>改 BE 的 NBT</td><td><code>modifyBlockEntityNBT(Selection, Class, Consumer&lt;CompoundTag&gt;[, boolean])</code></td></tr>
+<tr><td>造实体</td><td><code>createEntity(Function&lt;Level, Entity&gt;)</code> → <code>ElementLink&lt;EntityElement&gt;</code></td></tr>
+<tr><td>造掉落物</td><td><code>createItemEntity(Vec3 pos, Vec3 motion, ItemStack)</code></td></tr>
+<tr><td>批量改实体</td><td><code>modifyEntities(Class&lt;T&gt;, Consumer&lt;T&gt;)</code> / <code>modifyEntitiesInside(Class&lt;T&gt;, Selection, Consumer&lt;T&gt;)</code></td></tr>
+<tr><td>改一个实体</td><td><code>modifyEntity(ElementLink&lt;EntityElement&gt;, Consumer&lt;Entity&gt;)</code></td></tr>
+</tbody></table>
+<h3 id="3-3-overlay-overlayinstructions">3.3 <code>overlay()</code>：<code>OverlayInstructions</code></h3>
+<table><thead><tr><th>我要</th><th>方法</th></tr></thead><tbody>
+<tr><td>一句话</td><td><code>showText(int ticks)</code> → <code>TextElementBuilder</code></td></tr>
+<tr><td>文字 + 高亮框</td><td><code>showOutlineWithText(Selection, int ticks)</code></td></tr>
+<tr><td>鼠标/键盘手势</td><td><code>showControls(Vec3, Pointing, int ticks)</code> → <code>InputElementBuilder</code></td></tr>
+<tr><td>描一个选区</td><td><code>showOutline(PonderPalette, Object key, Selection, int)</code></td></tr>
+<tr><td>追着一个 AABB 描边</td><td><code>chaseBoundingBoxOutline(PonderPalette, Object key, AABB, int)</code></td></tr>
+<tr><td>两点画线</td><td><code>showLine(PonderPalette, Vec3 a, Vec3 b, int)</code> / <code>showBigLine(...)</code></td></tr>
+<tr><td>滚动条 UI</td><td><code>showScrollInput</code> / <code>showCenteredScrollInput</code> / <code>showRepeaterScrollInput</code></td></tr>
+<tr><td>过滤槽 UI</td><td><code>showFilterSlotInput(Vec3, int)</code> / <code>(Vec3, Direction, int)</code></td></tr>
+</tbody></table>
+<p><code>TextElementBuilder</code> 链式：</p>
+<table><thead><tr><th>调用</th><th>作用</th></tr></thead><tbody>
+<tr><td><code>.text(String)</code> / <code>.text(String, Object... args)</code></td><td>设文案（会被登记成 <code>text_N</code>）</td></tr>
+<tr><td><code>.sharedText(String)</code> / <code>.sharedText(ResourceLocation)</code></td><td>用共享文案（见 1.2 的 registerSharedText）</td></tr>
+<tr><td><code>.colored(PonderPalette)</code></td><td>气泡颜色（枚举见下）</td></tr>
+<tr><td><code>.placeNearTarget()</code></td><td>贴着 <code>pointAt</code> 的目标放（不写就在上方）</td></tr>
+<tr><td><code>.pointAt(Vec3)</code></td><td>指定指向的位置</td></tr>
+<tr><td><code>.attachKeyFrame()</code></td><td>在这句打关键帧</td></tr>
+<tr><td><code>.independent(int)</code> / <code>.independent()</code></td><td>独立文字（不跟随视角/不自动隐藏）</td></tr>
+</tbody></table>
+<p><code>PonderPalette</code> 全部取值： <code>WHITE</code> <code>BLACK</code> <code>RED</code> <code>GREEN</code> <code>BLUE</code> <code>SLOW</code> <code>MEDIUM</code> <code>FAST</code> <code>INPUT</code> <code>OUTPUT</code> （<code>SLOW/MEDIUM/FAST</code> 用于转速语义，<code>INPUT/OUTPUT</code> 用于输入输出，其余是纯色）。</p>
+<p><code>InputElementBuilder</code>：</p>
+<table><thead><tr><th>调用</th><th>作用</th></tr></thead><tbody>
+<tr><td><code>.leftClick()</code> / <code>.rightClick()</code> / <code>.scroll()</code></td><td>画哪种手势</td></tr>
+<tr><td><code>.withItem(ItemStack)</code></td><td>手上拿什么物品</td></tr>
+<tr><td><code>.whileSneaking()</code> / <code>.whileCTRL()</code></td><td>附加按键</td></tr>
+<tr><td><code>.showing(ScreenElement)</code></td><td>显示一个自定义图标</td></tr>
+</tbody></table>
+<h3 id="3-4-effects-effectinstructions">3.4 <code>effects()</code>：<code>EffectInstructions</code></h3>
+<table><thead><tr><th>我要</th><th>方法</th></tr></thead><tbody>
+<tr><td>成功提示（绿勾粒子）</td><td><code>indicateSuccess(BlockPos)</code></td></tr>
+<tr><td>红石提示</td><td><code>indicateRedstone(BlockPos)</code></td></tr>
+<tr><td>红石粒子</td><td><code>createRedstoneParticles(BlockPos, int color, int amount)</code></td></tr>
+<tr><td>自定义粒子</td><td><code>emitParticles(Vec3, ParticleEmitter, float velocity, int amount)</code></td></tr>
+<tr><td>造发射器</td><td><code>simpleParticleEmitter(ParticleOptions, Vec3)</code> / <code>particleEmitterWithinBlockSpace(ParticleOptions, Vec3)</code></td></tr>
+</tbody></table>
+<h3 id="3-5-special-specialinstructions">3.5 <code>special()</code>：<code>SpecialInstructions</code></h3>
+<table><thead><tr><th>我要</th><th>方法</th></tr></thead><tbody>
+<tr><td>让鹦鹉出场（彩蛋/教学梗）</td><td><code>createBirb(Vec3, Supplier&lt;? extends ParrotPose&gt;)</code> / <code>changeBirbPose(...)</code> / <code>moveParrot(...)</code> / <code>rotateParrot(...)</code></td></tr>
+<tr><td>矿车</td><td><code>createCart(Vec3, float, MinecartElement.MinecartConstructor)</code> / <code>moveCart(...)</code> / <code>rotateCart(...)</code></td></tr>
+<tr><td>移动注意力点（相机 POI）</td><td><code>movePointOfInterest(Vec3)</code> / <code>movePointOfInterest(BlockPos)</code></td></tr>
+<tr><td>隐藏动画元素</td><td><code>hideElement(ElementLink&lt;T&gt;, Direction)</code></td></tr>
+</tbody></table>
+<h3 id="3-6-debug-debuginstructions">3.6 <code>debug()</code>：<code>DebugInstructions</code></h3>
+<table><thead><tr><th>方法</th><th>作用</th></tr></thead><tbody>
+<tr><td><code>debugSchematic()</code></td><td><strong>一键把整张结构显示出来</strong>（排查「我的方块到底在不在」时最好用）</td></tr>
+<tr><td><code>enqueueCallback(Consumer&lt;PonderScene&gt;)</code></td><td>队列空闲时执行回调（可以在这里读虚拟世界做断言/打印）</td></tr>
+<tr><td><code>addInstructionInstance(PonderInstruction)</code></td><td>塞原生指令实例（进阶）</td></tr>
+</tbody></table>
+<h3 id="3-7-选址三件套-scenebuildingutil">3.7 选址三件套：<code>SceneBuildingUtil</code></h3>
+<pre class="code"><code class="lang-java">util.select()   // SelectionUtil：选方块集合
+util.grid()     // PositionUtil：拿 BlockPos
+util.vector()   // VectorUtil：拿 Vec3（画文字/粒子用）</code></pre>
+<table><thead><tr><th><code>select()</code></th><th>说明</th></tr></thead><tbody>
+<tr><td><code>.position(int x,y,z)</code> / <code>.position(BlockPos)</code></td><td>单格</td></tr>
+<tr><td><code>.fromTo(int..., int...)</code> / <code>.fromTo(BlockPos, BlockPos)</code></td><td>两个角之间的长方体（<strong>含两端</strong>）</td></tr>
+<tr><td><code>.cuboid(BlockPos origin, Vec3i size)</code></td><td>原点 + 尺寸（<code>size</code> 是<strong>跨度-1</strong>）</td></tr>
+<tr><td><code>.layer(int y)</code> / <code>.layers(int from, int to)</code> / <code>.layersFrom(int y)</code></td><td>整层/多层</td></tr>
+<tr><td><code>.column(int x, int z)</code></td><td>整列（从底到顶）</td></tr>
+<tr><td><code>.everywhere()</code></td><td>全场景</td></tr>
+</tbody></table>
+<p><code>Selection</code> 支持 <code>.add(Selection)</code>、<code>.substract(Selection)</code>、<code>.copy()</code>、<code>.getCenter()</code>，也可以直接 <code>for (BlockPos p : sel)</code> 迭代。</p>
+<table><thead><tr><th><code>vector()</code></th><th>说明</th></tr></thead><tbody>
+<tr><td><code>.centerOf(int x,y,z)</code> / <code>.centerOf(BlockPos)</code></td><td>方块中心</td></tr>
+<tr><td><code>.topOf(...)</code></td><td>方块顶面中心</td></tr>
+<tr><td><code>.blockSurface(BlockPos, Direction)</code> / <code>(BlockPos, Direction, float)</code></td><td>某一面中心（文字指向神器）</td></tr>
+<tr><td><code>.of(double, double, double)</code></td><td>任意偏移</td></tr>
+</tbody></table>
+<table><thead><tr><th><code>grid()</code></th><th>说明</th></tr></thead><tbody>
+<tr><td><code>.at(int x,y,z)</code> / <code>.zero()</code></td><td>BlockPos</td></tr>
+</tbody></table>
+<hr/>
+<h2 id="4-分镜实操-每个动作怎么做-可抄代码-坑">4. 分镜实操：每个动作怎么做（可抄代码 + 坑）</h2>
+<blockquote><p>用法：按你要表达的意思找到对应小节，把代码贴进剧本，改坐标即可。 所有片段都来自 Create 1.21.1 的真实场景或本手册已编译验证的示例。</p></blockquote>
+<h3 id="4-1-开场三件套">4.1 开场三件套</h3>
+<pre class="code"><code class="lang-java">scene.title(&quot;machine_id&quot;, &quot;Doing the thing&quot;);   // ① lang key 前缀 + 默认标题
+scene.configureBasePlate(0, 0, 5);              // ② 5x5 底板，左下角在 (0,0,0)
+scene.idle(5);                                  // ③ 定格一下再开始
+scene.world().showSection(util.select().layer(0), Direction.UP); // 显示地板
+scene.idle(5);</code></pre>
+<h3 id="4-2-显示结构-三种-浮现-方式">4.2 显示结构：三种「浮现」方式</h3>
+<pre class="code"><code class="lang-java">// (a) 逐块浮现，并「焊」进底板（最常见的机器出场）
+scene.world().showSection(util.select().fromTo(2, 1, 2, 2, 2, 2), Direction.DOWN);
+
+// (b) 独立区块：之后能整体移动/旋转
+ElementLink&lt;WorldSectionElement&gt; contraption =
+        scene.world().showIndependentSection(util.select().fromTo(2, 1, 2, 2, 3, 2), Direction.DOWN);
+
+// (c) 立刻出现（没有生长动画，调试用）
+scene.world().showIndependentSectionImmediately(util.select().everywhere());</code></pre>
+<p><strong><code>Direction</code> 到底是什么意思</strong>（源码级确认，别再猜）： Ponder 会把元素先<strong>偏移 0.5 格</strong>放在这个方向上，再一边淡入一边滑回原位 （<code>setFadeVec(Vec3.atLowerCornerOf(direction.getNormal()).scale(0.5))</code>）。所以它表示的是「<strong>从哪边滑进来</strong>」：</p>
+<table><thead><tr><th>参数</th><th>效果</th></tr></thead><tbody>
+<tr><td><code>Direction.UP</code></td><td>从<strong>上方</strong>落下（元素先出现在上方 0.5 格）</td></tr>
+<tr><td><code>Direction.DOWN</code></td><td>从<strong>下方</strong>升起</td></tr>
+<tr><td><code>Direction.NORTH</code></td><td>从北面推进来</td></tr>
+<tr><td><code>Direction.SOUTH/EAST/WEST</code></td><td>同上，各侧面</td></tr>
+</tbody></table>
+<blockquote><p>Create 的惯例：地板（第 0 层）用 <code>Direction.UP</code>（从上方盖下来），机器用 <code>Direction.DOWN</code>（从地里升起）。 这两个刚好和中文直觉相反，是本手册里最常被搞反的一处。</p></blockquote>
+<h3 id="4-3-移动-旋转结构">4.3 移动 / 旋转结构</h3>
+<pre class="code"><code class="lang-java">// 平移 1 格，20 tick
+scene.world().moveSection(contraption, util.vector().of(0, 1, 0), 20);
+scene.idle(20);
+
+// 绕自身中心转 45°（先设转轴，否则绕底板原点飞出去）
+scene.world().configureCenterOfRotation(contraption, util.vector().centerOf(2, 1, 2));
+scene.world().rotateSection(contraption, 0, 45, 0, 40);
+scene.idle(40);
+
+// 让旋转中的结构「原地转」而不是画圈：加反向补偿
+scene.world().configureStabilization(contraption, util.vector().centerOf(2, 1, 2));</code></pre>
+<h3 id="4-4-改方块">4.4 改方块</h3>
+<pre class="code"><code class="lang-java">// 换一个方块
+scene.world().setBlock(util.grid().at(2, 1, 2), Blocks.STONE.defaultBlockState(), true);
+
+// 只改某个属性（保留其它状态）—— 例如让朝向变 Y 轴
+scene.world().modifyBlock(pos, s -&gt; s.setValue(CustomBlock.AXIS, Direction.Axis.Y), true);
+
+// 循环切属性（每次「右键」切一格）
+scene.world().cycleBlockProperty(pos, CustomBlock.POWERED);
+
+// 红石开关（拉杆/按钮）
+scene.world().toggleRedstonePower(util.select().fromTo(3, 1, 0, 3, 1, 2));
+
+// 敲掉（带破坏动画）
+scene.world().destroyBlock(pos);
+
+// 撤销所有方块改动
+scene.world().restoreBlocks(util.select().everywhere());</code></pre>
+<blockquote><p>布尔参数 <code>spawnParticles</code> 传 <code>true</code> 会有「放置/破坏」粒子，视觉上更像真的在动手。</p></blockquote>
+<h3 id="4-5-方块实体-实体-掉落物">4.5 方块实体、实体、掉落物</h3>
+<pre class="code"><code class="lang-java">// 直接改方块实体的字段（编译期执行！）
+scene.world().modifyBlockEntity(pos, MyBlockEntity.class, be -&gt; be.setSomething(42));
+
+// 改 NBT（适合跨版本/复杂数据）
+scene.world().modifyBlockEntityNBT(util.select().position(pos), MyBlockEntity.class,
+        tag -&gt; tag.putInt(&quot;Something&quot;, 42));
+
+// 造一个掉落物（pos 是中心点，motion 是初速度）
+scene.world().createItemEntity(util.vector().centerOf(2, 4, 2), util.vector().of(0, 0, 0),
+        new ItemStack(Items.IRON_INGOT));
+
+// 造任意实体
+ElementLink&lt;EntityElement&gt; zombie = scene.world().createEntity(world -&gt; {
+    Zombie z = new Zombie(world);
+    z.setPos(2.5, 1, 2.5);
+    return z;
+});
+scene.world().modifyEntity(zombie, e -&gt; ((Zombie) e).setBaby(true));</code></pre>
+<blockquote><p>坑：<code>createEntity</code> 里返回的实体必须自己 <code>setPos</code>，否则出现在 (0,0,0)。 坑：<code>modifyEntity</code> 拿到的是 <code>PonderLevel</code> 里的假实体，别指望它 tick 出 AI 行为。</p></blockquote>
+<h3 id="4-6-文字-最重要的表现手段">4.6 文字（最重要的表现手段）</h3>
+<pre class="code"><code class="lang-java">// 基础
+scene.overlay().showText(60)
+     .text(&quot;This machine collects neutron matter&quot;)
+     .attachKeyFrame()                 // 打关键帧
+     .placeNearTarget()
+     .pointAt(util.vector().blockSurface(pos, Direction.NORTH));
+scene.idle(60);
+
+// 带参数（%s 之类）：注意原文里要有占位符
+scene.overlay().showText(60).text(&quot;Output: %s items&quot;, 16);
+
+// 共享文案（在 registerSharedText 里登记过）
+scene.overlay().showText(50).sharedText(&quot;needs_rotation&quot;);
+
+// 带颜色 + 不贴身
+scene.overlay().showText(60)
+     .text(&quot;Power flows this way&quot;)
+     .colored(PonderPalette.INPUT)
+     .independent(80)                 // 独立显示 80 tick
+     .pointAt(util.vector().of(2.5, 2, 2.5));</code></pre>
+<p><strong>文字排版的三个经验</strong>：</p>
+<ol><li><code>showText(n)</code> 的 <code>n</code> 是<strong>存活时长</strong>，不是「弹出生效的延时」。你还要自己 <code>idle(n)</code> 才看得完。</li><li>想要文字<strong>先后出现</strong>就 <code>showText(...)</code> 后立刻 <code>idle(...)</code>；想<strong>同时存在</strong>就别 idle，连着写。</li><li><code>.placeNearTarget()</code> 会让气泡贴着 <code>pointAt</code> 目标，读起来比浮在正中清楚得多。</li></ol>
+<h3 id="4-7-高亮-轮廓-线">4.7 高亮 / 轮廓 / 线</h3>
+<pre class="code"><code class="lang-java">// 给一个选区描边（key 用任意稳定对象，例如 BlockPos 或字符串）
+scene.overlay().showOutline(PonderPalette.OUTPUT, pos, util.select().fromTo(2,1,2, 2,2,2), 60);
+
+// 大线：从一个点到另一个点画一条粗线（指导流向）
+scene.overlay().showBigLine(PonderPalette.INPUT, util.vector().centerOf(2, 2, 4),
+        util.vector().centerOf(2, 2, 2), 60);
+
+// 追着一个 AABB 描边（会跟着动，用于动态结构）
+scene.overlay().chaseBoundingBoxOutline(PonderPalette.MEDIUM, pos, new AABB(pos).move(0, 0, 0), 60);
+
+// 文字 + 高亮一起
+scene.overlay().showOutlineWithText(util.select().position(pos), 60)
+     .text(&quot;This slot takes the input&quot;);</code></pre>
+<h3 id="4-8-玩家操作提示-手势">4.8 玩家操作提示（手势）</h3>
+<pre class="code"><code class="lang-java">// 右键 + 手持扳手
+scene.overlay().showControls(util.vector().topOf(pos), Pointing.DOWN, 30)
+     .rightClick()
+     .withItem(AllItems.WRENCH.asStack());
+scene.idle(30);
+
+// 滚动 + 潜行
+scene.overlay().showControls(util.vector().centerOf(pos), Pointing.LEFT, 40)
+     .scroll()
+     .whileSneaking();
+scene.idle(40);
+
+// 过滤槽 UI（Create 风格）
+scene.overlay().showFilterSlotInput(util.vector().centerOf(pos), Direction.NORTH, 80);</code></pre>
+<blockquote><p><code>Pointing</code> 来自 <code>net.createmod.catnip.math.Pointing</code>，取值 <code>UP/DOWN/LEFT/RIGHT</code>（箭头指向哪边）。</p></blockquote>
+<h3 id="4-9-特效">4.9 特效</h3>
+<pre class="code"><code class="lang-java">scene.effects().indicateSuccess(pos);          // 绿勾
+scene.effects().indicateRedstone(pos);         // 红石闪
+scene.effects().createRedstoneParticles(pos, 0xFFFFFF, 10);
+// 自定义粒子：发射器 + 速度 + 数量
+scene.effects().emitParticles(util.vector().centerOf(2, 2, 2),
+        scene.effects().simpleParticleEmitter(ParticleTypes.END_ROD, util.vector().of(0, 0.2, 0)), 1, 20);</code></pre>
+<h3 id="4-10-镜头">4.10 镜头</h3>
+<pre class="code"><code class="lang-java">scene.rotateCameraY(-30);            // 视角水平转 -30°（指令，插值执行）
+scene.scaleSceneView(1.6f);          // 拉近（配合小机器）
+scene.setSceneOffsetY(-1);           // 整体下移
+scene.special().movePointOfInterest(util.vector().centerOf(2, 2, 2)); // 视线焦点挪到机器</code></pre>
+<h3 id="4-11-收尾">4.11 收尾</h3>
+<pre class="code"><code class="lang-java">scene.idle(20);
+scene.markAsFinished();          // 宣布结束（进度条走满、出现 &quot;Up Next&quot;/结束）
+// 可选：最后一个场景关掉 &quot;Up Next&quot;
+scene.setNextUpEnabled(false);</code></pre>
+<hr/>
+<h2 id="5-结构文件-nbt-的制作-最容易翻车的一章">5. 结构文件 <code>.nbt</code> 的制作（最容易翻车的一章）</h2>
+<h3 id="5-1-硬规则-源码级">5.1 硬规则（源码级）</h3>
+<p>Ponder 读结构的代码就这三行（反编译自 <code>PonderSceneRegistry</code>）：</p>
+<pre class="code"><code class="lang-java">String path = &quot;ponder/&quot; + location.getPath() + &quot;.nbt&quot;;
+ResourceLocation loc = ResourceLocation.fromNamespaceAndPath(location.getNamespace(), path);
+// 找不到就 log.error(&quot;Ponder schematic missing: &quot; + loc) 并返回空结构
+StructureTemplate t = PonderSceneRegistry.loadSchematic(stream);   // GZIP + NBT
+activeTemplate.placeInWorld(level, BlockPos.ZERO, BlockPos.ZERO, new StructurePlaceSettings(), level.random, 2);</code></pre>
+<p>翻译成人话：</p>
+<table><thead><tr><th>规则</th><th>内容</th></tr></thead><tbody>
+<tr><td>路径</td><td><code>assets/&lt;modid&gt;/ponder/&lt;剧本id&gt;.nbt</code>（<strong>变量是「剧本id」，不是物品 id</strong>）</td></tr>
+<tr><td>剧本id</td><td><code>addStoryBoard(组件, "my/id", ...)</code> 的第二个参数；可以带子目录，如 <code>"machines/collector"</code> → <code>ponder/machines/collector.nbt</code></td></tr>
+<tr><td>格式</td><td><strong>GZIP 压缩的 NBT</strong>，即 <code>StructureTemplate</code> 格式（结构方块存出来的就是它）</td></tr>
+<tr><td>落点</td><td>结构的<strong>最小角</strong>被摆在场景 <code>(0,0,0)</code></td></tr>
+<tr><td>缺失时</td><td>只打一行 error 日志，场景仍然能播（世界里什么都没有）</td></tr>
+</tbody></table>
+<h3 id="5-2-用结构方块导出-推荐流程-照着做">5.2 用结构方块导出（推荐流程，照着做）</h3>
+<ol><li>开一个<strong>创造超平坦</strong>世界（<code>/gamemode creative</code>，平坦预设即可）。</li><li>按剧本坐标搭机器。<strong>关键</strong>：让机器的<strong>最下一层方块贴在 y=0 的地面上</strong>。</li></ol>
+<p>   例：剧本里机器在 <code>util.grid().at(2, 1, 2)</code> → 结构里它就应该在局部坐标 <code>(2, 1, 2)</code>。    同时让所有方块都在 <code>x,z ∈ [0, size-1]</code> 范围内（底板 <code>size</code> 通常 5 或 7）。</p>
+<ol><li><code>/give @s structure_block</code>，把它放在结构的一个角，打开 GUI：</li><li>模式 = <code>SAVE</code></li><li>结构名称 = <code>my_first</code></li><li>相对位置/尺寸 = 框住整个结构</li><li><strong>勾掉「包含实体」</strong>（除非你确实要结构里带实体）</li><li>点 <code>DETECT</code> 再 <code>SAVE</code></li><li>到存档里拿文件：</li></ol>
+<p>   <code>saves/&lt;世界名&gt;/generated/minecraft/structures/my_first.nbt</code></p>
+<ol><li>复制到 <code>src/main/resources/assets/&lt;modid&gt;/ponder/my_first.nbt</code>。</li><li>Dev 环境特别注意：<strong>运行时真正读的是 <code>build/resources/main</code></strong>（<code>processResources</code> 的产物），</li></ol>
+<p>   见本仓库 <code>build/resources/main/assets/...</code>。所以改完源资源要跑一次    <code>./gradlew processResources</code>（或 <code>./gradlew build</code>），再 <code>F3+T</code> 重载资源包。</p>
+<h3 id="5-3-坐标系对齐表-照着填就不会歪">5.3 坐标系对齐表（照着填就不会歪）</h3>
+<table><thead><tr><th>你想表达</th><th>结构里怎么摆</th><th>剧本里怎么写</th></tr></thead><tbody>
+<tr><td>机器在底板正中心（5x5）</td><td>机器底部落在 <code>(2,1,2)</code></td><td><code>configureBasePlate(0,0,5)</code> + <code>grid().at(2,1,2)</code></td></tr>
+<tr><td>7x7 底板</td><td>中心是 <code>(3,1,3)</code></td><td><code>configureBasePlate(0,0,7)</code></td></tr>
+<tr><td>地面层</td><td>y=0 的那一层方块</td><td><code>select().layer(0)</code></td></tr>
+<tr><td>机器上方留 3 格</td><td>结构高度至少到 y=4</td><td><code>grid().at(2,4,2)</code> 能用</td></tr>
+<tr><td>侧边传动力（传动杆在南侧）</td><td>杆在 <code>(2,1,4)</code></td><td><code>grid().at(2,1,4)</code></td></tr>
+</tbody></table>
+<blockquote><p>记法：<strong>结构文件里的局部坐标 = 剧本里的 <code>util.grid()</code> 坐标</strong>。两边对不上的唯一原因就是你搭的时候没让最小角落在 (0,0)。</p></blockquote>
+<h3 id="5-4-方块实体的数据">5.4 方块实体的数据</h3>
+<ul><li>结构方块保存时会把方块实体 NBT 一起存（容器内容、朝向、速度……），Ponder 落位时按 <code>placeInWorld(..., flags=2)</code> 放置，</li></ul>
+<p>  <strong>方块实体数据会跟着来</strong>。</p>
+<ul><li>想改 BE 字段：在剧本里用 <code>modifyBlockEntity(...)</code> / <code>modifyBlockEntityNBT(...)</code>（见 4.5）。</li><li>Create 自己还需要一次性修正：</li></ul>
+<p>  <code>CreatePonderPlugin.onPonderLevelRestore</code> 里调 <code>PonderWorldBlockEntityFix.fixControllerBlockEntities(ponderLevel)</code>。   这是 Create 内部处理（动能控制器 BE 的引用重建），<strong>第三方 addon 通常不需要</strong>，除非你也用了「主控方块实体」模式。</p>
+<h3 id="5-5-失败症状对照表">5.5 失败症状对照表</h3>
+<table><thead><tr><th>症状</th><th>原因</th><th>修法</th></tr></thead><tbody>
+<tr><td>场景全空，日志 <code>Ponder schematic missing: ns:ponder/x.nbt</code></td><td>路径/文件名/命名空间错</td><td>核对 <code>assets/&lt;modid&gt;/ponder/&lt;剧本id&gt;.nbt</code></td></tr>
+<tr><td>日志 <code>Failed to read ponder schematic</code></td><td>不是 GZIP+NBT（比如存成了 .schem / 未压缩）</td><td>用结构方块重存；或 <code>gzip</code> 压一遍</td></tr>
+<tr><td>场景里有方块但位置全歪</td><td>结构最小角不在 (0,0,0)</td><td>重搭时把方块挪到 0 起步</td></tr>
+<tr><td>机器缺零件（只有一部分）</td><td>结构方块尺寸框小了</td><td>加大尺寸重新 SAVE</td></tr>
+<tr><td>方块变成「空气/未知方块」</td><td>结构里含其它模组方块，但测试环境没装该模组</td><td>测试环境装齐依赖</td></tr>
+<tr><td>改完 .nbt 游戏里没变化</td><td>没同步到 <code>build/resources/main</code>，或没重载资源</td><td><code>./gradlew processResources</code> + <code>F3+T</code></td></tr>
+</tbody></table>
+<h3 id="5-6-没有结构文件时的降级方案-纯代码搭">5.6 没有结构文件时的降级方案（纯代码搭）</h3>
+<p>调试期（或做「程序生成教学场景」）可以完全不用 .nbt：</p>
+<pre class="code"><code class="lang-java">scene.debug().debugSchematic();            // 先让整张结构可见（这里其实是空的）
+scene.world().setBlocks(util.select().fromTo(0,0,0, 4,0,4), Blocks.STONE.defaultBlockState(), false);
+scene.world().setBlock(util.grid().at(2,1,2), ModBlocks.KINETIC_NEUTRON_COLLECTOR.get().defaultBlockState(), true);</code></pre>
+<blockquote><p>这样能验证剧本逻辑、文字、节奏，但<strong>先别指望方块实体有数据</strong>。 优点：改一行看一眼，不用反复结构方块导出；缺点：结构一复杂就该上 .nbt 了。</p></blockquote>
+<hr/>
+<h2 id="6-本地化-中文标题与台词-第二大翻车点">6. 本地化：中文标题与台词（第二大翻车点）</h2>
+<h3 id="6-1-真相-你写在代码里的文字-平时根本不会显示">6.1 真相：你写在代码里的文字<strong>平时根本不会显示</strong></h3>
+<p>这是所有新手第一个「为什么显示成一串奇怪 key」的原因。看源码：</p>
+<pre class="code"><code class="lang-java">// PonderLocalization: 正常模式下，文本一律走 I18n
+public String getSpecific(ResourceLocation sceneId, String k) {
+    if (PonderIndex.editingModeActive()) {             // 编辑模式：用你代码里的默认文本
+        return specific.get(sceneId).get(k);
+    } else {
+        return I18n.get(langKeyForSpecific(sceneId, k));   // 正常模式：查 lang！
+    }
+}</code></pre>
+<p>也就是说：<code>.text("This is a machine")</code> 里的英文只是<strong>默认值/占位</strong>， 玩家真正看到的是 lang 文件里对应 key 的内容；<strong>lang 里没有这个 key，就显示 key 本身</strong>。</p>
+<h3 id="6-2-key-规则表-照抄即可">6.2 key 规则表（照抄即可）</h3>
+<table><thead><tr><th>内容</th><th>lang key</th><th>例子</th></tr></thead><tbody>
+<tr><td>场景标题</td><td><code>&lt;modid&gt;.ponder.&lt;sceneId&gt;.header</code></td><td><code>mymod.ponder.my_first.header</code></td></tr>
+<tr><td>第 N 句文字</td><td><code>&lt;modid&gt;.ponder.&lt;sceneId&gt;.text_&lt;N&gt;</code></td><td><code>mymod.ponder.my_first.text_1</code></td></tr>
+<tr><td>共享文字</td><td><code>&lt;modid&gt;.ponder.shared.&lt;key&gt;</code></td><td><code>mymod.ponder.shared.needs_rotation</code></td></tr>
+<tr><td>标签名</td><td><code>&lt;modid&gt;.ponder.tag.&lt;tagId&gt;</code></td><td><code>mymod.ponder.tag.neutron_machines</code></td></tr>
+<tr><td>标签描述</td><td><code>&lt;modid&gt;.ponder.tag.&lt;tagId&gt;.description</code></td><td>同上 + <code>.description</code></td></tr>
+</tbody></table>
+<p>其中：</p>
+<ul><li><strong><code>&lt;sceneId&gt;</code> 来自 `scene.title("my_first", "...") 的第一个参数</strong>——不是物品 id，也不是 .nbt 文件名。</li></ul>
+<p>  不调用 <code>title()</code> 时它默认是 <code>missing_title</code>（源码里就是这么写的）。</p>
+<ul><li><strong><code>&lt;N&gt;</code> 从 1 开始</strong>，按剧本里 <code>.text()</code> 的<strong>调用顺序</strong>自增（<code>textIndex</code> 初值 1）。</li><li><strong><code>.sharedText()</code> 不占号</strong>（源码：它走 <code>getShared</code>，不调用 <code>registerText</code>）。</li></ul>
+<p>  所以混用 sharedText 不会打乱 <code>.text_1/.text_2</code> 的编号，但插一句 <code>.text()</code> 会让后面所有编号顺移 —— <strong>改剧本后一定要回头核对 lang 编号</strong>。</p>
+<h3 id="6-3-落地方式-a-手写-lang-最简单">6.3 落地方式 A：手写 lang（最简单）</h3>
+<p><code>src/main/resources/assets/&lt;modid&gt;/lang/en_us.json</code>：</p>
+<pre class="code"><code class="lang-json">{
+  &quot;mymod.ponder.my_first.header&quot;: &quot;My First Machine&quot;,
+  &quot;mymod.ponder.my_first.text_1&quot;: &quot;This machine does the thing&quot;,
+  &quot;mymod.ponder.my_first.text_2&quot;: &quot;And this is how you power it&quot;,
+  &quot;mymod.ponder.shared.needs_rotation&quot;: &quot;It needs rotational force&quot;,
+  &quot;mymod.ponder.tag.neutron_machines&quot;: &quot;Neutron Machines&quot;,
+  &quot;mymod.ponder.tag.neutron_machines.description&quot;: &quot;Machines that condense neutron matter&quot;
+}</code></pre>
+<p><code>src/main/resources/assets/&lt;modid&gt;/lang/zh_cn.json</code> 写中文即可。</p>
+<blockquote><p>本模组已有 <code>ModLanguageProvider</code> / <code>ModLanguageProviderZhCn</code>（datagen），可以在这两个类里加同样的 key。</p></blockquote>
+<h3 id="6-4-落地方式-b-datagen-自动生成-推荐给要维护的项目">6.4 落地方式 B：datagen 自动生成（推荐给要维护的项目）</h3>
+<p>Ponder 提供了把「代码里写的默认文案」导出成 lang 的 API：</p>
+<pre class="code"><code class="lang-java">// 在 GatherDataEvent 的 LANGUAGE provider 里
+PonderIndex.addPlugin(MyPonderPlugin.INSTANCE);   // datagen 期间不会跑 FMLClientSetupEvent，必须手动加
+PonderIndex.getLangAccess().provideLang(&quot;mymod&quot;, (key, value) -&gt; {
+    langProvider.add(key, value);                  // 由你的 LanguageProvider 收集
+});</code></pre>
+<p>Create 就是这么干的（<code>CreateDatagen.providePonderLang</code>，注释里明确写了「FMLClientSetupEvent does not run during datagen」）。</p>
+<p>优点：<code>.text("English")</code> 改一句，en_us.json 自动跟着改，key 永远对得上。 缺点：<code>.text()</code> 的默认文案必须写成<strong>英文</strong>（它会被当成 en_us 的正式文案）；中文仍需手写 zh_cn。</p>
+<h3 id="6-5-编辑模式-开发期神器">6.5 编辑模式（开发期神器）</h3>
+<p>Ponder 有个客户端配置开关：</p>
+<pre class="code"><code class="lang-toml"># run/config/ponder-client.toml
+[client]
+    editingMode = true</code></pre>
+<p>打开后（<code>PonderConfig.client().editingMode</code>）：</p>
+<ul><li>文案<strong>直接显示你在代码里写的默认值</strong>，不用写 lang 就能看见文字；</li><li>场景脚本重载更频繁，方便调整；</li><li>索引界面会多出调试信息。</li></ul>
+<p><strong>开发期强烈建议打开</strong>：先看效果，最后再补 lang。</p>
+<h3 id="6-6-语言问题速查">6.6 语言问题速查</h3>
+<table><thead><tr><th>症状</th><th>原因</th><th>修法</th></tr></thead><tbody>
+<tr><td>标题显示成 <code>mymod.ponder.xxx.header</code></td><td>lang 缺 key</td><td>补 <code>header</code> 条目</td></tr>
+<tr><td>第 2 句显示成 <code>...text_2</code></td><td>编号对不上（你插了一句 <code>.text()</code>）</td><td>数一遍调用顺序重排编号</td></tr>
+<tr><td>英文正常，中文也是英文</td><td>zh_cn.json 没写 / 没打包进去</td><td>检查 <code>assets/&lt;modid&gt;/lang/zh_cn.json</code></td></tr>
+<tr><td>全部显示正常但共享文字是 key</td><td><code>sharedText</code> 的 key 规则是 <code>shared.</code> 不是 <code>text_</code></td><td>用 6.2 表的写法</td></tr>
+<tr><td>改了 lang 没生效</td><td>没 <code>F3+T</code> 重载资源（lang 属于资源包）</td><td>重载资源包</td></tr>
+</tbody></table>
+<hr/>
+<h2 id="7-标签-索引-排序-排除">7. 标签、索引、排序、排除</h2>
+<h3 id="7-1-注册一个标签">7.1 注册一个标签</h3>
+<pre class="code"><code class="lang-java">public static final ResourceLocation TAG_MACHINES =
+        ResourceLocation.fromNamespaceAndPath(&quot;mymod&quot;, &quot;machines&quot;);
+
+@Override
+public void registerTags(PonderTagRegistrationHelper&lt;ResourceLocation&gt; helper) {
+    helper.registerTag(TAG_MACHINES)
+          .addToIndex()                                            // 出现在 /ponder index 首页
+          .item(ModBlocks.MY_MACHINE.get(), true, false)            // 标签图标（物品）, 后两个参数 = 大图标/带动画
+          .title(&quot;My Machines&quot;)                                     // 默认文案 → &lt;ns&gt;.ponder.tag.machines
+          .description(&quot;Machines added by my mod&quot;)                  // → &lt;ns&gt;.ponder.tag.machines.description
+          .register();                                              // ← 别忘了，忘了等于没注册
+}</code></pre>
+<p><code>TagBuilder</code> 全部可选项：<code>title</code> <code>description</code> <code>addToIndex</code> <code>icon(ResourceLocation|String)</code> <code>idAsIcon()</code> <code>item(ItemLike[,boolean,boolean])</code> <code>register()</code>。</p>
+<blockquote><p>标签 key 用的是 <code>registerTag(id)</code> 里 id 的 <strong>path</strong>：<code>mymod:machines</code> → key <code>mymod.ponder.tag.machines</code>。</p></blockquote>
+<h3 id="7-2-一个剧本给多个组件共用">7.2 一个剧本给多个组件共用</h3>
+<p>同一段动画给一堆同类方块用（比如你的 4 个等级的收集器）：</p>
+<pre class="code"><code class="lang-java">helper.forComponents(
+            ModBlocks.KINETIC_NEUTRON_COLLECTOR.get(),
+            ModBlocks.KINETIC_NEUTRON_COLLECTOR_DENSE.get())
+      .addStoryBoard(&quot;neutron_collector&quot;, ExampleScenes::collectorBasics, TAG_MACHINES);</code></pre>
+<ul><li><code>forComponents(T...)</code> / <code>forComponents(Iterable&lt;? extends T&gt;)</code> 返回 <code>MultiSceneBuilder</code>，</li></ul>
+<p>  可以接着链多个 <code>addStoryBoard</code>。</p>
+<ul><li>注意每组组件会<strong>各自生成一份场景</strong>，但共用同一个 .nbt 与同一套 lang key（sceneId 相同）。</li><li>如果组件类型不是 <code>ResourceLocation</code>（比如 Registrate 的 <code>ItemProviderEntry</code>），先转换一次：</li></ul>
+<p>  <code>PonderSceneRegistrationHelper&lt;ItemProviderEntry&lt;?,?&gt;&gt; h = helper.withKeyFunction(RegistryEntry::getId);</code></p>
+<h3 id="7-3-场景顺序">7.3 场景顺序</h3>
+<pre class="code"><code class="lang-java">helper.addStoryBoard(component, &quot;a&quot;, Scenes::a)
+      .orderBefore(&quot;mymod:b&quot;)     // 排在 b 之前
+      .orderAfter(&quot;create:shaft/relay&quot;);  // 排在 Create 的某场景之后</code></pre>
+<p>字符串写 <code>"namespace:path"</code> 或只写 <code>"path"</code>（默认用当前 modid）。</p>
+<h3 id="7-4-高亮标签">7.4 高亮标签</h3>
+<p>注册场景时传标签，或用 <code>StoryBoardEntry</code> 的链式：</p>
+<table><thead><tr><th>方法</th><th>作用</th></tr></thead><tbody>
+<tr><td><code>addStoryBoard(comp, id, board, tag1, tag2...)</code></td><td>直接带标签</td></tr>
+<tr><td><code>.highlightTag(tag)</code> / <code>.highlightTags(a, b)</code> / <code>.highlightAllTags()</code></td><td>后续追加</td></tr>
+</tbody></table>
+<p>标签决定索引页的分组，也决定「相关条目」列表。</p>
+<h3 id="7-5-排除索引项-indexexclusions">7.5 排除索引项（<code>indexExclusions</code>）</h3>
+<p>有些组件你不希望出现在索引里（比如同一方块的所有染色变体）：</p>
+<pre class="code"><code class="lang-java">@Override
+public void indexExclusions(IndexExclusionHelper helper) {
+    helper.exclude(ModItems.MY_DEBUG_ITEM.get());                                  // 单个
+    helper.excludeBlockVariants(MyColoredBlock.class, ModBlocks.RED_MACHINE.get()); // 整族变体
+    helper.exclude(item -&gt; item.asItem() == Items.STICK);                          // 谓词
+}</code></pre>
+<h3 id="7-6-热重载">7.6 热重载</h3>
+<table><thead><tr><th>你改了什么</th><th>怎么生效</th></tr></thead><tbody>
+<tr><td>剧本 Java 代码</td><td>重启客户端（<code>/ponder reload</code> 只重跑注册，不会热替换已编译的类）</td></tr>
+<tr><td>.nbt / lang</td><td><code>F3+T</code> 重载资源包（dev 环境先 <code>processResources</code>）</td></tr>
+<tr><td>注册逻辑（addStoryBoard 等）</td><td><code>/ponder reload</code></td></tr>
+</tbody></table>
+<p><code>/ponder reload</code> 内部就是 <code>PonderIndex.reload()</code>：清空 localization/shared/scenes/tags， 重新跑一遍所有插件的 <code>registerScenes</code>/<code>registerTags</code>/<code>registerSharedText</code> ——所以第 1.2 节强调「必须幂等」。</p>
+<hr/>
+<h2 id="8-调试与排错速查表">8. 调试与排错速查表</h2>
+<h3 id="8-1-三分钟定位法">8.1 三分钟定位法</h3>
+<pre class="code"><code class="lang-text">1. 悬停物品/按 W 没反应
+   → /ponder &lt;组件id&gt; 直接开：能开 = 入口问题（物品未注册/tooltip 被屏蔽）；也开不了 = 注册没跑
+2. 界面开了但空
+   → 看日志有没有 &quot;Ponder schematic missing&quot;（第 5.5 节）
+   → 有结构但看不见：临时加 scene.debug().debugSchematic() 看方块在不在
+3. 有方块但没文字
+   → 编辑模式打开了吗？没有 lang 就只会显示 key
+4. 场景卡住不动
+   → 是不是忘了 idle？或者最后忘了 markAsFinished()
+5. 动作全挤在一起
+   → 每个动作之间补 idle(5~10)</code></pre>
+<h3 id="8-2-症状-原因-修法-总表">8.2 症状 → 原因 → 修法 总表</h3>
+<table><thead><tr><th>症状</th><th>最可能的原因</th><th>修法</th></tr></thead><tbody>
+<tr><td>日志完全没有 <code>Registering Ponder Scenes</code></td><td><code>PonderIndex.addPlugin</code> 没被调用</td><td>检查 <code>@EventBusSubscriber(value = Dist.CLIENT)</code> 与 <code>FMLClientSetupEvent</code></td></tr>
+<tr><td>有 Registering 日志但没有你的场景</td><td><code>registerScenes</code> 里抛异常被吞 / addStoryBoard 参数 key 不是 <code>ResourceLocation</code></td><td>看日志里 PonderIndex 的报错；确认 key 类型与 <code>withKeyFunction</code></td></tr>
+<tr><td><code>/ponder xxx</code> 提示 <code>Could not find ponder scenes for item</code></td><td>组件 id 不对（你传的是剧本 id）</td><td>用 <code>addStoryBoard</code> 的第一个参数（方块/物品注册名）</td></tr>
+<tr><td>标题/正文显示原始 key</td><td>lang 缺条目 / <code>title()</code> 的第一个参数变了</td><td>第 6 章</td></tr>
+<tr><td>schematic missing</td><td>路径错（<code>ponder/</code> 目录、命名空间、文件名）</td><td>第 5.5 节</td></tr>
+<tr><td>方块位置整体偏移</td><td>结构最小角不是 (0,0,0)</td><td>第 5.3 节</td></tr>
+<tr><td>文字出现了但立刻消失</td><td><code>showText(n)</code> 的 n 太小</td><td>至少 40～60 tick</td></tr>
+<tr><td>关键帧拖不回去</td><td>没 <code>attachKeyFrame()</code> / 或挂在 <code>.sharedText()</code> 后面仍有效（挂法一样）</td><td>加 <code>.attachKeyFrame()</code></td></tr>
+<tr><td>结构移动后飞出去</td><td>没设转轴</td><td><code>configureCenterOfRotation</code></td></tr>
+<tr><td>专有服务器崩 <code>NoClassDefFoundError: net/createmod/ponder/...</code></td><td>客户端类泄漏到服务端</td><td>全部塞进 <code>Dist.CLIENT</code> 事件或 <code>DistExecutor</code></td></tr>
+<tr><td>切换世界后场景重复/变多</td><td>注册方法不幂等（往里 add 静态列表）</td><td>改成纯声明式</td></tr>
+<tr><td>改代码后不生效</td><td><code>/ponder reload</code> 不能热替换已编译的剧本类</td><td>重启客户端</td></tr>
+</tbody></table>
+<h3 id="8-3-有用的日志-命令">8.3 有用的日志/命令</h3>
+<table><thead><tr><th>手段</th><th>用途</th></tr></thead><tbody>
+<tr><td><code>/ponder reload</code></td><td>重跑注册（改 <code>addStoryBoard</code> 后不用重启）</td></tr>
+<tr><td><code>/ponder index</code> / <code>/ponder tags</code></td><td>看索引里到底有什么</td></tr>
+<tr><td><code>/ponder &lt;id&gt;</code></td><td>绕过物品入口直接播放</td></tr>
+<tr><td>日志关键字 <code>Ponder schematic missing</code> / <code>Failed to read ponder schematic</code> / <code>Registering Ponder Scenes took</code></td><td>三个关键断点</td></tr>
+<tr><td><code>scene.debug().debugSchematic()</code></td><td>一次性显示整张结构（排查性最强的一行）</td></tr>
+<tr><td><code>scene.debug().enqueueCallback(s -&gt; System.out.println(...))</code></td><td>在队列空闲时读虚拟世界</td></tr>
+<tr><td>客户端配置 <code>editingMode = true</code></td><td>显示代码里的默认文案</td></tr>
+</tbody></table>
+<hr/>
+<h2 id="9-完整实战-给本模组的-动能中子收集器-写一个思索场景">9. 完整实战：给本模组的「动能中子收集器」写一个思索场景</h2>
+<p>以下代码<strong>已在本仓库用 <code>./gradlew compileJava</code> 编译验证通过</strong>（记录见第 11 章）， 源文件在 <code>docs/ponder-example/java/.../ponder_demo/</code>，拷进 <code>src/main/java</code> 即可用。</p>
+<h3 id="9-1-先设计分镜-写代码前必做">9.1 先设计分镜（写代码前必做）</h3>
+<p>好的思索场景 = 一个观点一句话，一句一个关键帧：</p>
+<table><thead><tr><th>步</th><th>画面</th><th>台词</th><th>时长</th></tr></thead><tbody>
+<tr><td>1</td><td>底板浮现</td><td>（无）</td><td>10</td></tr>
+<tr><td>2</td><td>收集器从地里升起</td><td>"动能中子收集器会在旋转时凝聚物质"</td><td>60</td></tr>
+<tr><td>3</td><td>传动杆接入、出现转向指示</td><td>"这里接入旋转力"</td><td>60</td></tr>
+<tr><td>4</td><td>转速翻倍、成功提示</td><td>"转速越高，收集越快"</td><td>50</td></tr>
+</tbody></table>
+<h3 id="9-2-注册三件套-plugin-客户端挂载">9.2 注册三件套（Plugin + 客户端挂载）</h3>
+<p>见 1.2 / 1.3 节。本仓库示例文件：</p>
+<ul><li><code>MyPonderPlugin.java</code> —— 实现 <code>PonderPlugin</code></li><li><code>MyPonderClientSetup.java</code> —— <code>FMLClientSetupEvent</code> 里 <code>PonderIndex.addPlugin(...)</code></li></ul>
+<h3 id="9-3-剧本全文-示例-1-只用-ponder-原生-api">9.3 剧本全文（示例 1：只用 Ponder 原生 API）</h3>
+<pre class="code"><code class="lang-java">public static void collectorBasics(SceneBuilder builder, SceneBuildingUtil util) {
+    builder.title(&quot;neutron_collector&quot;, &quot;Collecting neutron matter&quot;);
+    builder.configureBasePlate(0, 0, 5);
+    builder.scaleSceneView(1);
+    builder.idle(5);
+
+    builder.world().showSection(util.select().layer(0), Direction.UP);
+    builder.idle(5);
+
+    BlockPos collector = util.grid().at(2, 1, 2);
+    builder.world().showSection(util.select().position(collector), Direction.DOWN);
+    builder.idle(10);
+
+    builder.overlay().showText(60)
+            .text(&quot;Kinetic Neutron Collectors condense matter while rotating&quot;)
+            .attachKeyFrame()
+            .placeNearTarget()
+            .pointAt(util.vector().blockSurface(collector, Direction.NORTH));
+    builder.idle(60);
+
+    builder.effects().indicateSuccess(collector);
+    builder.idle(20);
+
+    builder.markAsFinished();
+}</code></pre>
+<h3 id="9-4-剧本全文-示例-2-create-增强版">9.4 剧本全文（示例 2：Create 增强版）</h3>
+<pre class="code"><code class="lang-java">public static void collectorKinetic(SceneBuilder builder, SceneBuildingUtil util) {
+    // 关键：CreateSceneBuilder 包一层，才能用 setKineticSpeed / rotationDirectionIndicator
+    CreateSceneBuilder scene = new CreateSceneBuilder(builder);
+
+    scene.title(&quot;neutron_collector_kinetic&quot;, &quot;Feeding it rotational force&quot;);
+    scene.configureBasePlate(0, 0, 5);
+    scene.setSceneOffsetY(-1);
+    scene.world().showSection(util.select().layer(0), Direction.UP);
+    scene.idle(5);
+
+    BlockPos collector = util.grid().at(2, 1, 2);
+    BlockPos shaft = util.grid().at(2, 1, 4);
+    Selection drive = util.select().fromTo(shaft, shaft.west().east());   // 传动杆所在的一格
+
+    scene.world().showSection(util.select().position(collector), Direction.DOWN);
+    scene.idle(5);
+    scene.world().showSection(drive, Direction.SOUTH);
+    scene.idle(10);
+
+    scene.world().setKineticSpeed(drive, 32);            // Create 专用：设定转速
+    scene.effects().rotationDirectionIndicator(shaft);   // Create 专用：转向粒子
+    scene.idle(20);
+
+    scene.overlay().showText(60)
+            .text(&quot;A shaft here supplies the collector with rotational force&quot;)
+            .attachKeyFrame()
+            .placeNearTarget()
+            .colored(PonderPalette.MEDIUM)
+            .pointAt(util.vector().blockSurface(shaft, Direction.NORTH));
+    scene.idle(60);
+
+    scene.overlay().showControls(util.vector().topOf(collector), Pointing.DOWN, 30)
+            .rightClick()
+            .withItem(new ItemStack(AllItems.WRENCH.get()));
+    scene.idle(30);
+
+    scene.overlay().showText(50)
+            .sharedText(&quot;needs_rotation&quot;)
+            .colored(PonderPalette.INPUT)
+            .placeNearTarget()
+            .pointAt(util.vector().centerOf(collector));
+    scene.idle(50);
+
+    scene.world().modifyKineticSpeed(drive, f -&gt; f * 2);  // 转速翻倍
+    scene.idle(20);
+    scene.effects().indicateRedstone(collector);
+    scene.markAsFinished();
+}</code></pre>
+<blockquote><p>完整可编译版本（含 import、注册、标签）见 <code>docs/ponder-example/java/.../ExampleScenes.java</code>。 注意 <code>CreateSceneBuilder</code> 的 <code>world()</code> 返回的是 <code>CreateSceneBuilder.WorldInstructions</code>， 它继承自 Ponder 的 <code>PonderWorldInstructions</code>，所以原生方法（<code>showSection</code>/<code>setBlock</code>…）照样能用。</p></blockquote>
+<h3 id="9-5-create-专属能力速查-createscenebuilder">9.5 Create 专属能力速查（<code>CreateSceneBuilder</code>）</h3>
+<table><thead><tr><th>分类</th><th>方法</th></tr></thead><tbody>
+<tr><td>动能</td><td><code>setKineticSpeed(Selection, float)</code> / <code>multiplyKineticSpeed(Selection, float)</code> / <code>modifyKineticSpeed(Selection, UnaryOperator&lt;Float&gt;)</code></td></tr>
+<tr><td>转向/转速粒子</td><td><code>effects().rotationDirectionIndicator(BlockPos)</code> / <code>rotationSpeedIndicator(BlockPos)</code></td></tr>
+<tr><td>传动构件动画</td><td><code>rotateBearing(pos, angle, ticks)</code> / <code>movePulley(pos, distance, ticks)</code> / <code>moveDeployer(pos, distance, ticks)</code> / <code>animateBogey(...)</code></td></tr>
+<tr><td>传送带</td><td><code>createItemOnBeltLike(pos, side, stack)</code> / <code>createItemOnBelt(pos, side, stack)</code> → <code>ElementLink&lt;BeltItemElement&gt;</code> / <code>removeItemsFromBelt(pos)</code> / <code>stallBeltItem(link, bool)</code> / <code>changeBeltItemTo(link, stack)</code></td></tr>
+<tr><td>漏斗/机械手</td><td><code>flapFunnel(pos, outward)</code> / <code>instructArm(pos, phase, heldItem, ...)</code></td></tr>
+<tr><td>合成器</td><td><code>setCraftingResult(crafter, output)</code> / <code>connectCrafterInvs(pos1, pos2)</code></td></tr>
+<tr><td>胶水/显示板/列车</td><td><code>effects().superGlue(...)</code> / <code>setDisplayBoardText(...)</code> / <code>animateTrainStation(...)</code> / <code>conductorBlaze(...)</code> / <code>changeSignalState(...)</code></td></tr>
+<tr><td>彩蛋</td><td><code>special().birbOnSpinnyShaft(pos)</code> / <code>birbOnTurntable(pos)</code> / <code>conductorBirb(link, bool)</code></td></tr>
+</tbody></table>
+<h3 id="9-6-场景需要补的资产清单">9.6 场景需要补的资产清单</h3>
+<pre class="code"><code class="lang-text">src/main/resources/assets/avaritia_singularity_stress/ponder/neutron_collector.nbt          ← 结构（5x5 底板，机器在 (2,1,2)）
+src/main/resources/assets/avaritia_singularity_stress/ponder/neutron_collector_kinetic.nbt  ← 第二个场景的结构
+lang: avaritia_singularity_stress.ponder.neutron_collector.header / .text_1
+      avaritia_singularity_stress.ponder.neutron_collector_kinetic.header / .text_1 / .text_2
+      avaritia_singularity_stress.ponder.shared.needs_rotation
+      avaritia_singularity_stress.ponder.tag.neutron_machines(.description)</code></pre>
+<hr/>
+<h2 id="10-版本与移植">10. 版本与移植</h2>
+<h3 id="10-1-本仓库事实-已验证">10.1 本仓库事实（已验证）</h3>
+<table><thead><tr><th>项</th><th>1.21.1 环境（本仓库）</th><th>备注</th></tr></thead><tbody>
+<tr><td>artifact</td><td><code>net.createmod.ponder:ponder-neoforge:1.0.82+mc1.21.1</code></td><td>Create 1.21.1 源码用的是 1.0.85</td></tr>
+<tr><td>包名</td><td><code>net.createmod.ponder.*</code></td><td>见 jar 内包结构</td></tr>
+<tr><td>入口</td><td><code>PonderIndex.addPlugin</code>（客户端）</td><td>1.20.1 的 Forge 版 jar（1.0.91）<strong>包名同样是</strong> <code>net.createmod.ponder.*</code>（已核对两个 jar 的包结构一致）</td></tr>
+<tr><td>文本</td><td>代码里提供默认文案，实际显示走 lang（第 6 章）</td><td>两版一致</td></tr>
+<tr><td>结构路径</td><td><code>assets/&lt;ns&gt;/ponder/&lt;id&gt;.nbt</code></td><td>两版一致</td></tr>
+</tbody></table>
+<h3 id="10-2-1-20-1-1-21-1-逐项差异-对两个真实-jar-做了-javap-逐个-diff">10.2 1.20.1 ↔ 1.21.1 逐项差异（对两个真实 jar 做了 <code>javap</code> 逐个 diff）</h3>
+<table><thead><tr><th>项</th><th>结论</th></tr></thead><tbody>
+<tr><td>包名</td><td><strong>两版都是</strong> <code>net.createmod.ponder.*</code>：两个 jar 里 <code>grep -c 'com/simibubi/ponder'</code> 都是 0 → 移植<strong>不用改 import</strong></td></tr>
+<tr><td>核心 API</td><td>15 个核心接口逐个 diff：<strong>14 个完全相同</strong></td></tr>
+<tr><td>唯一 API 差异</td><td>1.21.1 的 <code>WorldInstructions</code> <strong>多一个</strong> <code>getHolderLookupProvider()</code></td></tr>
+<tr><td>加载器入口类</td><td>全量改名：<code>ForgePonder</code>/<code>ForgePonderClient</code>（1.20.1）→ <code>NeoForgePonder</code>/<code>NeoForgePonderClient</code>（1.21.1）。那是 Ponder 自己的入口，<strong>与你无关</strong></td></tr>
+</tbody></table>
+<p><code>getHolderLookupProvider()</code> 为什么存在：1.21 把 <code>ItemStack.save(tag)</code> 换成了需要 <code>HolderLookup.Provider</code> 的 <code>saveOptional(provider)</code>。 所以「把物品写进方块实体 NBT」要这样写：</p>
+<pre class="code"><code class="lang-java">scene.world().modifyBlockEntityNBT(selection, MyBlockEntity.class, nbt -&gt; {
+    nbt.put(&quot;Filter&quot;, stack.saveOptional(scene.world().getHolderLookupProvider()));
+});</code></pre>
+<p>（Create 的 <code>CreateSceneBuilder.setFilterData</code> / <code>instructArm</code> 就是这么写的，见 <code>allapis/Create-mc1.21.1-dev/.../foundation/ponder/CreateSceneBuilder.java:242</code>。） 拿 1.21.1 的代码往 1.20.1 搬，这个方法是编译不过的。</p>
+<blockquote><p>完整比对命令与结果见 <code>docs/ponder-research/04-移植注意.md</code>。</p></blockquote>
+<h3 id="10-3-从-create-0-5-x-老教程移植时">10.3 从 Create 0.5.x 老教程移植时</h3>
+<ul><li>那时候 Ponder 还在 Create 内部，包名 <code>com.simibubi.ponder</code>。具体在哪一版改名<strong>未验证</strong>（本地没有更早的 jar）；</li></ul>
+<p>  能确定的是：<strong>1.0.91 起就已经是 <code>net.createmod.ponder</code></strong>，所以 1.20.1(1.0.91) → 1.21.1(1.0.82) 不用改 import。</p>
+<ul><li><code>net.createmod.catnip</code>（Catnip）是 Ponder 的配套工具库：<code>Pointing</code>、<code>Color</code>、<code>Outliner</code> 都在里面，Create 的 <code>CreateSceneBuilder</code> 也依赖它。</li><li>1.21.1 的 NeoForge 事件与 1.20.1 Forge 不同（<code>FMLClientSetupEvent</code> 还在，但注册表/网络 API 变了），移植时优先改「注册部分」，剧本 API 基本不动。</li></ul>
+<h3 id="10-4-依赖写法-各平台">10.4 依赖写法（各平台）</h3>
+<pre class="code"><code class="lang-gradle">// NeoForge 1.21.1
+implementation(&quot;net.createmod.ponder:ponder-neoforge:1.0.82+mc1.21.1&quot;)
+// Forge 1.20.1（若维护老分支）
+implementation(&quot;net.createmod.ponder:Ponder-Forge-1.20.1:1.0.91&quot;)</code></pre>
+<blockquote><p>注意：Create 6.x 已把 Ponder <strong>jarJar 内嵌</strong>（<code>build.gradle</code> 里 <code>jarJar(api("net.createmod.ponder:ponder-neoforge..."))</code>）。 如果你只是 Create 的 addon，依赖 Create 就已经带上 Ponder 运行时了； 但<strong>编译期仍要显式声明 ponder 依赖</strong>（本仓库就是这么做的）。</p></blockquote>
+<hr/>
+<h2 id="11-证据清单-每条结论的出处">11. 证据清单（每条结论的出处）</h2>
+<h3 id="11-1-本手册验证过的命令">11.1 本手册验证过的命令</h3>
+<pre class="code"><code class="lang-bash"># ① 反编译 API 真身
+java -jar vineflower-1.11.2.jar -dgs=1 -asc=1 -rsy=1 \
+     ~/.gradle/caches/modules-2/files-2.1/net.createmod.ponder/ponder-neoforge/1.0.82+mc1.21.1/&lt;hash&gt;/ponder-neoforge-1.0.82+mc1.21.1.jar \
+     /tmp/psrc
+
+# ② 看签名（不反编译也能拿）
+cd /tmp/ponderx &amp;&amp; javap -public -cp . net.createmod.ponder.api.scene.WorldInstructions
+
+# ③ 编译验证本手册第 9 章的示例代码（把示例拷进 src 后）
+cp -r docs/ponder-example/java/committee src/main/java/
+./gradlew compileJava --offline --no-build-cache --console=plain
+# → BUILD SUCCESSFUL in 6s，产出 3 个 .class：
+#   ExampleScenes.class / MyPonderClientSetup.class / MyPonderPlugin.class
+# 唯一警告来自本模组既有代码（NeutronExtendoGripItem.initializeClient 已被 NeoForge 标记过期），与本示例无关。
+# 完整日志：docs/_verify/compile-demo.log
+rm -rf src/main/java/committee/nova/avaritia_singularity_stress/ponder_demo   # 验证后已清理</code></pre>
+<h3 id="11-2-逐条结论-源码位置-反编译后的类">11.2 逐条结论 → 源码位置（反编译后的类）</h3>
+<table><thead><tr><th>结论</th><th>出处</th></tr></thead><tbody>
+<tr><td>结构路径是 <code>assets/&lt;ns&gt;/ponder/&lt;id&gt;.nbt</code></td><td><code>PonderSceneRegistry.loadSchematic</code>：<code>String path = "ponder/" + location.getPath() + ".nbt"</code></td></tr>
+<tr><td>结构是 GZIP+NBT，用 <code>StructureTemplate</code> 落位</td><td><code>PonderSceneRegistry.loadSchematic(InputStream)</code> + <code>compile(...)</code> 里 <code>placeInWorld(level, ZERO, ZERO, ...)</code></td></tr>
+<tr><td>找不到结构只报错不崩</td><td>同上，<code>Ponder.LOGGER.error("Ponder schematic missing: " + ...)</code> 后返回空 <code>StructureTemplate</code></td></tr>
+<tr><td>lang key：<code>&lt;ns&gt;.ponder.&lt;scene&gt;.&lt;key&gt;</code></td><td><code>PonderLocalization.langKeyForSpecific</code></td></tr>
+<tr><td>lang key：<code>&lt;ns&gt;.ponder.shared.&lt;key&gt;</code> / <code>&lt;ns&gt;.ponder.tag.&lt;id&gt;[.description]</code></td><td><code>PonderLocalization.langKeyForShared</code> / <code>langKeyForTag</code> / <code>langKeyForTagDescription</code></td></tr>
+<tr><td>正常模式一律走 <code>I18n.get(langKey)</code>，代码里的文本只是默认值</td><td><code>PonderLocalization.getSpecific</code> / <code>getShared</code> / <code>getTagName</code></td></tr>
+<tr><td>场景 id 由 <code>title()</code> 第一参数决定，默认 <code>missing_title</code></td><td><code>PonderSceneBuilder.title</code> + <code>PonderScene</code> 构造器 <code>this.sceneId = ...("missing_title")</code></td></tr>
+<tr><td>标题 key 是 <code>header</code></td><td><code>PonderScene.TITLE_KEY = "header"</code></td></tr>
+<tr><td>文字编号从 1 开始、<code>.sharedText</code> 不占号</td><td><code>PonderScene</code> 构造器 <code>textIndex = 1</code>；<code>registerText</code> 里 <code>"text_" + textIndex</code>；<code>TextWindowElement.Builder.sharedText</code> 不调 registerText</td></tr>
+<tr><td><code>attachKeyFrame()</code> = 延迟关键帧</td><td><code>TextWindowElement.Builder.attachKeyFrame</code> → <code>addLazyKeyframe()</code></td></tr>
+<tr><td><code>idle(n)</code> = 插入 <code>DelayInstruction(n)</code>；<code>idleSeconds(s)=idle(s*20)</code></td><td><code>PonderSceneBuilder.idle/idleSeconds</code></td></tr>
+<tr><td>场景每 tick 推进一次、指令串行、Delay 阻塞</td><td><code>PonderScene.tick</code></td></tr>
+<tr><td>不能倒退 seek</td><td><code>PonderScene.seekToTime</code> 抛 <code>"Cannot seek backwards. Rewind first."</code></td></tr>
+<tr><td><code>showSection</code> 的方向 = 起始 0.5 格偏移方向</td><td><code>FadeIntoSceneInstruction.firstTick</code>：<code>setFadeVec(Vec3.atLowerCornerOf(dir.getNormal()).scale(0.5))</code></td></tr>
+<tr><td>插件方法会被反复调用（reload 时清空重跑）</td><td><code>PonderIndex.reload</code> → <code>clearShared/clearRegistry/registerAll/gatherSharedText</code></td></tr>
+<tr><td><code>/ponder</code> 命令族</td><td><code>PonderCommand.register</code>：<code>reload</code> / <code>index</code> / <code>tags</code> / <code>&lt;scene id&gt; [targets]</code></td></tr>
+<tr><td><code>/ponder &lt;id&gt;</code> 的 id 是<strong>组件</strong> id</td><td><code>SimplePonderActions.openPonder</code>：<code>doScenesExistForId(id)</code> → <code>PonderUI.of(id)</code></td></tr>
+<tr><td>编辑模式开关</td><td><code>CClient.editingMode</code>（<code>ponder-client.toml</code>，默认 false）</td></tr>
+<tr><td>默认键位是 W（keyCode 87）</td><td><code>PonderKeybinds.PONDER("ponder", 87)</code></td></tr>
+<tr><td>Create 的挂载点</td><td><code>CreateClient</code> 第 112 行 <code>PonderIndex.addPlugin(new CreatePonderPlugin());</code></td></tr>
+<tr><td>datagen 期间必须手动 addPlugin</td><td><code>CreateDatagen.providePonderLang</code>（注释原文：<code>FMLClientSetupEvent does not run during datagen</code>）</td></tr>
+<tr><td>场景注册的真实调用形态</td><td><code>allapis/Create-mc1.21.1-dev/.../infrastructure/ponder/AllCreatePonderScenes.java</code></td></tr>
+<tr><td>标签注册形态</td><td>同上目录 <code>AllCreatePonderTags.java</code></td></tr>
+<tr><td>Create 增强 API</td><td><code>.../foundation/ponder/CreateSceneBuilder.java</code></td></tr>
+</tbody></table>
+<h3 id="11-3-本手册没能验证的部分-老实交代">11.3 本手册没能验证的部分（老实交代）</h3>
+<ul><li><strong>渲染效果</strong>：文字气泡位置、粒子观感、缩放比例这些只能进游戏肉眼看，本手册给的是参数含义与经验值，不保证「好看」。</li><li><strong>真实播放</strong>：本文档的示例代码只做了<strong>编译验证</strong>（BUILD SUCCESSFUL），没有在实机里播放过；</li></ul>
+<p>  实机播放需要 <code>assets/&lt;modid&gt;/ponder/*.nbt</code> 结构文件（本仓库尚未放），缺失时场景会是空的但不崩。</p>
+<ul><li><strong>「<code>com.simibubi.ponder</code> 具体在哪一版改名」</strong>：未知（本地无早于 1.0.91 的 jar）。</li></ul>
+<p>  已实证的是 1.20.1(1.0.91) 与 1.21.1(1.0.82) 包名相同、15 个核心接口里 14 个完全一致（10.2）。</p>
+<ul><li><strong>结构方块导出的具体 GUI 文案</strong>：随游戏版本/语言变化，第 5.2 节给的是流程而非逐字文案。</li></ul>
+<hr/>
+<h2 id="附录-a-文件清单">附录 A：文件清单</h2>
+<table><thead><tr><th>文件</th><th>内容</th></tr></thead><tbody>
+<tr><td><code>docs/ponder-api/00-索引.md</code></td><td>全部 public API 的类索引（作用/是否外部可用）</td></tr>
+<tr><td><code>docs/ponder-api/10-scene.md</code></td><td><code>api.scene</code> 包逐方法说明</td></tr>
+<tr><td><code>docs/ponder-api/20-element.md</code></td><td>元素与 builder</td></tr>
+<tr><td><code>docs/ponder-api/30-registration.md</code></td><td>注册相关</td></tr>
+<tr><td><code>docs/ponder-api/40-foundation-others.md</code></td><td>foundation / enums / command / config</td></tr>
+<tr><td><code>docs/ponder-api/99-签名原始转储.txt</code></td><td><code>javap -public</code> 原始输出（核对用）</td></tr>
+<tr><td><code>docs/ponder-research/01-入口与注册.md</code></td><td>Create 真实注册代码与时机</td></tr>
+<tr><td><code>docs/ponder-research/02-场景范式.md</code></td><td>Create 真实场景范式库（含文件:行号）</td></tr>
+<tr><td><code>docs/ponder-example/java/...</code></td><td>本手册第 9 章示例的完整可编译源码（+ README：怎么接进自己的模组）</td></tr>
+<tr><td><code>docs/_verify/compile-demo.log</code></td><td>示例代码的编译验证日志（BUILD SUCCESSFUL）</td></tr>
+<tr><td><code>docs/_shots/*.png</code></td><td>本手册 HTML 版的渲染截图（自查用）</td></tr>
+</tbody></table>
+<h2 id="附录-b-一页速查卡">附录 B：一页速查卡</h2>
+<pre class="code"><code class="lang-text">【依赖】  net.createmod.ponder:ponder-neoforge:&lt;ver&gt;+mc1.21.1
+
+【四件套】
+  PonderPlugin          getModId + registerScenes/Tags/SharedText
+  PonderIndex.addPlugin 在 FMLClientSetupEvent（Dist.CLIENT）
+  剧本                  (SceneBuilder scene, SceneBuildingUtil util) -&gt; 指令流
+  资源                  assets/&lt;ns&gt;/ponder/&lt;剧本id&gt;.nbt
+                        assets/&lt;ns&gt;/lang/&lt;lang&gt;.json
+
+【剧本骨架】
+  title(id, 标题) → configureBasePlate(x,z,size) → idle(5)
+  → world().showSection(...) → idle(10)
+  → overlay().showText(60).text(&quot;...&quot;).attachKeyFrame().pointAt(...) → idle(60)
+  → effects().indicateSuccess(pos) → idle(20)
+  → markAsFinished()
+
+【时间】  1 tick = 1/20 秒    idle(20) = 1 秒
+
+【lang】  &lt;ns&gt;.ponder.&lt;title第一个参数&gt;.header
+          &lt;ns&gt;.ponder.&lt;title第一个参数&gt;.text_1 / text_2 ...
+          &lt;ns&gt;.ponder.shared.&lt;key&gt;
+          &lt;ns&gt;.ponder.tag.&lt;id&gt; / .description
+
+【方向】  showSection 的 Direction = 从哪个方向滑进来
+          UP=从上方落下   DOWN=从下方升起（和直觉相反！）
+
+【调试】  /ponder &lt;组件id&gt; | /ponder reload | editingMode=true
+          日志搜 &quot;Ponder schematic missing&quot;</code></pre></main></div></body></html>

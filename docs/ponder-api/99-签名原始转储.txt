@@ -1,0 +1,2449 @@
+Ponder (net.createmod.ponder) 1.0.82+mc1.21.1 -- javap -public 原始签名转储
+jar: ponder-neoforge-1.0.82+mc1.21.1.jar
+生成方式: cd <解压目录> && javap -public -cp . <全限定类名>
+共 184 个类/内部类
+
+================================================================================
+### net.createmod.ponder.NeoForgePonder
+================================================================================
+Compiled from "NeoForgePonder.java"
+public class net.createmod.ponder.NeoForgePonder {
+  public net.createmod.ponder.NeoForgePonder(net.neoforged.bus.api.IEventBus, net.neoforged.fml.ModContainer);
+  public static void init(net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent);
+}
+
+================================================================================
+### net.createmod.ponder.NeoForgePonder$Events
+================================================================================
+Compiled from "NeoForgePonder.java"
+public class net.createmod.ponder.NeoForgePonder$Events {
+  public net.createmod.ponder.NeoForgePonder$Events();
+  public static void registerCommands(net.neoforged.neoforge.event.RegisterCommandsEvent);
+}
+
+================================================================================
+### net.createmod.ponder.NeoForgePonder$ModBusEvents
+================================================================================
+Compiled from "NeoForgePonder.java"
+public class net.createmod.ponder.NeoForgePonder$ModBusEvents {
+  public net.createmod.ponder.NeoForgePonder$ModBusEvents();
+  public static void onLoad(net.neoforged.fml.event.config.ModConfigEvent$Loading);
+  public static void onReload(net.neoforged.fml.event.config.ModConfigEvent$Reloading);
+}
+
+================================================================================
+### net.createmod.ponder.NeoForgePonderClient
+================================================================================
+Compiled from "NeoForgePonderClient.java"
+public class net.createmod.ponder.NeoForgePonderClient {
+  public net.createmod.ponder.NeoForgePonderClient(net.neoforged.bus.api.IEventBus);
+  public static void init(net.neoforged.fml.event.lifecycle.FMLClientSetupEvent);
+}
+
+================================================================================
+### net.createmod.ponder.NeoForgePonderClient$ClientEvents
+================================================================================
+Compiled from "NeoForgePonderClient.java"
+public class net.createmod.ponder.NeoForgePonderClient$ClientEvents {
+  public net.createmod.ponder.NeoForgePonderClient$ClientEvents();
+  public static void onTickPre(net.neoforged.neoforge.client.event.ClientTickEvent$Pre);
+  public static void onRenderWorld(net.neoforged.neoforge.client.event.RenderLevelStageEvent);
+  public static void onLoadWorld(net.neoforged.neoforge.event.level.LevelEvent$Load);
+  public static void onUnloadWorld(net.neoforged.neoforge.event.level.LevelEvent$Unload);
+  public static void afterRenderOverlayLayer(net.neoforged.neoforge.client.event.RenderGuiLayerEvent$Post);
+  public static void onRenderTooltipColor(net.neoforged.neoforge.client.event.RenderTooltipEvent$Color);
+  public static void onItemTooltip(net.neoforged.neoforge.event.entity.player.ItemTooltipEvent);
+}
+
+================================================================================
+### net.createmod.ponder.NeoForgePonderClient$ModBusClientEvents
+================================================================================
+Compiled from "NeoForgePonderClient.java"
+public class net.createmod.ponder.NeoForgePonderClient$ModBusClientEvents {
+  public net.createmod.ponder.NeoForgePonderClient$ModBusClientEvents();
+  public static void loadCompleted(net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent);
+  public static void registerClientReloadListeners(net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent);
+  public static void onTextureStitchPost(net.neoforged.neoforge.client.event.TextureAtlasStitchedEvent);
+  public static void register(net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent);
+}
+
+================================================================================
+### net.createmod.ponder.Ponder
+================================================================================
+Compiled from "Ponder.java"
+public class net.createmod.ponder.Ponder {
+  public static final java.lang.String MOD_ID;
+  public static final java.lang.String MOD_NAME;
+  public static final org.apache.logging.log4j.Logger LOGGER;
+  public static final java.util.Random RANDOM;
+  public net.createmod.ponder.Ponder();
+  public static net.createmod.catnip.lang.LangBuilder lang();
+  public static net.minecraft.resources.ResourceLocation asResource(java.lang.String);
+  public static void init();
+}
+
+================================================================================
+### net.createmod.ponder.PonderClient
+================================================================================
+Compiled from "PonderClient.java"
+public class net.createmod.ponder.PonderClient {
+  public static final net.createmod.catnip.event.ClientResourceReloadListener RESOURCE_RELOAD_LISTENER;
+  public static final net.createmod.catnip.ghostblock.GhostBlocks GHOST_BLOCKS;
+  public net.createmod.ponder.PonderClient();
+  public static void init();
+  public static void modLoadCompleted();
+  public static void onTick();
+  public static void onRenderWorld(com.mojang.blaze3d.vertex.PoseStack);
+  public static void invalidateRenderers();
+  public static boolean isGameActive();
+}
+
+================================================================================
+### net.createmod.ponder.api.ParticleEmitter
+================================================================================
+Compiled from "ParticleEmitter.java"
+public interface net.createmod.ponder.api.ParticleEmitter {
+  public abstract void create(net.createmod.ponder.api.level.PonderLevel, double, double, double);
+}
+
+================================================================================
+### net.createmod.ponder.api.PonderPalette
+================================================================================
+Compiled from "PonderPalette.java"
+public final class net.createmod.ponder.api.PonderPalette extends java.lang.Enum<net.createmod.ponder.api.PonderPalette> {
+  public static final net.createmod.ponder.api.PonderPalette WHITE;
+  public static final net.createmod.ponder.api.PonderPalette BLACK;
+  public static final net.createmod.ponder.api.PonderPalette RED;
+  public static final net.createmod.ponder.api.PonderPalette GREEN;
+  public static final net.createmod.ponder.api.PonderPalette BLUE;
+  public static final net.createmod.ponder.api.PonderPalette SLOW;
+  public static final net.createmod.ponder.api.PonderPalette MEDIUM;
+  public static final net.createmod.ponder.api.PonderPalette FAST;
+  public static final net.createmod.ponder.api.PonderPalette INPUT;
+  public static final net.createmod.ponder.api.PonderPalette OUTPUT;
+  public static net.createmod.ponder.api.PonderPalette[] values();
+  public static net.createmod.ponder.api.PonderPalette valueOf(java.lang.String);
+  public int getColor();
+  public net.createmod.catnip.theme.Color getColorObject();
+}
+
+================================================================================
+### net.createmod.ponder.api.VirtualBlockEntity
+================================================================================
+Compiled from "VirtualBlockEntity.java"
+public interface net.createmod.ponder.api.VirtualBlockEntity {
+  public abstract void markVirtual();
+  public abstract boolean isVirtual();
+}
+
+================================================================================
+### net.createmod.ponder.api.element.AnimatedOverlayElement
+================================================================================
+Compiled from "AnimatedOverlayElement.java"
+public interface net.createmod.ponder.api.element.AnimatedOverlayElement extends net.createmod.ponder.api.element.PonderOverlayElement {
+  public abstract void setFade(float);
+  public abstract float getFade(float);
+  public default void render(net.createmod.ponder.foundation.PonderScene, net.createmod.ponder.foundation.ui.PonderUI, net.minecraft.client.gui.GuiGraphics, float);
+  public abstract void render(net.createmod.ponder.foundation.PonderScene, net.createmod.ponder.foundation.ui.PonderUI, net.minecraft.client.gui.GuiGraphics, float, float);
+}
+
+================================================================================
+### net.createmod.ponder.api.element.AnimatedSceneElement
+================================================================================
+Compiled from "AnimatedSceneElement.java"
+public interface net.createmod.ponder.api.element.AnimatedSceneElement extends net.createmod.ponder.api.element.PonderSceneElement {
+  public abstract void forceApplyFade(float);
+  public abstract void setFade(float);
+  public abstract void setFadeVec(net.minecraft.world.phys.Vec3);
+}
+
+================================================================================
+### net.createmod.ponder.api.element.ElementLink
+================================================================================
+Compiled from "ElementLink.java"
+public interface net.createmod.ponder.api.element.ElementLink<T extends net.createmod.ponder.api.element.PonderElement> {
+  public abstract java.util.UUID getId();
+  public abstract T cast(net.createmod.ponder.api.element.PonderElement);
+}
+
+================================================================================
+### net.createmod.ponder.api.element.EntityElement
+================================================================================
+Compiled from "EntityElement.java"
+public interface net.createmod.ponder.api.element.EntityElement extends net.createmod.ponder.api.element.TrackedElement<net.minecraft.world.entity.Entity> {
+}
+
+================================================================================
+### net.createmod.ponder.api.element.InputElementBuilder
+================================================================================
+Compiled from "InputElementBuilder.java"
+public interface net.createmod.ponder.api.element.InputElementBuilder {
+  public abstract net.createmod.ponder.api.element.InputElementBuilder withItem(net.minecraft.world.item.ItemStack);
+  public abstract net.createmod.ponder.api.element.InputElementBuilder leftClick();
+  public abstract net.createmod.ponder.api.element.InputElementBuilder rightClick();
+  public abstract net.createmod.ponder.api.element.InputElementBuilder scroll();
+  public abstract net.createmod.ponder.api.element.InputElementBuilder showing(net.createmod.catnip.gui.element.ScreenElement);
+  public abstract net.createmod.ponder.api.element.InputElementBuilder whileSneaking();
+  public abstract net.createmod.ponder.api.element.InputElementBuilder whileCTRL();
+}
+
+================================================================================
+### net.createmod.ponder.api.element.MinecartElement
+================================================================================
+Compiled from "MinecartElement.java"
+public interface net.createmod.ponder.api.element.MinecartElement extends net.createmod.ponder.api.element.AnimatedSceneElement {
+  public abstract void setPositionOffset(net.minecraft.world.phys.Vec3, boolean);
+  public abstract void setRotation(float, boolean);
+  public abstract net.minecraft.world.phys.Vec3 getPositionOffset();
+  public abstract net.minecraft.world.phys.Vec3 getRotation();
+}
+
+================================================================================
+### net.createmod.ponder.api.element.MinecartElement$MinecartConstructor
+================================================================================
+Compiled from "MinecartElement.java"
+public interface net.createmod.ponder.api.element.MinecartElement$MinecartConstructor {
+  public abstract net.minecraft.world.entity.vehicle.AbstractMinecart create(net.minecraft.world.level.Level, double, double, double);
+}
+
+================================================================================
+### net.createmod.ponder.api.element.ParrotElement
+================================================================================
+Compiled from "ParrotElement.java"
+public interface net.createmod.ponder.api.element.ParrotElement extends net.createmod.ponder.api.element.AnimatedSceneElement {
+  public abstract void setPositionOffset(net.minecraft.world.phys.Vec3, boolean);
+  public abstract void setRotation(net.minecraft.world.phys.Vec3, boolean);
+  public abstract net.minecraft.world.phys.Vec3 getPositionOffset();
+  public abstract net.minecraft.world.phys.Vec3 getRotation();
+  public abstract void setPose(net.createmod.ponder.api.element.ParrotPose);
+}
+
+================================================================================
+### net.createmod.ponder.api.element.ParrotPose
+================================================================================
+Compiled from "ParrotPose.java"
+public abstract class net.createmod.ponder.api.element.ParrotPose {
+  public net.createmod.ponder.api.element.ParrotPose();
+  public abstract void tick(net.createmod.ponder.foundation.PonderScene, net.minecraft.world.entity.animal.Parrot, net.minecraft.world.phys.Vec3);
+  public net.minecraft.world.entity.animal.Parrot create(net.createmod.ponder.api.level.PonderLevel);
+}
+
+================================================================================
+### net.createmod.ponder.api.element.ParrotPose$DancePose
+================================================================================
+Compiled from "ParrotPose.java"
+public class net.createmod.ponder.api.element.ParrotPose$DancePose extends net.createmod.ponder.api.element.ParrotPose {
+  public net.createmod.ponder.api.element.ParrotPose$DancePose();
+  public net.minecraft.world.entity.animal.Parrot create(net.createmod.ponder.api.level.PonderLevel);
+  public void tick(net.createmod.ponder.foundation.PonderScene, net.minecraft.world.entity.animal.Parrot, net.minecraft.world.phys.Vec3);
+}
+
+================================================================================
+### net.createmod.ponder.api.element.ParrotPose$FaceCursorPose
+================================================================================
+Compiled from "ParrotPose.java"
+public class net.createmod.ponder.api.element.ParrotPose$FaceCursorPose extends net.createmod.ponder.api.element.ParrotPose$FaceVecPose {
+  public net.createmod.ponder.api.element.ParrotPose$FaceCursorPose();
+}
+
+================================================================================
+### net.createmod.ponder.api.element.ParrotPose$FacePointOfInterestPose
+================================================================================
+Compiled from "ParrotPose.java"
+public class net.createmod.ponder.api.element.ParrotPose$FacePointOfInterestPose extends net.createmod.ponder.api.element.ParrotPose$FaceVecPose {
+  public net.createmod.ponder.api.element.ParrotPose$FacePointOfInterestPose();
+}
+
+================================================================================
+### net.createmod.ponder.api.element.ParrotPose$FaceVecPose
+================================================================================
+Compiled from "ParrotPose.java"
+public abstract class net.createmod.ponder.api.element.ParrotPose$FaceVecPose extends net.createmod.ponder.api.element.ParrotPose {
+  public net.createmod.ponder.api.element.ParrotPose$FaceVecPose();
+  public void tick(net.createmod.ponder.foundation.PonderScene, net.minecraft.world.entity.animal.Parrot, net.minecraft.world.phys.Vec3);
+}
+
+================================================================================
+### net.createmod.ponder.api.element.ParrotPose$FlappyPose
+================================================================================
+Compiled from "ParrotPose.java"
+public class net.createmod.ponder.api.element.ParrotPose$FlappyPose extends net.createmod.ponder.api.element.ParrotPose {
+  public net.createmod.ponder.api.element.ParrotPose$FlappyPose();
+  public void tick(net.createmod.ponder.foundation.PonderScene, net.minecraft.world.entity.animal.Parrot, net.minecraft.world.phys.Vec3);
+}
+
+================================================================================
+### net.createmod.ponder.api.element.PonderElement
+================================================================================
+Compiled from "PonderElement.java"
+public interface net.createmod.ponder.api.element.PonderElement {
+  public default void whileSkipping(net.createmod.ponder.foundation.PonderScene);
+  public default void tick(net.createmod.ponder.foundation.PonderScene);
+  public default void reset(net.createmod.ponder.foundation.PonderScene);
+  public abstract boolean isVisible();
+  public abstract void setVisible(boolean);
+}
+
+================================================================================
+### net.createmod.ponder.api.element.PonderOverlayElement
+================================================================================
+Compiled from "PonderOverlayElement.java"
+public interface net.createmod.ponder.api.element.PonderOverlayElement extends net.createmod.ponder.api.element.PonderElement {
+  public abstract void render(net.createmod.ponder.foundation.PonderScene, net.createmod.ponder.foundation.ui.PonderUI, net.minecraft.client.gui.GuiGraphics, float);
+}
+
+================================================================================
+### net.createmod.ponder.api.element.PonderSceneElement
+================================================================================
+Compiled from "PonderSceneElement.java"
+public interface net.createmod.ponder.api.element.PonderSceneElement extends net.createmod.ponder.api.element.PonderElement {
+  public abstract void renderFirst(net.createmod.ponder.api.level.PonderLevel, net.minecraft.client.renderer.MultiBufferSource, net.minecraft.client.gui.GuiGraphics, float);
+  public abstract void renderLayer(net.createmod.ponder.api.level.PonderLevel, net.minecraft.client.renderer.MultiBufferSource, net.minecraft.client.renderer.RenderType, net.minecraft.client.gui.GuiGraphics, float);
+  public abstract void renderLast(net.createmod.ponder.api.level.PonderLevel, net.minecraft.client.renderer.MultiBufferSource, net.minecraft.client.gui.GuiGraphics, float);
+}
+
+================================================================================
+### net.createmod.ponder.api.element.TextElementBuilder
+================================================================================
+Compiled from "TextElementBuilder.java"
+public interface net.createmod.ponder.api.element.TextElementBuilder {
+  public abstract net.createmod.ponder.api.element.TextElementBuilder colored(net.createmod.ponder.api.PonderPalette);
+  public abstract net.createmod.ponder.api.element.TextElementBuilder pointAt(net.minecraft.world.phys.Vec3);
+  public abstract net.createmod.ponder.api.element.TextElementBuilder independent(int);
+  public default net.createmod.ponder.api.element.TextElementBuilder independent();
+  public abstract net.createmod.ponder.api.element.TextElementBuilder text(java.lang.String);
+  public abstract net.createmod.ponder.api.element.TextElementBuilder text(java.lang.String, java.lang.Object...);
+  public abstract net.createmod.ponder.api.element.TextElementBuilder sharedText(net.minecraft.resources.ResourceLocation);
+  public abstract net.createmod.ponder.api.element.TextElementBuilder sharedText(net.minecraft.resources.ResourceLocation, java.lang.Object...);
+  public abstract net.createmod.ponder.api.element.TextElementBuilder sharedText(java.lang.String);
+  public abstract net.createmod.ponder.api.element.TextElementBuilder sharedText(java.lang.String, java.lang.Object...);
+  public abstract net.createmod.ponder.api.element.TextElementBuilder placeNearTarget();
+  public abstract net.createmod.ponder.api.element.TextElementBuilder attachKeyFrame();
+}
+
+================================================================================
+### net.createmod.ponder.api.element.TrackedElement
+================================================================================
+Compiled from "TrackedElement.java"
+public interface net.createmod.ponder.api.element.TrackedElement<T> extends net.createmod.ponder.api.element.PonderSceneElement {
+  public abstract void ifPresent(java.util.function.Consumer<T>);
+  public default boolean isStillValid(T);
+}
+
+================================================================================
+### net.createmod.ponder.api.element.WorldSectionElement
+================================================================================
+Compiled from "WorldSectionElement.java"
+public interface net.createmod.ponder.api.element.WorldSectionElement extends net.createmod.ponder.api.element.AnimatedSceneElement {
+  public abstract void mergeOnto(net.createmod.ponder.api.element.WorldSectionElement);
+  public abstract void set(net.createmod.ponder.api.scene.Selection);
+  public abstract void add(net.createmod.ponder.api.scene.Selection);
+  public abstract void erase(net.createmod.ponder.api.scene.Selection);
+  public abstract void setCenterOfRotation(net.minecraft.world.phys.Vec3);
+  public abstract void stabilizeRotation(net.minecraft.world.phys.Vec3);
+  public abstract void selectBlock(net.minecraft.core.BlockPos);
+  public abstract void resetSelectedBlock();
+  public abstract void queueRedraw();
+  public abstract boolean isEmpty();
+  public abstract void setEmpty();
+  public abstract void setAnimatedRotation(net.minecraft.world.phys.Vec3, boolean);
+  public abstract net.minecraft.world.phys.Vec3 getAnimatedRotation();
+  public abstract void setAnimatedOffset(net.minecraft.world.phys.Vec3, boolean);
+  public abstract net.minecraft.world.phys.Vec3 getAnimatedOffset();
+  public abstract net.createmod.catnip.data.Pair<net.minecraft.world.phys.Vec3, net.minecraft.world.phys.BlockHitResult> rayTrace(net.createmod.ponder.api.level.PonderLevel, net.minecraft.world.phys.Vec3, net.minecraft.world.phys.Vec3);
+}
+
+================================================================================
+### net.createmod.ponder.api.element.package-info
+================================================================================
+Compiled from "package-info.java"
+interface net.createmod.ponder.api.element.package-info {
+}
+
+================================================================================
+### net.createmod.ponder.api.level.PonderLevel
+================================================================================
+Compiled from "PonderLevel.java"
+public class net.createmod.ponder.api.level.PonderLevel extends net.createmod.catnip.levelWrappers.SchematicLevel {
+  public net.createmod.ponder.foundation.PonderScene scene;
+  public net.createmod.ponder.api.level.PonderLevel(net.minecraft.core.BlockPos, net.minecraft.world.level.Level);
+  public void createBackup();
+  public void restore();
+  public void restoreBlocks(net.createmod.ponder.api.scene.Selection);
+  public void pushFakeLight(int);
+  public void popLight();
+  public int getBrightness(net.minecraft.world.level.LightLayer, net.minecraft.core.BlockPos);
+  public void setMask(net.createmod.ponder.api.scene.Selection);
+  public void clearMask();
+  public net.minecraft.world.level.block.state.BlockState getBlockState(net.minecraft.core.BlockPos);
+  public net.minecraft.world.level.BlockGetter getChunkForCollisions(int, int);
+  public void renderEntities(com.mojang.blaze3d.vertex.PoseStack, net.createmod.catnip.render.SuperRenderTypeBuffer, net.minecraft.client.Camera, float);
+  public void renderParticles(com.mojang.blaze3d.vertex.PoseStack, net.minecraft.client.renderer.MultiBufferSource, net.minecraft.client.Camera, float);
+  public void tick();
+  public void addParticle(net.minecraft.core.particles.ParticleOptions, double, double, double, double, double, double);
+  public void addAlwaysVisibleParticle(net.minecraft.core.particles.ParticleOptions, double, double, double, double, double, double);
+  public boolean setBlock(net.minecraft.core.BlockPos, net.minecraft.world.level.block.state.BlockState, int);
+  public void addParticle(net.minecraft.client.particle.Particle);
+  public void setBlockBreakingProgress(net.minecraft.core.BlockPos, int);
+  public java.util.Map<net.minecraft.core.BlockPos, java.lang.Integer> getBlockBreakingProgressions();
+  public void addBlockDestroyEffects(net.minecraft.core.BlockPos, net.minecraft.world.level.block.state.BlockState);
+  public boolean hasChunkAt(net.minecraft.core.BlockPos);
+  public boolean hasChunk(int, int);
+  public boolean isLoaded(net.minecraft.core.BlockPos);
+  public boolean hasNearbyAlivePlayer(double, double, double, double);
+}
+
+================================================================================
+### net.createmod.ponder.api.level.package-info
+================================================================================
+Compiled from "package-info.java"
+interface net.createmod.ponder.api.level.package-info {
+}
+
+================================================================================
+### net.createmod.ponder.api.package-info
+================================================================================
+Compiled from "package-info.java"
+interface net.createmod.ponder.api.package-info {
+}
+
+================================================================================
+### net.createmod.ponder.api.registration.IndexExclusionHelper
+================================================================================
+Compiled from "IndexExclusionHelper.java"
+public interface net.createmod.ponder.api.registration.IndexExclusionHelper {
+  public abstract net.createmod.ponder.api.registration.IndexExclusionHelper exclude(net.minecraft.world.level.ItemLike);
+  public abstract net.createmod.ponder.api.registration.IndexExclusionHelper excludeItemVariants(java.lang.Class<? extends net.minecraft.world.item.Item>, net.minecraft.world.item.Item);
+  public abstract net.createmod.ponder.api.registration.IndexExclusionHelper excludeBlockVariants(java.lang.Class<? extends net.minecraft.world.level.block.Block>, net.minecraft.world.level.block.Block);
+  public abstract net.createmod.ponder.api.registration.IndexExclusionHelper exclude(java.util.function.Predicate<net.minecraft.world.level.ItemLike>);
+}
+
+================================================================================
+### net.createmod.ponder.api.registration.LangRegistryAccess
+================================================================================
+Compiled from "LangRegistryAccess.java"
+public interface net.createmod.ponder.api.registration.LangRegistryAccess {
+  public abstract void provideLang(java.lang.String, java.util.function.BiConsumer<java.lang.String, java.lang.String>);
+  public abstract java.lang.String getShared(net.minecraft.resources.ResourceLocation);
+  public abstract java.lang.String getShared(net.minecraft.resources.ResourceLocation, java.lang.Object...);
+  public abstract java.lang.String getTagName(net.minecraft.resources.ResourceLocation);
+  public abstract java.lang.String getTagDescription(net.minecraft.resources.ResourceLocation);
+  public abstract java.lang.String getSpecific(net.minecraft.resources.ResourceLocation, java.lang.String);
+  public abstract java.lang.String getSpecific(net.minecraft.resources.ResourceLocation, java.lang.String, java.lang.Object...);
+}
+
+================================================================================
+### net.createmod.ponder.api.registration.MultiSceneBuilder
+================================================================================
+Compiled from "MultiSceneBuilder.java"
+public interface net.createmod.ponder.api.registration.MultiSceneBuilder {
+  public abstract net.createmod.ponder.api.registration.MultiSceneBuilder addStoryBoard(net.minecraft.resources.ResourceLocation, net.createmod.ponder.api.scene.PonderStoryBoard);
+  public abstract net.createmod.ponder.api.registration.MultiSceneBuilder addStoryBoard(net.minecraft.resources.ResourceLocation, net.createmod.ponder.api.scene.PonderStoryBoard, net.minecraft.resources.ResourceLocation...);
+  public abstract net.createmod.ponder.api.registration.MultiSceneBuilder addStoryBoard(net.minecraft.resources.ResourceLocation, net.createmod.ponder.api.scene.PonderStoryBoard, java.util.function.Consumer<net.createmod.ponder.api.registration.StoryBoardEntry>);
+  public abstract net.createmod.ponder.api.registration.MultiSceneBuilder addStoryBoard(java.lang.String, net.createmod.ponder.api.scene.PonderStoryBoard);
+  public abstract net.createmod.ponder.api.registration.MultiSceneBuilder addStoryBoard(java.lang.String, net.createmod.ponder.api.scene.PonderStoryBoard, net.minecraft.resources.ResourceLocation...);
+  public abstract net.createmod.ponder.api.registration.MultiSceneBuilder addStoryBoard(java.lang.String, net.createmod.ponder.api.scene.PonderStoryBoard, java.util.function.Consumer<net.createmod.ponder.api.registration.StoryBoardEntry>);
+}
+
+================================================================================
+### net.createmod.ponder.api.registration.MultiTagBuilder
+================================================================================
+Compiled from "MultiTagBuilder.java"
+public interface net.createmod.ponder.api.registration.MultiTagBuilder {
+}
+
+================================================================================
+### net.createmod.ponder.api.registration.MultiTagBuilder$Component
+================================================================================
+Compiled from "MultiTagBuilder.java"
+public interface net.createmod.ponder.api.registration.MultiTagBuilder$Component {
+  public abstract net.createmod.ponder.api.registration.MultiTagBuilder$Component add(net.minecraft.resources.ResourceLocation);
+}
+
+================================================================================
+### net.createmod.ponder.api.registration.MultiTagBuilder$Tag
+================================================================================
+Compiled from "MultiTagBuilder.java"
+public interface net.createmod.ponder.api.registration.MultiTagBuilder$Tag<T> {
+  public abstract net.createmod.ponder.api.registration.MultiTagBuilder$Tag<T> add(T);
+}
+
+================================================================================
+### net.createmod.ponder.api.registration.PonderPlugin
+================================================================================
+Compiled from "PonderPlugin.java"
+public interface net.createmod.ponder.api.registration.PonderPlugin {
+  public abstract java.lang.String getModId();
+  public default void registerScenes(net.createmod.ponder.api.registration.PonderSceneRegistrationHelper<net.minecraft.resources.ResourceLocation>);
+  public default void registerTags(net.createmod.ponder.api.registration.PonderTagRegistrationHelper<net.minecraft.resources.ResourceLocation>);
+  public default void registerSharedText(net.createmod.ponder.api.registration.SharedTextRegistrationHelper);
+  public default void onPonderLevelRestore(net.createmod.ponder.api.level.PonderLevel);
+  public default void indexExclusions(net.createmod.ponder.api.registration.IndexExclusionHelper);
+}
+
+================================================================================
+### net.createmod.ponder.api.registration.PonderSceneRegistrationHelper
+================================================================================
+Compiled from "PonderSceneRegistrationHelper.java"
+public interface net.createmod.ponder.api.registration.PonderSceneRegistrationHelper<T> {
+  public abstract <S> net.createmod.ponder.api.registration.PonderSceneRegistrationHelper<S> withKeyFunction(java.util.function.Function<S, T>);
+  public abstract net.createmod.ponder.api.registration.StoryBoardEntry addStoryBoard(T, net.minecraft.resources.ResourceLocation, net.createmod.ponder.api.scene.PonderStoryBoard, net.minecraft.resources.ResourceLocation...);
+  public abstract net.createmod.ponder.api.registration.StoryBoardEntry addStoryBoard(T, java.lang.String, net.createmod.ponder.api.scene.PonderStoryBoard, net.minecraft.resources.ResourceLocation...);
+  public abstract net.createmod.ponder.api.registration.MultiSceneBuilder forComponents(T...);
+  public abstract net.createmod.ponder.api.registration.MultiSceneBuilder forComponents(java.lang.Iterable<? extends T>);
+  public abstract net.minecraft.resources.ResourceLocation asLocation(java.lang.String);
+}
+
+================================================================================
+### net.createmod.ponder.api.registration.PonderTagRegistrationHelper
+================================================================================
+Compiled from "PonderTagRegistrationHelper.java"
+public interface net.createmod.ponder.api.registration.PonderTagRegistrationHelper<T> {
+  public abstract <S> net.createmod.ponder.api.registration.PonderTagRegistrationHelper<S> withKeyFunction(java.util.function.Function<S, T>);
+  public abstract net.createmod.ponder.api.registration.TagBuilder registerTag(net.minecraft.resources.ResourceLocation);
+  public abstract net.createmod.ponder.api.registration.TagBuilder registerTag(java.lang.String);
+  public abstract void addTagToComponent(T, net.minecraft.resources.ResourceLocation);
+  public abstract net.createmod.ponder.api.registration.MultiTagBuilder$Tag<T> addToTag(net.minecraft.resources.ResourceLocation);
+  public abstract net.createmod.ponder.api.registration.MultiTagBuilder$Tag<T> addToTag(net.minecraft.resources.ResourceLocation...);
+  public abstract net.createmod.ponder.api.registration.MultiTagBuilder$Component addToComponent(T);
+  public abstract net.createmod.ponder.api.registration.MultiTagBuilder$Component addToComponent(T...);
+}
+
+================================================================================
+### net.createmod.ponder.api.registration.SceneRegistryAccess
+================================================================================
+Compiled from "SceneRegistryAccess.java"
+public interface net.createmod.ponder.api.registration.SceneRegistryAccess {
+  public abstract boolean doScenesExistForId(net.minecraft.resources.ResourceLocation);
+  public abstract java.util.Collection<java.util.Map$Entry<net.minecraft.resources.ResourceLocation, net.createmod.ponder.api.registration.StoryBoardEntry>> getRegisteredEntries();
+  public abstract java.util.List<net.createmod.ponder.foundation.PonderScene> compile(net.minecraft.resources.ResourceLocation);
+  public abstract java.util.List<net.createmod.ponder.foundation.PonderScene> compile(java.util.Collection<net.createmod.ponder.api.registration.StoryBoardEntry>);
+}
+
+================================================================================
+### net.createmod.ponder.api.registration.SharedTextRegistrationHelper
+================================================================================
+Compiled from "SharedTextRegistrationHelper.java"
+public interface net.createmod.ponder.api.registration.SharedTextRegistrationHelper {
+  public abstract void registerSharedText(java.lang.String, java.lang.String);
+}
+
+================================================================================
+### net.createmod.ponder.api.registration.StoryBoardEntry
+================================================================================
+Compiled from "StoryBoardEntry.java"
+public interface net.createmod.ponder.api.registration.StoryBoardEntry {
+  public abstract net.createmod.ponder.api.scene.PonderStoryBoard getBoard();
+  public abstract java.lang.String getNamespace();
+  public abstract net.minecraft.resources.ResourceLocation getSchematicLocation();
+  public abstract net.minecraft.resources.ResourceLocation getComponent();
+  public abstract java.util.List<net.minecraft.resources.ResourceLocation> getTags();
+  public abstract java.util.List<net.createmod.ponder.api.registration.StoryBoardEntry$SceneOrderingEntry> getOrderingEntries();
+  public default net.createmod.ponder.api.registration.StoryBoardEntry orderBefore(java.lang.String);
+  public abstract net.createmod.ponder.api.registration.StoryBoardEntry orderBefore(java.lang.String, java.lang.String);
+  public default net.createmod.ponder.api.registration.StoryBoardEntry orderAfter(java.lang.String);
+  public abstract net.createmod.ponder.api.registration.StoryBoardEntry orderAfter(java.lang.String, java.lang.String);
+  public abstract net.createmod.ponder.api.registration.StoryBoardEntry highlightTag(net.minecraft.resources.ResourceLocation);
+  public abstract net.createmod.ponder.api.registration.StoryBoardEntry highlightTags(net.minecraft.resources.ResourceLocation...);
+  public abstract net.createmod.ponder.api.registration.StoryBoardEntry highlightAllTags();
+}
+
+================================================================================
+### net.createmod.ponder.api.registration.StoryBoardEntry$SceneOrderingEntry
+================================================================================
+Compiled from "StoryBoardEntry.java"
+public final class net.createmod.ponder.api.registration.StoryBoardEntry$SceneOrderingEntry extends java.lang.Record {
+  public net.createmod.ponder.api.registration.StoryBoardEntry$SceneOrderingEntry(net.createmod.ponder.api.registration.StoryBoardEntry$SceneOrderingType, net.minecraft.resources.ResourceLocation);
+  public static net.createmod.ponder.api.registration.StoryBoardEntry$SceneOrderingEntry after(java.lang.String, java.lang.String);
+  public static net.createmod.ponder.api.registration.StoryBoardEntry$SceneOrderingEntry before(java.lang.String, java.lang.String);
+  public final java.lang.String toString();
+  public final int hashCode();
+  public final boolean equals(java.lang.Object);
+  public net.createmod.ponder.api.registration.StoryBoardEntry$SceneOrderingType type();
+  public net.minecraft.resources.ResourceLocation sceneId();
+}
+
+================================================================================
+### net.createmod.ponder.api.registration.StoryBoardEntry$SceneOrderingType
+================================================================================
+Compiled from "StoryBoardEntry.java"
+public final class net.createmod.ponder.api.registration.StoryBoardEntry$SceneOrderingType extends java.lang.Enum<net.createmod.ponder.api.registration.StoryBoardEntry$SceneOrderingType> {
+  public static final net.createmod.ponder.api.registration.StoryBoardEntry$SceneOrderingType BEFORE;
+  public static final net.createmod.ponder.api.registration.StoryBoardEntry$SceneOrderingType AFTER;
+  public static net.createmod.ponder.api.registration.StoryBoardEntry$SceneOrderingType[] values();
+  public static net.createmod.ponder.api.registration.StoryBoardEntry$SceneOrderingType valueOf(java.lang.String);
+}
+
+================================================================================
+### net.createmod.ponder.api.registration.TagBuilder
+================================================================================
+Compiled from "TagBuilder.java"
+public interface net.createmod.ponder.api.registration.TagBuilder {
+  public abstract net.createmod.ponder.api.registration.TagBuilder title(java.lang.String);
+  public abstract net.createmod.ponder.api.registration.TagBuilder description(java.lang.String);
+  public abstract net.createmod.ponder.api.registration.TagBuilder addToIndex();
+  public abstract net.createmod.ponder.api.registration.TagBuilder icon(net.minecraft.resources.ResourceLocation);
+  public abstract net.createmod.ponder.api.registration.TagBuilder icon(java.lang.String);
+  public abstract net.createmod.ponder.api.registration.TagBuilder idAsIcon();
+  public abstract net.createmod.ponder.api.registration.TagBuilder item(net.minecraft.world.level.ItemLike, boolean, boolean);
+  public default net.createmod.ponder.api.registration.TagBuilder item(net.minecraft.world.level.ItemLike);
+  public abstract void register();
+}
+
+================================================================================
+### net.createmod.ponder.api.registration.TagRegistryAccess
+================================================================================
+Compiled from "TagRegistryAccess.java"
+public interface net.createmod.ponder.api.registration.TagRegistryAccess {
+  public abstract net.createmod.ponder.foundation.PonderTag getRegisteredTag(net.minecraft.resources.ResourceLocation);
+  public abstract java.util.List<net.createmod.ponder.foundation.PonderTag> getListedTags();
+  public abstract java.util.Set<net.createmod.ponder.foundation.PonderTag> getTags(net.minecraft.resources.ResourceLocation);
+  public abstract java.util.Set<net.minecraft.resources.ResourceLocation> getItems(net.minecraft.resources.ResourceLocation);
+  public abstract java.util.Set<net.minecraft.resources.ResourceLocation> getItems(net.createmod.ponder.foundation.PonderTag);
+}
+
+================================================================================
+### net.createmod.ponder.api.registration.package-info
+================================================================================
+Compiled from "package-info.java"
+interface net.createmod.ponder.api.registration.package-info {
+}
+
+================================================================================
+### net.createmod.ponder.api.scene.DebugInstructions
+================================================================================
+Compiled from "DebugInstructions.java"
+public interface net.createmod.ponder.api.scene.DebugInstructions {
+  public abstract void debugSchematic();
+  public abstract void addInstructionInstance(net.createmod.ponder.foundation.instruction.PonderInstruction);
+  public abstract void enqueueCallback(java.util.function.Consumer<net.createmod.ponder.foundation.PonderScene>);
+}
+
+================================================================================
+### net.createmod.ponder.api.scene.EffectInstructions
+================================================================================
+Compiled from "EffectInstructions.java"
+public interface net.createmod.ponder.api.scene.EffectInstructions {
+  public abstract void emitParticles(net.minecraft.world.phys.Vec3, net.createmod.ponder.api.ParticleEmitter, float, int);
+  public abstract <T extends net.minecraft.core.particles.ParticleOptions> net.createmod.ponder.api.ParticleEmitter simpleParticleEmitter(T, net.minecraft.world.phys.Vec3);
+  public abstract <T extends net.minecraft.core.particles.ParticleOptions> net.createmod.ponder.api.ParticleEmitter particleEmitterWithinBlockSpace(T, net.minecraft.world.phys.Vec3);
+  public abstract void indicateRedstone(net.minecraft.core.BlockPos);
+  public abstract void indicateSuccess(net.minecraft.core.BlockPos);
+  public abstract void createRedstoneParticles(net.minecraft.core.BlockPos, int, int);
+}
+
+================================================================================
+### net.createmod.ponder.api.scene.OverlayInstructions
+================================================================================
+Compiled from "OverlayInstructions.java"
+public interface net.createmod.ponder.api.scene.OverlayInstructions {
+  public abstract net.createmod.ponder.api.element.TextElementBuilder showText(int);
+  public abstract net.createmod.ponder.api.element.TextElementBuilder showOutlineWithText(net.createmod.ponder.api.scene.Selection, int);
+  public abstract net.createmod.ponder.api.element.InputElementBuilder showControls(net.minecraft.world.phys.Vec3, net.createmod.catnip.math.Pointing, int);
+  public abstract void chaseBoundingBoxOutline(net.createmod.ponder.api.PonderPalette, java.lang.Object, net.minecraft.world.phys.AABB, int);
+  public abstract void showCenteredScrollInput(net.minecraft.core.BlockPos, net.minecraft.core.Direction, int);
+  public abstract void showScrollInput(net.minecraft.world.phys.Vec3, net.minecraft.core.Direction, int);
+  public abstract void showRepeaterScrollInput(net.minecraft.core.BlockPos, int);
+  public abstract void showFilterSlotInput(net.minecraft.world.phys.Vec3, int);
+  public abstract void showFilterSlotInput(net.minecraft.world.phys.Vec3, net.minecraft.core.Direction, int);
+  public abstract void showLine(net.createmod.ponder.api.PonderPalette, net.minecraft.world.phys.Vec3, net.minecraft.world.phys.Vec3, int);
+  public abstract void showBigLine(net.createmod.ponder.api.PonderPalette, net.minecraft.world.phys.Vec3, net.minecraft.world.phys.Vec3, int);
+  public abstract void showOutline(net.createmod.ponder.api.PonderPalette, java.lang.Object, net.createmod.ponder.api.scene.Selection, int);
+}
+
+================================================================================
+### net.createmod.ponder.api.scene.PonderStoryBoard
+================================================================================
+Compiled from "PonderStoryBoard.java"
+public interface net.createmod.ponder.api.scene.PonderStoryBoard {
+  public abstract void program(net.createmod.ponder.api.scene.SceneBuilder, net.createmod.ponder.api.scene.SceneBuildingUtil);
+}
+
+================================================================================
+### net.createmod.ponder.api.scene.PositionUtil
+================================================================================
+Compiled from "PositionUtil.java"
+public interface net.createmod.ponder.api.scene.PositionUtil {
+  public abstract net.minecraft.core.BlockPos at(int, int, int);
+  public abstract net.minecraft.core.BlockPos zero();
+}
+
+================================================================================
+### net.createmod.ponder.api.scene.SceneBuilder
+================================================================================
+Compiled from "SceneBuilder.java"
+public interface net.createmod.ponder.api.scene.SceneBuilder {
+  public abstract net.createmod.ponder.api.scene.OverlayInstructions overlay();
+  public abstract net.createmod.ponder.api.scene.WorldInstructions world();
+  public abstract net.createmod.ponder.api.scene.DebugInstructions debug();
+  public abstract net.createmod.ponder.api.scene.EffectInstructions effects();
+  public abstract net.createmod.ponder.api.scene.SpecialInstructions special();
+  public abstract net.createmod.ponder.foundation.PonderScene getScene();
+  public abstract void title(java.lang.String, java.lang.String);
+  public abstract void configureBasePlate(int, int, int);
+  public abstract void scaleSceneView(float);
+  public abstract void removeShadow();
+  public abstract void setSceneOffsetY(float);
+  public abstract void showBasePlate();
+  public abstract void addInstruction(net.createmod.ponder.foundation.instruction.PonderInstruction);
+  public abstract void addInstruction(java.util.function.Consumer<net.createmod.ponder.foundation.PonderScene>);
+  public abstract void idle(int);
+  public abstract void idleSeconds(int);
+  public abstract void markAsFinished();
+  public abstract void setNextUpEnabled(boolean);
+  public abstract void rotateCameraY(float);
+  public abstract void addKeyframe();
+  public abstract void addLazyKeyframe();
+}
+
+================================================================================
+### net.createmod.ponder.api.scene.SceneBuildingUtil
+================================================================================
+Compiled from "SceneBuildingUtil.java"
+public interface net.createmod.ponder.api.scene.SceneBuildingUtil {
+  public abstract net.createmod.ponder.api.scene.SelectionUtil select();
+  public abstract net.createmod.ponder.api.scene.VectorUtil vector();
+  public abstract net.createmod.ponder.api.scene.PositionUtil grid();
+}
+
+================================================================================
+### net.createmod.ponder.api.scene.Selection
+================================================================================
+Compiled from "Selection.java"
+public interface net.createmod.ponder.api.scene.Selection extends java.lang.Iterable<net.minecraft.core.BlockPos>, java.util.function.Predicate<net.minecraft.core.BlockPos> {
+  public abstract net.createmod.ponder.api.scene.Selection add(net.createmod.ponder.api.scene.Selection);
+  public abstract net.createmod.ponder.api.scene.Selection substract(net.createmod.ponder.api.scene.Selection);
+  public abstract net.createmod.ponder.api.scene.Selection copy();
+  public abstract net.minecraft.world.phys.Vec3 getCenter();
+  public abstract net.createmod.catnip.outliner.Outline$OutlineParams makeOutline(net.createmod.catnip.outliner.Outliner, java.lang.Object);
+  public default net.createmod.catnip.outliner.Outline$OutlineParams makeOutline(net.createmod.catnip.outliner.Outliner);
+}
+
+================================================================================
+### net.createmod.ponder.api.scene.SelectionUtil
+================================================================================
+Compiled from "SelectionUtil.java"
+public interface net.createmod.ponder.api.scene.SelectionUtil {
+  public abstract net.createmod.ponder.api.scene.Selection everywhere();
+  public abstract net.createmod.ponder.api.scene.Selection position(int, int, int);
+  public abstract net.createmod.ponder.api.scene.Selection position(net.minecraft.core.BlockPos);
+  public abstract net.createmod.ponder.api.scene.Selection fromTo(int, int, int, int, int, int);
+  public abstract net.createmod.ponder.api.scene.Selection fromTo(net.minecraft.core.BlockPos, net.minecraft.core.BlockPos);
+  public abstract net.createmod.ponder.api.scene.Selection column(int, int);
+  public abstract net.createmod.ponder.api.scene.Selection layer(int);
+  public abstract net.createmod.ponder.api.scene.Selection layersFrom(int);
+  public abstract net.createmod.ponder.api.scene.Selection layers(int, int);
+  public abstract net.createmod.ponder.api.scene.Selection cuboid(net.minecraft.core.BlockPos, net.minecraft.core.Vec3i);
+}
+
+================================================================================
+### net.createmod.ponder.api.scene.SpecialInstructions
+================================================================================
+Compiled from "SpecialInstructions.java"
+public interface net.createmod.ponder.api.scene.SpecialInstructions {
+  public abstract net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.ParrotElement> createBirb(net.minecraft.world.phys.Vec3, java.util.function.Supplier<? extends net.createmod.ponder.api.element.ParrotPose>);
+  public abstract void changeBirbPose(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.ParrotElement>, java.util.function.Supplier<? extends net.createmod.ponder.api.element.ParrotPose>);
+  public abstract void movePointOfInterest(net.minecraft.world.phys.Vec3);
+  public abstract void movePointOfInterest(net.minecraft.core.BlockPos);
+  public abstract void rotateParrot(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.ParrotElement>, double, double, double, int);
+  public abstract void moveParrot(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.ParrotElement>, net.minecraft.world.phys.Vec3, int);
+  public abstract net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.MinecartElement> createCart(net.minecraft.world.phys.Vec3, float, net.createmod.ponder.api.element.MinecartElement$MinecartConstructor);
+  public abstract void rotateCart(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.MinecartElement>, float, int);
+  public abstract void moveCart(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.MinecartElement>, net.minecraft.world.phys.Vec3, int);
+  public abstract <T extends net.createmod.ponder.api.element.AnimatedSceneElement> void hideElement(net.createmod.ponder.api.element.ElementLink<T>, net.minecraft.core.Direction);
+}
+
+================================================================================
+### net.createmod.ponder.api.scene.VectorUtil
+================================================================================
+Compiled from "VectorUtil.java"
+public interface net.createmod.ponder.api.scene.VectorUtil {
+  public abstract net.minecraft.world.phys.Vec3 centerOf(int, int, int);
+  public abstract net.minecraft.world.phys.Vec3 centerOf(net.minecraft.core.BlockPos);
+  public abstract net.minecraft.world.phys.Vec3 topOf(int, int, int);
+  public abstract net.minecraft.world.phys.Vec3 topOf(net.minecraft.core.BlockPos);
+  public abstract net.minecraft.world.phys.Vec3 blockSurface(net.minecraft.core.BlockPos, net.minecraft.core.Direction);
+  public abstract net.minecraft.world.phys.Vec3 blockSurface(net.minecraft.core.BlockPos, net.minecraft.core.Direction, float);
+  public abstract net.minecraft.world.phys.Vec3 of(double, double, double);
+}
+
+================================================================================
+### net.createmod.ponder.api.scene.WorldInstructions
+================================================================================
+Compiled from "WorldInstructions.java"
+public interface net.createmod.ponder.api.scene.WorldInstructions {
+  public abstract net.minecraft.core.HolderLookup$Provider getHolderLookupProvider();
+  public abstract void incrementBlockBreakingProgress(net.minecraft.core.BlockPos);
+  public abstract void showSection(net.createmod.ponder.api.scene.Selection, net.minecraft.core.Direction);
+  public abstract void showSectionAndMerge(net.createmod.ponder.api.scene.Selection, net.minecraft.core.Direction, net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.WorldSectionElement>);
+  public abstract void glueBlockOnto(net.minecraft.core.BlockPos, net.minecraft.core.Direction, net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.WorldSectionElement>);
+  public abstract net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.WorldSectionElement> showIndependentSection(net.createmod.ponder.api.scene.Selection, net.minecraft.core.Direction);
+  public abstract net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.WorldSectionElement> showIndependentSectionImmediately(net.createmod.ponder.api.scene.Selection);
+  public abstract void hideSection(net.createmod.ponder.api.scene.Selection, net.minecraft.core.Direction);
+  public abstract void hideIndependentSection(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.WorldSectionElement>, net.minecraft.core.Direction);
+  public abstract void restoreBlocks(net.createmod.ponder.api.scene.Selection);
+  public abstract net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.WorldSectionElement> makeSectionIndependent(net.createmod.ponder.api.scene.Selection);
+  public abstract void rotateSection(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.WorldSectionElement>, double, double, double, int);
+  public abstract void configureCenterOfRotation(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.WorldSectionElement>, net.minecraft.world.phys.Vec3);
+  public abstract void configureStabilization(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.WorldSectionElement>, net.minecraft.world.phys.Vec3);
+  public abstract void moveSection(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.WorldSectionElement>, net.minecraft.world.phys.Vec3, int);
+  public abstract void setBlocks(net.createmod.ponder.api.scene.Selection, net.minecraft.world.level.block.state.BlockState, boolean);
+  public abstract void destroyBlock(net.minecraft.core.BlockPos);
+  public abstract void setBlock(net.minecraft.core.BlockPos, net.minecraft.world.level.block.state.BlockState, boolean);
+  public abstract void replaceBlocks(net.createmod.ponder.api.scene.Selection, net.minecraft.world.level.block.state.BlockState, boolean);
+  public abstract void modifyBlock(net.minecraft.core.BlockPos, java.util.function.UnaryOperator<net.minecraft.world.level.block.state.BlockState>, boolean);
+  public abstract void cycleBlockProperty(net.minecraft.core.BlockPos, net.minecraft.world.level.block.state.properties.Property<?>);
+  public abstract void modifyBlocks(net.createmod.ponder.api.scene.Selection, java.util.function.UnaryOperator<net.minecraft.world.level.block.state.BlockState>, boolean);
+  public abstract void toggleRedstonePower(net.createmod.ponder.api.scene.Selection);
+  public abstract <T extends net.minecraft.world.entity.Entity> void modifyEntities(java.lang.Class<T>, java.util.function.Consumer<T>);
+  public abstract <T extends net.minecraft.world.entity.Entity> void modifyEntitiesInside(java.lang.Class<T>, net.createmod.ponder.api.scene.Selection, java.util.function.Consumer<T>);
+  public abstract void modifyEntity(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.EntityElement>, java.util.function.Consumer<net.minecraft.world.entity.Entity>);
+  public abstract net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.EntityElement> createEntity(java.util.function.Function<net.minecraft.world.level.Level, net.minecraft.world.entity.Entity>);
+  public abstract net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.EntityElement> createItemEntity(net.minecraft.world.phys.Vec3, net.minecraft.world.phys.Vec3, net.minecraft.world.item.ItemStack);
+  public abstract void modifyBlockEntityNBT(net.createmod.ponder.api.scene.Selection, java.lang.Class<? extends net.minecraft.world.level.block.entity.BlockEntity>, java.util.function.Consumer<net.minecraft.nbt.CompoundTag>);
+  public abstract <T extends net.minecraft.world.level.block.entity.BlockEntity> void modifyBlockEntity(net.minecraft.core.BlockPos, java.lang.Class<T>, java.util.function.Consumer<T>);
+  public abstract void modifyBlockEntityNBT(net.createmod.ponder.api.scene.Selection, java.lang.Class<? extends net.minecraft.world.level.block.entity.BlockEntity>, java.util.function.Consumer<net.minecraft.nbt.CompoundTag>, boolean);
+}
+
+================================================================================
+### net.createmod.ponder.api.scene.package-info
+================================================================================
+Compiled from "package-info.java"
+interface net.createmod.ponder.api.scene.package-info {
+}
+
+================================================================================
+### net.createmod.ponder.command.PonderCommand
+================================================================================
+Compiled from "PonderCommand.java"
+public class net.createmod.ponder.command.PonderCommand {
+  public net.createmod.ponder.command.PonderCommand();
+}
+
+================================================================================
+### net.createmod.ponder.command.PonderCommands
+================================================================================
+Compiled from "PonderCommands.java"
+public class net.createmod.ponder.command.PonderCommands {
+  public net.createmod.ponder.command.PonderCommands();
+  public static void register(com.mojang.brigadier.CommandDispatcher<net.minecraft.commands.CommandSourceStack>);
+}
+
+================================================================================
+### net.createmod.ponder.command.SimplePonderActions
+================================================================================
+Compiled from "SimplePonderActions.java"
+public class net.createmod.ponder.command.SimplePonderActions {
+  public net.createmod.ponder.command.SimplePonderActions();
+  public static void openPonder(java.lang.String);
+  public static void reloadPonder(java.lang.String);
+}
+
+================================================================================
+### net.createmod.ponder.config.CClient
+================================================================================
+Compiled from "CClient.java"
+public class net.createmod.ponder.config.CClient extends net.createmod.catnip.config.ConfigBase {
+  public final net.createmod.catnip.config.ConfigBase$ConfigBool comfyReading;
+  public final net.createmod.catnip.config.ConfigBase$ConfigBool editingMode;
+  public final net.createmod.catnip.config.ConfigBase$ConfigGroup placementAssist;
+  public final net.createmod.catnip.config.ConfigBase$ConfigEnum<net.createmod.ponder.config.CClient$PlacementIndicatorSetting> placementIndicator;
+  public final net.createmod.catnip.config.ConfigBase$ConfigFloat indicatorScale;
+  public net.createmod.ponder.config.CClient();
+  public java.lang.String getName();
+}
+
+================================================================================
+### net.createmod.ponder.config.CClient$Comments
+================================================================================
+Compiled from "CClient.java"
+class net.createmod.ponder.config.CClient$Comments {
+}
+
+================================================================================
+### net.createmod.ponder.config.CClient$PlacementIndicatorSetting
+================================================================================
+Compiled from "CClient.java"
+public final class net.createmod.ponder.config.CClient$PlacementIndicatorSetting extends java.lang.Enum<net.createmod.ponder.config.CClient$PlacementIndicatorSetting> {
+  public static final net.createmod.ponder.config.CClient$PlacementIndicatorSetting TEXTURE;
+  public static final net.createmod.ponder.config.CClient$PlacementIndicatorSetting TRIANGLE;
+  public static final net.createmod.ponder.config.CClient$PlacementIndicatorSetting NONE;
+  public static net.createmod.ponder.config.CClient$PlacementIndicatorSetting[] values();
+  public static net.createmod.ponder.config.CClient$PlacementIndicatorSetting valueOf(java.lang.String);
+}
+
+================================================================================
+### net.createmod.ponder.config.package-info
+================================================================================
+Compiled from "package-info.java"
+interface net.createmod.ponder.config.package-info {
+}
+
+================================================================================
+### net.createmod.ponder.enums.PonderConfig
+================================================================================
+Compiled from "PonderConfig.java"
+public class net.createmod.ponder.enums.PonderConfig {
+  public net.createmod.ponder.enums.PonderConfig();
+  public static java.util.Set<java.util.Map$Entry<net.neoforged.fml.config.ModConfig$Type, net.createmod.catnip.config.ConfigBase>> registerConfigs();
+  public static void onLoad(net.neoforged.fml.config.ModConfig);
+  public static void onReload(net.neoforged.fml.config.ModConfig);
+  public static net.createmod.ponder.config.CClient client();
+}
+
+================================================================================
+### net.createmod.ponder.enums.PonderGuiTextures
+================================================================================
+Compiled from "PonderGuiTextures.java"
+public final class net.createmod.ponder.enums.PonderGuiTextures extends java.lang.Enum<net.createmod.ponder.enums.PonderGuiTextures> implements net.createmod.catnip.gui.TextureSheetSegment, net.createmod.catnip.gui.element.ScreenElement, net.createmod.catnip.render.ColoredRenderable {
+  public static final net.createmod.ponder.enums.PonderGuiTextures LOGO;
+  public static final net.createmod.ponder.enums.PonderGuiTextures SPEECH_TOOLTIP_BACKGROUND;
+  public static final net.createmod.ponder.enums.PonderGuiTextures SPEECH_TOOLTIP_COLOR;
+  public static final net.createmod.ponder.enums.PonderGuiTextures ICON_PONDER_LEFT;
+  public static final net.createmod.ponder.enums.PonderGuiTextures ICON_PONDER_CLOSE;
+  public static final net.createmod.ponder.enums.PonderGuiTextures ICON_PONDER_RIGHT;
+  public static final net.createmod.ponder.enums.PonderGuiTextures ICON_PONDER_IDENTIFY;
+  public static final net.createmod.ponder.enums.PonderGuiTextures ICON_PONDER_REPLAY;
+  public static final net.createmod.ponder.enums.PonderGuiTextures ICON_PONDER_USER_MODE;
+  public static final net.createmod.ponder.enums.PonderGuiTextures ICON_PONDER_SLOW_MODE;
+  public static final net.createmod.ponder.enums.PonderGuiTextures ICON_CONFIG_UNLOCKED;
+  public static final net.createmod.ponder.enums.PonderGuiTextures ICON_CONFIG_LOCKED;
+  public static final net.createmod.ponder.enums.PonderGuiTextures ICON_CONFIG_DISCARD;
+  public static final net.createmod.ponder.enums.PonderGuiTextures ICON_CONFIG_SAVE;
+  public static final net.createmod.ponder.enums.PonderGuiTextures ICON_CONFIG_RESET;
+  public static final net.createmod.ponder.enums.PonderGuiTextures ICON_CONFIG_BACK;
+  public static final net.createmod.ponder.enums.PonderGuiTextures ICON_CONFIG_PREV;
+  public static final net.createmod.ponder.enums.PonderGuiTextures ICON_CONFIG_NEXT;
+  public static final net.createmod.ponder.enums.PonderGuiTextures ICON_DISABLE;
+  public static final net.createmod.ponder.enums.PonderGuiTextures ICON_CONFIG_OPEN;
+  public static final net.createmod.ponder.enums.PonderGuiTextures ICON_CONFIRM;
+  public static final net.createmod.ponder.enums.PonderGuiTextures ICON_LMB;
+  public static final net.createmod.ponder.enums.PonderGuiTextures ICON_SCROLL;
+  public static final net.createmod.ponder.enums.PonderGuiTextures ICON_RMB;
+  public static final net.createmod.ponder.enums.PonderGuiTextures PLACEMENT_INDICATOR_SHEET;
+  public final net.minecraft.resources.ResourceLocation location;
+  public static net.createmod.ponder.enums.PonderGuiTextures[] values();
+  public static net.createmod.ponder.enums.PonderGuiTextures valueOf(java.lang.String);
+  public void render(net.minecraft.client.gui.GuiGraphics, int, int);
+  public void render(net.minecraft.client.gui.GuiGraphics, int, int, net.createmod.catnip.theme.Color);
+  public net.minecraft.resources.ResourceLocation getLocation();
+  public int getStartX();
+  public int getStartY();
+  public int getWidth();
+  public int getHeight();
+  public net.createmod.catnip.gui.element.DelegatedStencilElement asStencil();
+}
+
+================================================================================
+### net.createmod.ponder.enums.PonderKeybinds
+================================================================================
+Compiled from "PonderKeybinds.java"
+public final class net.createmod.ponder.enums.PonderKeybinds extends java.lang.Enum<net.createmod.ponder.enums.PonderKeybinds> {
+  public static final net.createmod.ponder.enums.PonderKeybinds PONDER;
+  public static final java.lang.String CATEGORY;
+  public static net.createmod.ponder.enums.PonderKeybinds[] values();
+  public static net.createmod.ponder.enums.PonderKeybinds valueOf(java.lang.String);
+  public static void register(java.util.function.Consumer<net.minecraft.client.KeyMapping>);
+  public boolean isDown();
+  public net.minecraft.network.chat.Component message();
+}
+
+================================================================================
+### net.createmod.ponder.enums.PonderSpecialTextures
+================================================================================
+Compiled from "PonderSpecialTextures.java"
+public final class net.createmod.ponder.enums.PonderSpecialTextures extends java.lang.Enum<net.createmod.ponder.enums.PonderSpecialTextures> implements net.createmod.catnip.render.BindableTexture {
+  public static final net.createmod.ponder.enums.PonderSpecialTextures BLANK;
+  public static final java.lang.String ASSET_PATH;
+  public static net.createmod.ponder.enums.PonderSpecialTextures[] values();
+  public static net.createmod.ponder.enums.PonderSpecialTextures valueOf(java.lang.String);
+  public void bind();
+  public net.minecraft.resources.ResourceLocation getLocation();
+}
+
+================================================================================
+### net.createmod.ponder.enums.package-info
+================================================================================
+Compiled from "package-info.java"
+interface net.createmod.ponder.enums.package-info {
+}
+
+================================================================================
+### net.createmod.ponder.foundation.PonderChapter
+================================================================================
+Compiled from "PonderChapter.java"
+public class net.createmod.ponder.foundation.PonderChapter implements net.createmod.catnip.gui.element.ScreenElement {
+  public net.minecraft.resources.ResourceLocation getId();
+  public java.lang.String getTitle();
+  public void render(net.minecraft.client.gui.GuiGraphics, int, int);
+  public static net.createmod.ponder.foundation.PonderChapter of(net.minecraft.resources.ResourceLocation);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.PonderChapterRegistry
+================================================================================
+Compiled from "PonderChapterRegistry.java"
+public class net.createmod.ponder.foundation.PonderChapterRegistry {
+  public net.createmod.ponder.foundation.PonderChapterRegistry();
+  public void addStoriesToChapter(net.createmod.ponder.foundation.PonderChapter, net.createmod.ponder.api.registration.StoryBoardEntry...);
+  public java.util.List<net.createmod.ponder.foundation.PonderChapter> getAllChapters();
+  public java.util.List<net.createmod.ponder.api.registration.StoryBoardEntry> getStories(net.createmod.ponder.foundation.PonderChapter);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.PonderIndex
+================================================================================
+Compiled from "PonderIndex.java"
+public class net.createmod.ponder.foundation.PonderIndex {
+  public net.createmod.ponder.foundation.PonderIndex();
+  public static void addPlugin(net.createmod.ponder.api.registration.PonderPlugin);
+  public static void forEachPlugin(java.util.function.Consumer<net.createmod.ponder.api.registration.PonderPlugin>);
+  public static java.util.stream.Stream<net.createmod.ponder.api.registration.PonderPlugin> streamPlugins();
+  public static void reload();
+  public static void registerAll();
+  public static void gatherSharedText();
+  public static net.createmod.ponder.api.registration.SceneRegistryAccess getSceneAccess();
+  public static net.createmod.ponder.api.registration.TagRegistryAccess getTagAccess();
+  public static net.createmod.ponder.api.registration.LangRegistryAccess getLangAccess();
+  public static boolean editingModeActive();
+}
+
+================================================================================
+### net.createmod.ponder.foundation.PonderScene
+================================================================================
+Compiled from "PonderScene.java"
+public class net.createmod.ponder.foundation.PonderScene {
+  public static final java.lang.String TITLE_KEY;
+  public net.createmod.ponder.foundation.PonderScene(net.createmod.ponder.api.level.PonderLevel, net.createmod.ponder.foundation.registration.PonderLocalization, java.lang.String, net.minecraft.resources.ResourceLocation, java.util.Collection<net.minecraft.resources.ResourceLocation>, java.util.Collection<net.createmod.ponder.api.registration.StoryBoardEntry$SceneOrderingEntry>);
+  public void deselect();
+  public net.createmod.catnip.data.Pair<net.minecraft.world.item.ItemStack, net.minecraft.core.BlockPos> rayTraceScene(net.minecraft.world.phys.Vec3, net.minecraft.world.phys.Vec3);
+  public void reset();
+  public void begin();
+  public net.createmod.ponder.api.element.WorldSectionElement getBaseWorldSection();
+  public float getSceneProgress();
+  public void fadeOut();
+  public void renderScene(net.createmod.catnip.render.SuperRenderTypeBuffer, net.minecraft.client.gui.GuiGraphics, float);
+  public void renderOverlay(net.createmod.ponder.foundation.ui.PonderUI, net.minecraft.client.gui.GuiGraphics, float);
+  public void setPointOfInterest(net.minecraft.world.phys.Vec3);
+  public net.minecraft.world.phys.Vec3 getPointOfInterest();
+  public void tick();
+  public void seekToTime(int);
+  public void addToSceneTime(int);
+  public void stopCounting();
+  public void markKeyframe(int);
+  public void addElement(net.createmod.ponder.api.element.PonderElement);
+  public <E extends net.createmod.ponder.api.element.PonderElement> void linkElement(E, net.createmod.ponder.api.element.ElementLink<E>);
+  public <E extends net.createmod.ponder.api.element.PonderElement> E resolve(net.createmod.ponder.api.element.ElementLink<E>);
+  public <E extends net.createmod.ponder.api.element.PonderElement> java.util.Optional<E> resolveOptional(net.createmod.ponder.api.element.ElementLink<E>);
+  public <E extends net.createmod.ponder.api.element.PonderElement> void runWith(net.createmod.ponder.api.element.ElementLink<E>, java.util.function.Consumer<E>);
+  public <E extends net.createmod.ponder.api.element.PonderElement, F> F applyTo(net.createmod.ponder.api.element.ElementLink<E>, java.util.function.Function<E, F>);
+  public void forEach(java.util.function.Consumer<? super net.createmod.ponder.api.element.PonderElement>);
+  public <T extends net.createmod.ponder.api.element.PonderElement> void forEach(java.lang.Class<T>, java.util.function.Consumer<T>);
+  public <T extends net.createmod.ponder.api.element.PonderElement> void forEachVisible(java.lang.Class<T>, java.util.function.Consumer<T>);
+  public <T extends net.minecraft.world.entity.Entity> void forEachWorldEntity(java.lang.Class<T>, java.util.function.Consumer<T>);
+  public java.util.function.Supplier<java.lang.String> registerText(java.lang.String);
+  public java.util.function.Supplier<java.lang.String> registerText(java.lang.String, java.lang.Object...);
+  public net.createmod.ponder.api.scene.SceneBuilder builder();
+  public net.createmod.ponder.api.scene.SceneBuildingUtil getSceneBuildingUtil();
+  public java.lang.String getTitle();
+  public java.lang.String getString(java.lang.String);
+  public net.createmod.ponder.api.level.PonderLevel getWorld();
+  public java.lang.String getNamespace();
+  public int getKeyframeCount();
+  public int getKeyframeTime(int);
+  public java.util.List<net.createmod.ponder.foundation.PonderTag> getTags();
+  public java.util.List<net.createmod.ponder.api.registration.StoryBoardEntry$SceneOrderingEntry> getOrderingEntries();
+  public net.minecraft.resources.ResourceLocation getLocation();
+  public java.util.Set<net.createmod.ponder.api.element.PonderElement> getElements();
+  public net.minecraft.world.level.levelgen.structure.BoundingBox getBounds();
+  public net.minecraft.resources.ResourceLocation getId();
+  public net.createmod.ponder.foundation.PonderScene$SceneTransform getTransform();
+  public net.createmod.catnip.outliner.Outliner getOutliner();
+  public boolean isFinished();
+  public void setFinished(boolean);
+  public int getBasePlateOffsetX();
+  public int getBasePlateOffsetZ();
+  public boolean shouldHidePlatformShadow();
+  public int getBasePlateSize();
+  public float getScaleFactor();
+  public float getYOffset();
+  public int getTotalTime();
+  public int getCurrentTime();
+  public void setNextUpEnabled(boolean);
+  public boolean isNextUpEnabled();
+}
+
+================================================================================
+### net.createmod.ponder.foundation.PonderScene$SceneCamera
+================================================================================
+Compiled from "PonderScene.java"
+public class net.createmod.ponder.foundation.PonderScene$SceneCamera extends net.minecraft.client.Camera {
+  public net.createmod.ponder.foundation.PonderScene$SceneCamera();
+  public void set(float, float);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.PonderScene$SceneTransform
+================================================================================
+Compiled from "PonderScene.java"
+public class net.createmod.ponder.foundation.PonderScene$SceneTransform {
+  public net.createmod.catnip.animation.LerpedFloat xRotation;
+  public net.createmod.catnip.animation.LerpedFloat yRotation;
+  public net.createmod.ponder.foundation.PonderScene$SceneTransform(net.createmod.ponder.foundation.PonderScene);
+  public void tick();
+  public void updateScreenParams(int, int, double);
+  public com.mojang.blaze3d.vertex.PoseStack apply(com.mojang.blaze3d.vertex.PoseStack);
+  public com.mojang.blaze3d.vertex.PoseStack apply(com.mojang.blaze3d.vertex.PoseStack, float);
+  public void updateSceneRVE(float);
+  public net.minecraft.world.phys.Vec3 screenToScene(double, double, int, float);
+  public net.minecraft.world.phys.Vec2 sceneToScreen(net.minecraft.world.phys.Vec3, float);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.PonderSceneBuilder
+================================================================================
+Compiled from "PonderSceneBuilder.java"
+public class net.createmod.ponder.foundation.PonderSceneBuilder implements net.createmod.ponder.api.scene.SceneBuilder {
+  public net.createmod.ponder.foundation.PonderSceneBuilder(net.createmod.ponder.foundation.PonderScene);
+  public net.createmod.ponder.api.scene.OverlayInstructions overlay();
+  public net.createmod.ponder.api.scene.WorldInstructions world();
+  public net.createmod.ponder.api.scene.DebugInstructions debug();
+  public net.createmod.ponder.api.scene.EffectInstructions effects();
+  public net.createmod.ponder.api.scene.SpecialInstructions special();
+  public net.createmod.ponder.foundation.PonderScene getScene();
+  public void title(java.lang.String, java.lang.String);
+  public void configureBasePlate(int, int, int);
+  public void scaleSceneView(float);
+  public void removeShadow();
+  public void setSceneOffsetY(float);
+  public void showBasePlate();
+  public void addInstruction(net.createmod.ponder.foundation.instruction.PonderInstruction);
+  public void addInstruction(java.util.function.Consumer<net.createmod.ponder.foundation.PonderScene>);
+  public void idle(int);
+  public void idleSeconds(int);
+  public void markAsFinished();
+  public void setNextUpEnabled(boolean);
+  public void rotateCameraY(float);
+  public void addKeyframe();
+  public void addLazyKeyframe();
+}
+
+================================================================================
+### net.createmod.ponder.foundation.PonderSceneBuilder$PonderDebugInstructions
+================================================================================
+Compiled from "PonderSceneBuilder.java"
+public class net.createmod.ponder.foundation.PonderSceneBuilder$PonderDebugInstructions implements net.createmod.ponder.api.scene.DebugInstructions {
+  public net.createmod.ponder.foundation.PonderSceneBuilder$PonderDebugInstructions(net.createmod.ponder.foundation.PonderSceneBuilder);
+  public void debugSchematic();
+  public void addInstructionInstance(net.createmod.ponder.foundation.instruction.PonderInstruction);
+  public void enqueueCallback(java.util.function.Consumer<net.createmod.ponder.foundation.PonderScene>);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.PonderSceneBuilder$PonderEffectInstructions
+================================================================================
+Compiled from "PonderSceneBuilder.java"
+public class net.createmod.ponder.foundation.PonderSceneBuilder$PonderEffectInstructions implements net.createmod.ponder.api.scene.EffectInstructions {
+  public net.createmod.ponder.foundation.PonderSceneBuilder$PonderEffectInstructions(net.createmod.ponder.foundation.PonderSceneBuilder);
+  public void emitParticles(net.minecraft.world.phys.Vec3, net.createmod.ponder.api.ParticleEmitter, float, int);
+  public <T extends net.minecraft.core.particles.ParticleOptions> net.createmod.ponder.api.ParticleEmitter simpleParticleEmitter(T, net.minecraft.world.phys.Vec3);
+  public <T extends net.minecraft.core.particles.ParticleOptions> net.createmod.ponder.api.ParticleEmitter particleEmitterWithinBlockSpace(T, net.minecraft.world.phys.Vec3);
+  public void indicateRedstone(net.minecraft.core.BlockPos);
+  public void indicateSuccess(net.minecraft.core.BlockPos);
+  public void createRedstoneParticles(net.minecraft.core.BlockPos, int, int);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.PonderSceneBuilder$PonderOverlayInstructions
+================================================================================
+Compiled from "PonderSceneBuilder.java"
+public class net.createmod.ponder.foundation.PonderSceneBuilder$PonderOverlayInstructions implements net.createmod.ponder.api.scene.OverlayInstructions {
+  public net.createmod.ponder.foundation.PonderSceneBuilder$PonderOverlayInstructions(net.createmod.ponder.foundation.PonderSceneBuilder);
+  public net.createmod.ponder.api.element.TextElementBuilder showText(int);
+  public net.createmod.ponder.api.element.TextElementBuilder showOutlineWithText(net.createmod.ponder.api.scene.Selection, int);
+  public net.createmod.ponder.api.element.InputElementBuilder showControls(net.minecraft.world.phys.Vec3, net.createmod.catnip.math.Pointing, int);
+  public void chaseBoundingBoxOutline(net.createmod.ponder.api.PonderPalette, java.lang.Object, net.minecraft.world.phys.AABB, int);
+  public void showCenteredScrollInput(net.minecraft.core.BlockPos, net.minecraft.core.Direction, int);
+  public void showScrollInput(net.minecraft.world.phys.Vec3, net.minecraft.core.Direction, int);
+  public void showRepeaterScrollInput(net.minecraft.core.BlockPos, int);
+  public void showFilterSlotInput(net.minecraft.world.phys.Vec3, int);
+  public void showFilterSlotInput(net.minecraft.world.phys.Vec3, net.minecraft.core.Direction, int);
+  public void showLine(net.createmod.ponder.api.PonderPalette, net.minecraft.world.phys.Vec3, net.minecraft.world.phys.Vec3, int);
+  public void showBigLine(net.createmod.ponder.api.PonderPalette, net.minecraft.world.phys.Vec3, net.minecraft.world.phys.Vec3, int);
+  public void showOutline(net.createmod.ponder.api.PonderPalette, java.lang.Object, net.createmod.ponder.api.scene.Selection, int);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.PonderSceneBuilder$PonderSpecialInstructions
+================================================================================
+Compiled from "PonderSceneBuilder.java"
+public class net.createmod.ponder.foundation.PonderSceneBuilder$PonderSpecialInstructions implements net.createmod.ponder.api.scene.SpecialInstructions {
+  public net.createmod.ponder.foundation.PonderSceneBuilder$PonderSpecialInstructions(net.createmod.ponder.foundation.PonderSceneBuilder);
+  public net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.ParrotElement> createBirb(net.minecraft.world.phys.Vec3, java.util.function.Supplier<? extends net.createmod.ponder.api.element.ParrotPose>);
+  public void changeBirbPose(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.ParrotElement>, java.util.function.Supplier<? extends net.createmod.ponder.api.element.ParrotPose>);
+  public void movePointOfInterest(net.minecraft.world.phys.Vec3);
+  public void movePointOfInterest(net.minecraft.core.BlockPos);
+  public void rotateParrot(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.ParrotElement>, double, double, double, int);
+  public void moveParrot(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.ParrotElement>, net.minecraft.world.phys.Vec3, int);
+  public net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.MinecartElement> createCart(net.minecraft.world.phys.Vec3, float, net.createmod.ponder.api.element.MinecartElement$MinecartConstructor);
+  public void rotateCart(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.MinecartElement>, float, int);
+  public void moveCart(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.MinecartElement>, net.minecraft.world.phys.Vec3, int);
+  public <T extends net.createmod.ponder.api.element.AnimatedSceneElement> void hideElement(net.createmod.ponder.api.element.ElementLink<T>, net.minecraft.core.Direction);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.PonderSceneBuilder$PonderWorldInstructions
+================================================================================
+Compiled from "PonderSceneBuilder.java"
+public class net.createmod.ponder.foundation.PonderSceneBuilder$PonderWorldInstructions implements net.createmod.ponder.api.scene.WorldInstructions {
+  public net.createmod.ponder.foundation.PonderSceneBuilder$PonderWorldInstructions(net.createmod.ponder.foundation.PonderSceneBuilder);
+  public net.minecraft.core.HolderLookup$Provider getHolderLookupProvider();
+  public void incrementBlockBreakingProgress(net.minecraft.core.BlockPos);
+  public void showSection(net.createmod.ponder.api.scene.Selection, net.minecraft.core.Direction);
+  public void showSectionAndMerge(net.createmod.ponder.api.scene.Selection, net.minecraft.core.Direction, net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.WorldSectionElement>);
+  public void glueBlockOnto(net.minecraft.core.BlockPos, net.minecraft.core.Direction, net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.WorldSectionElement>);
+  public net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.WorldSectionElement> showIndependentSection(net.createmod.ponder.api.scene.Selection, net.minecraft.core.Direction);
+  public net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.WorldSectionElement> showIndependentSectionImmediately(net.createmod.ponder.api.scene.Selection);
+  public void hideSection(net.createmod.ponder.api.scene.Selection, net.minecraft.core.Direction);
+  public void hideIndependentSection(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.WorldSectionElement>, net.minecraft.core.Direction);
+  public void restoreBlocks(net.createmod.ponder.api.scene.Selection);
+  public net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.WorldSectionElement> makeSectionIndependent(net.createmod.ponder.api.scene.Selection);
+  public void rotateSection(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.WorldSectionElement>, double, double, double, int);
+  public void configureCenterOfRotation(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.WorldSectionElement>, net.minecraft.world.phys.Vec3);
+  public void configureStabilization(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.WorldSectionElement>, net.minecraft.world.phys.Vec3);
+  public void moveSection(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.WorldSectionElement>, net.minecraft.world.phys.Vec3, int);
+  public void setBlocks(net.createmod.ponder.api.scene.Selection, net.minecraft.world.level.block.state.BlockState, boolean);
+  public void destroyBlock(net.minecraft.core.BlockPos);
+  public void setBlock(net.minecraft.core.BlockPos, net.minecraft.world.level.block.state.BlockState, boolean);
+  public void replaceBlocks(net.createmod.ponder.api.scene.Selection, net.minecraft.world.level.block.state.BlockState, boolean);
+  public void modifyBlock(net.minecraft.core.BlockPos, java.util.function.UnaryOperator<net.minecraft.world.level.block.state.BlockState>, boolean);
+  public void cycleBlockProperty(net.minecraft.core.BlockPos, net.minecraft.world.level.block.state.properties.Property<?>);
+  public void modifyBlocks(net.createmod.ponder.api.scene.Selection, java.util.function.UnaryOperator<net.minecraft.world.level.block.state.BlockState>, boolean);
+  public void toggleRedstonePower(net.createmod.ponder.api.scene.Selection);
+  public <T extends net.minecraft.world.entity.Entity> void modifyEntities(java.lang.Class<T>, java.util.function.Consumer<T>);
+  public <T extends net.minecraft.world.entity.Entity> void modifyEntitiesInside(java.lang.Class<T>, net.createmod.ponder.api.scene.Selection, java.util.function.Consumer<T>);
+  public void modifyEntity(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.EntityElement>, java.util.function.Consumer<net.minecraft.world.entity.Entity>);
+  public net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.EntityElement> createEntity(java.util.function.Function<net.minecraft.world.level.Level, net.minecraft.world.entity.Entity>);
+  public net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.EntityElement> createItemEntity(net.minecraft.world.phys.Vec3, net.minecraft.world.phys.Vec3, net.minecraft.world.item.ItemStack);
+  public void modifyBlockEntityNBT(net.createmod.ponder.api.scene.Selection, java.lang.Class<? extends net.minecraft.world.level.block.entity.BlockEntity>, java.util.function.Consumer<net.minecraft.nbt.CompoundTag>);
+  public <T extends net.minecraft.world.level.block.entity.BlockEntity> void modifyBlockEntity(net.minecraft.core.BlockPos, java.lang.Class<T>, java.util.function.Consumer<T>);
+  public void modifyBlockEntityNBT(net.createmod.ponder.api.scene.Selection, java.lang.Class<? extends net.minecraft.world.level.block.entity.BlockEntity>, java.util.function.Consumer<net.minecraft.nbt.CompoundTag>, boolean);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.PonderSceneBuildingUtil
+================================================================================
+Compiled from "PonderSceneBuildingUtil.java"
+public class net.createmod.ponder.foundation.PonderSceneBuildingUtil implements net.createmod.ponder.api.scene.SceneBuildingUtil {
+  public net.createmod.ponder.api.scene.SelectionUtil select();
+  public net.createmod.ponder.api.scene.VectorUtil vector();
+  public net.createmod.ponder.api.scene.PositionUtil grid();
+}
+
+================================================================================
+### net.createmod.ponder.foundation.PonderSceneBuildingUtil$PonderPositionUtil
+================================================================================
+Compiled from "PonderSceneBuildingUtil.java"
+public class net.createmod.ponder.foundation.PonderSceneBuildingUtil$PonderPositionUtil implements net.createmod.ponder.api.scene.PositionUtil {
+  public net.createmod.ponder.foundation.PonderSceneBuildingUtil$PonderPositionUtil(net.createmod.ponder.foundation.PonderSceneBuildingUtil);
+  public net.minecraft.core.BlockPos at(int, int, int);
+  public net.minecraft.core.BlockPos zero();
+}
+
+================================================================================
+### net.createmod.ponder.foundation.PonderSceneBuildingUtil$PonderSelectionUtil
+================================================================================
+Compiled from "PonderSceneBuildingUtil.java"
+public class net.createmod.ponder.foundation.PonderSceneBuildingUtil$PonderSelectionUtil implements net.createmod.ponder.api.scene.SelectionUtil {
+  public net.createmod.ponder.foundation.PonderSceneBuildingUtil$PonderSelectionUtil(net.createmod.ponder.foundation.PonderSceneBuildingUtil);
+  public net.createmod.ponder.api.scene.Selection everywhere();
+  public net.createmod.ponder.api.scene.Selection position(int, int, int);
+  public net.createmod.ponder.api.scene.Selection position(net.minecraft.core.BlockPos);
+  public net.createmod.ponder.api.scene.Selection fromTo(int, int, int, int, int, int);
+  public net.createmod.ponder.api.scene.Selection fromTo(net.minecraft.core.BlockPos, net.minecraft.core.BlockPos);
+  public net.createmod.ponder.api.scene.Selection column(int, int);
+  public net.createmod.ponder.api.scene.Selection layer(int);
+  public net.createmod.ponder.api.scene.Selection layersFrom(int);
+  public net.createmod.ponder.api.scene.Selection layers(int, int);
+  public net.createmod.ponder.api.scene.Selection cuboid(net.minecraft.core.BlockPos, net.minecraft.core.Vec3i);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.PonderSceneBuildingUtil$PonderVectorUtil
+================================================================================
+Compiled from "PonderSceneBuildingUtil.java"
+public class net.createmod.ponder.foundation.PonderSceneBuildingUtil$PonderVectorUtil implements net.createmod.ponder.api.scene.VectorUtil {
+  public net.createmod.ponder.foundation.PonderSceneBuildingUtil$PonderVectorUtil(net.createmod.ponder.foundation.PonderSceneBuildingUtil);
+  public net.minecraft.world.phys.Vec3 centerOf(int, int, int);
+  public net.minecraft.world.phys.Vec3 centerOf(net.minecraft.core.BlockPos);
+  public net.minecraft.world.phys.Vec3 topOf(int, int, int);
+  public net.minecraft.world.phys.Vec3 topOf(net.minecraft.core.BlockPos);
+  public net.minecraft.world.phys.Vec3 blockSurface(net.minecraft.core.BlockPos, net.minecraft.core.Direction);
+  public net.minecraft.world.phys.Vec3 blockSurface(net.minecraft.core.BlockPos, net.minecraft.core.Direction, float);
+  public net.minecraft.world.phys.Vec3 of(double, double, double);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.PonderStoryBoardEntry
+================================================================================
+Compiled from "PonderStoryBoardEntry.java"
+public class net.createmod.ponder.foundation.PonderStoryBoardEntry implements net.createmod.ponder.api.registration.StoryBoardEntry {
+  public net.createmod.ponder.foundation.PonderStoryBoardEntry(net.createmod.ponder.api.scene.PonderStoryBoard, java.lang.String, net.minecraft.resources.ResourceLocation, net.minecraft.resources.ResourceLocation);
+  public net.createmod.ponder.foundation.PonderStoryBoardEntry(net.createmod.ponder.api.scene.PonderStoryBoard, java.lang.String, java.lang.String, net.minecraft.resources.ResourceLocation);
+  public net.createmod.ponder.api.scene.PonderStoryBoard getBoard();
+  public java.lang.String getNamespace();
+  public net.minecraft.resources.ResourceLocation getSchematicLocation();
+  public net.minecraft.resources.ResourceLocation getComponent();
+  public java.util.List<net.minecraft.resources.ResourceLocation> getTags();
+  public java.util.List<net.createmod.ponder.api.registration.StoryBoardEntry$SceneOrderingEntry> getOrderingEntries();
+  public net.createmod.ponder.api.registration.StoryBoardEntry orderBefore(java.lang.String, java.lang.String);
+  public net.createmod.ponder.api.registration.StoryBoardEntry orderAfter(java.lang.String, java.lang.String);
+  public net.createmod.ponder.api.registration.StoryBoardEntry highlightTag(net.minecraft.resources.ResourceLocation);
+  public net.createmod.ponder.api.registration.StoryBoardEntry highlightTags(net.minecraft.resources.ResourceLocation...);
+  public net.createmod.ponder.api.registration.StoryBoardEntry highlightAllTags();
+}
+
+================================================================================
+### net.createmod.ponder.foundation.PonderTag
+================================================================================
+Compiled from "PonderTag.java"
+public class net.createmod.ponder.foundation.PonderTag implements net.createmod.catnip.gui.element.ScreenElement {
+  public net.createmod.ponder.foundation.PonderTag(net.minecraft.resources.ResourceLocation, net.minecraft.resources.ResourceLocation, net.minecraft.world.item.ItemStack, net.minecraft.world.item.ItemStack);
+  public net.minecraft.resources.ResourceLocation getId();
+  public net.minecraft.world.item.ItemStack getMainItem();
+  public java.lang.String getTitle();
+  public java.lang.String getDescription();
+  public void render(net.minecraft.client.gui.GuiGraphics, int, int);
+  public boolean equals(java.lang.Object);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.PonderTag$Highlight
+================================================================================
+Compiled from "PonderTag.java"
+public final class net.createmod.ponder.foundation.PonderTag$Highlight {
+  public static final net.minecraft.resources.ResourceLocation ALL;
+  public net.createmod.ponder.foundation.PonderTag$Highlight();
+}
+
+================================================================================
+### net.createmod.ponder.foundation.PonderTooltipHandler
+================================================================================
+Compiled from "PonderTooltipHandler.java"
+public class net.createmod.ponder.foundation.PonderTooltipHandler {
+  public static boolean enable;
+  public static final java.lang.String HOLD_TO_PONDER;
+  public static final java.lang.String SUBJECT;
+  public net.createmod.ponder.foundation.PonderTooltipHandler();
+  public static void tick();
+  public static void deferredTick();
+  public static void addToTooltip(java.util.List<net.minecraft.network.chat.Component>, net.minecraft.world.item.ItemStack);
+  public static java.util.Optional<net.createmod.catnip.data.Couple<net.createmod.catnip.theme.Color>> handleTooltipColor(net.minecraft.world.item.ItemStack);
+  public static synchronized void registerHoveredPonderStackCallback(java.util.function.Consumer<net.minecraft.world.item.ItemStack>);
+  public static synchronized void removeHoveredPonderStackCallback(java.util.function.Consumer<net.minecraft.world.item.ItemStack>);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.PonderWorldParticles
+================================================================================
+Compiled from "PonderWorldParticles.java"
+public class net.createmod.ponder.foundation.PonderWorldParticles {
+  public net.createmod.ponder.foundation.PonderWorldParticles(net.createmod.ponder.api.level.PonderLevel);
+  public void addParticle(net.minecraft.client.particle.Particle);
+  public void tick();
+  public void renderParticles(com.mojang.blaze3d.vertex.PoseStack, net.minecraft.client.renderer.MultiBufferSource, net.minecraft.client.Camera, float);
+  public void clearEffects();
+}
+
+================================================================================
+### net.createmod.ponder.foundation.SelectionImpl
+================================================================================
+Compiled from "SelectionImpl.java"
+public class net.createmod.ponder.foundation.SelectionImpl {
+  public net.createmod.ponder.foundation.SelectionImpl();
+  public static net.createmod.ponder.api.scene.Selection of(net.minecraft.world.level.levelgen.structure.BoundingBox);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.SelectionImpl$Compound
+================================================================================
+Compiled from "SelectionImpl.java"
+class net.createmod.ponder.foundation.SelectionImpl$Compound implements net.createmod.ponder.api.scene.Selection {
+  public net.createmod.ponder.foundation.SelectionImpl$Compound(net.createmod.ponder.foundation.SelectionImpl$Simple);
+  public boolean test(net.minecraft.core.BlockPos);
+  public net.createmod.ponder.api.scene.Selection add(net.createmod.ponder.api.scene.Selection);
+  public net.createmod.ponder.api.scene.Selection substract(net.createmod.ponder.api.scene.Selection);
+  public net.createmod.catnip.outliner.Outline$OutlineParams makeOutline(net.createmod.catnip.outliner.Outliner, java.lang.Object);
+  public net.minecraft.world.phys.Vec3 getCenter();
+  public net.createmod.ponder.api.scene.Selection copy();
+  public java.util.Iterator<net.minecraft.core.BlockPos> iterator();
+  public boolean test(java.lang.Object);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.SelectionImpl$Simple
+================================================================================
+Compiled from "SelectionImpl.java"
+class net.createmod.ponder.foundation.SelectionImpl$Simple implements net.createmod.ponder.api.scene.Selection {
+  public net.createmod.ponder.foundation.SelectionImpl$Simple(net.minecraft.world.level.levelgen.structure.BoundingBox);
+  public boolean test(net.minecraft.core.BlockPos);
+  public net.createmod.ponder.api.scene.Selection add(net.createmod.ponder.api.scene.Selection);
+  public net.createmod.ponder.api.scene.Selection substract(net.createmod.ponder.api.scene.Selection);
+  public net.minecraft.world.phys.Vec3 getCenter();
+  public net.createmod.catnip.outliner.Outline$OutlineParams makeOutline(net.createmod.catnip.outliner.Outliner, java.lang.Object);
+  public net.createmod.ponder.api.scene.Selection copy();
+  public java.util.Iterator<net.minecraft.core.BlockPos> iterator();
+  public boolean test(java.lang.Object);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.content.BasePonderPlugin
+================================================================================
+Compiled from "BasePonderPlugin.java"
+public class net.createmod.ponder.foundation.content.BasePonderPlugin implements net.createmod.ponder.api.registration.PonderPlugin {
+  public net.createmod.ponder.foundation.content.BasePonderPlugin();
+  public java.lang.String getModId();
+  public void registerSharedText(net.createmod.ponder.api.registration.SharedTextRegistrationHelper);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.content.DebugPonderPlugin
+================================================================================
+Compiled from "DebugPonderPlugin.java"
+public class net.createmod.ponder.foundation.content.DebugPonderPlugin implements net.createmod.ponder.api.registration.PonderPlugin {
+  public net.createmod.ponder.foundation.content.DebugPonderPlugin();
+  public java.lang.String getModId();
+  public void registerScenes(net.createmod.ponder.api.registration.PonderSceneRegistrationHelper<net.minecraft.resources.ResourceLocation>);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.content.DebugScenes
+================================================================================
+Compiled from "DebugScenes.java"
+public class net.createmod.ponder.foundation.content.DebugScenes {
+  public net.createmod.ponder.foundation.content.DebugScenes();
+  public static void registerAll(net.createmod.ponder.api.registration.PonderSceneRegistrationHelper<net.minecraft.resources.ResourceLocation>);
+  public static void empty(net.createmod.ponder.api.scene.SceneBuilder, net.createmod.ponder.api.scene.SceneBuildingUtil);
+  public static void coordinateScene(net.createmod.ponder.api.scene.SceneBuilder, net.createmod.ponder.api.scene.SceneBuildingUtil);
+  public static void blocksScene(net.createmod.ponder.api.scene.SceneBuilder, net.createmod.ponder.api.scene.SceneBuildingUtil);
+  public static void fluidsScene(net.createmod.ponder.api.scene.SceneBuilder, net.createmod.ponder.api.scene.SceneBuildingUtil);
+  public static void offScreenScene(net.createmod.ponder.api.scene.SceneBuilder, net.createmod.ponder.api.scene.SceneBuildingUtil);
+  public static void particleScene(net.createmod.ponder.api.scene.SceneBuilder, net.createmod.ponder.api.scene.SceneBuildingUtil);
+  public static void controlsScene(net.createmod.ponder.api.scene.SceneBuilder, net.createmod.ponder.api.scene.SceneBuildingUtil);
+  public static void birbScene(net.createmod.ponder.api.scene.SceneBuilder, net.createmod.ponder.api.scene.SceneBuildingUtil);
+  public static void sectionsScene(net.createmod.ponder.api.scene.SceneBuilder, net.createmod.ponder.api.scene.SceneBuildingUtil);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.content.TemplateScenes
+================================================================================
+Compiled from "TemplateScenes.java"
+public class net.createmod.ponder.foundation.content.TemplateScenes {
+  public net.createmod.ponder.foundation.content.TemplateScenes();
+  public static void templateMethod(net.createmod.ponder.api.scene.SceneBuilder, net.createmod.ponder.api.scene.SceneBuildingUtil);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.content.package-info
+================================================================================
+Compiled from "package-info.java"
+interface net.createmod.ponder.foundation.content.package-info {
+}
+
+================================================================================
+### net.createmod.ponder.foundation.element.AnimatedOverlayElementBase
+================================================================================
+Compiled from "AnimatedOverlayElementBase.java"
+public abstract class net.createmod.ponder.foundation.element.AnimatedOverlayElementBase extends net.createmod.ponder.foundation.element.PonderElementBase implements net.createmod.ponder.api.element.AnimatedOverlayElement {
+  public net.createmod.ponder.foundation.element.AnimatedOverlayElementBase();
+  public void setFade(float);
+  public float getFade(float);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.element.AnimatedSceneElementBase
+================================================================================
+Compiled from "AnimatedSceneElementBase.java"
+public abstract class net.createmod.ponder.foundation.element.AnimatedSceneElementBase extends net.createmod.ponder.foundation.element.PonderElementBase implements net.createmod.ponder.api.element.AnimatedSceneElement {
+  public net.createmod.ponder.foundation.element.AnimatedSceneElementBase();
+  public void forceApplyFade(float);
+  public void setFade(float);
+  public void setFadeVec(net.minecraft.world.phys.Vec3);
+  public final void renderFirst(net.createmod.ponder.api.level.PonderLevel, net.minecraft.client.renderer.MultiBufferSource, net.minecraft.client.gui.GuiGraphics, float);
+  public final void renderLayer(net.createmod.ponder.api.level.PonderLevel, net.minecraft.client.renderer.MultiBufferSource, net.minecraft.client.renderer.RenderType, net.minecraft.client.gui.GuiGraphics, float);
+  public final void renderLast(net.createmod.ponder.api.level.PonderLevel, net.minecraft.client.renderer.MultiBufferSource, net.minecraft.client.gui.GuiGraphics, float);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.element.ElementLinkImpl
+================================================================================
+Compiled from "ElementLinkImpl.java"
+public class net.createmod.ponder.foundation.element.ElementLinkImpl<T extends net.createmod.ponder.api.element.PonderElement> implements net.createmod.ponder.api.element.ElementLink<T> {
+  public net.createmod.ponder.foundation.element.ElementLinkImpl(java.lang.Class<T>);
+  public net.createmod.ponder.foundation.element.ElementLinkImpl(java.lang.Class<T>, java.util.UUID);
+  public java.util.UUID getId();
+  public T cast(net.createmod.ponder.api.element.PonderElement);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.element.EntityElementImpl
+================================================================================
+Compiled from "EntityElementImpl.java"
+public class net.createmod.ponder.foundation.element.EntityElementImpl extends net.createmod.ponder.foundation.element.TrackedElementBase<net.minecraft.world.entity.Entity> implements net.createmod.ponder.api.element.EntityElement {
+  public net.createmod.ponder.foundation.element.EntityElementImpl(net.minecraft.world.entity.Entity);
+  public boolean isStillValid(net.minecraft.world.entity.Entity);
+  public boolean isStillValid(java.lang.Object);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.element.InputWindowElement
+================================================================================
+Compiled from "InputWindowElement.java"
+public class net.createmod.ponder.foundation.element.InputWindowElement extends net.createmod.ponder.foundation.element.AnimatedOverlayElementBase {
+  public net.createmod.ponder.foundation.element.InputWindowElement(net.minecraft.world.phys.Vec3, net.createmod.catnip.math.Pointing);
+  public net.createmod.ponder.api.element.InputElementBuilder builder();
+  public void render(net.createmod.ponder.foundation.PonderScene, net.createmod.ponder.foundation.ui.PonderUI, net.minecraft.client.gui.GuiGraphics, float, float);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.element.InputWindowElement$Builder
+================================================================================
+Compiled from "InputWindowElement.java"
+class net.createmod.ponder.foundation.element.InputWindowElement$Builder implements net.createmod.ponder.api.element.InputElementBuilder {
+  public net.createmod.ponder.api.element.InputElementBuilder withItem(net.minecraft.world.item.ItemStack);
+  public net.createmod.ponder.api.element.InputElementBuilder leftClick();
+  public net.createmod.ponder.api.element.InputElementBuilder scroll();
+  public net.createmod.ponder.api.element.InputElementBuilder rightClick();
+  public net.createmod.ponder.api.element.InputElementBuilder showing(net.createmod.catnip.gui.element.ScreenElement);
+  public net.createmod.ponder.api.element.InputElementBuilder whileSneaking();
+  public net.createmod.ponder.api.element.InputElementBuilder whileCTRL();
+}
+
+================================================================================
+### net.createmod.ponder.foundation.element.MinecartElementImpl
+================================================================================
+Compiled from "MinecartElementImpl.java"
+public class net.createmod.ponder.foundation.element.MinecartElementImpl extends net.createmod.ponder.foundation.element.AnimatedSceneElementBase implements net.createmod.ponder.api.element.MinecartElement {
+  public net.createmod.ponder.foundation.element.MinecartElementImpl(net.minecraft.world.phys.Vec3, float, net.createmod.ponder.api.element.MinecartElement$MinecartConstructor);
+  public void reset(net.createmod.ponder.foundation.PonderScene);
+  public void tick(net.createmod.ponder.foundation.PonderScene);
+  public void setPositionOffset(net.minecraft.world.phys.Vec3, boolean);
+  public void setRotation(float, boolean);
+  public net.minecraft.world.phys.Vec3 getPositionOffset();
+  public net.minecraft.world.phys.Vec3 getRotation();
+  public void renderLast(net.createmod.ponder.api.level.PonderLevel, net.minecraft.client.renderer.MultiBufferSource, net.minecraft.client.gui.GuiGraphics, float, float);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.element.OutlinerElement
+================================================================================
+Compiled from "OutlinerElement.java"
+public class net.createmod.ponder.foundation.element.OutlinerElement extends net.createmod.ponder.foundation.element.AnimatedSceneElementBase {
+  public net.createmod.ponder.foundation.element.OutlinerElement(java.util.function.Function<net.createmod.catnip.outliner.Outliner, net.createmod.catnip.outliner.Outline$OutlineParams>);
+  public void tick(net.createmod.ponder.foundation.PonderScene);
+  public void setColor(int);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.element.ParrotElementImpl
+================================================================================
+Compiled from "ParrotElementImpl.java"
+public class net.createmod.ponder.foundation.element.ParrotElementImpl extends net.createmod.ponder.foundation.element.AnimatedSceneElementBase implements net.createmod.ponder.api.element.ParrotElement {
+  public static net.createmod.ponder.api.element.ParrotElement create(net.minecraft.world.phys.Vec3, java.util.function.Supplier<? extends net.createmod.ponder.api.element.ParrotPose>);
+  public void reset(net.createmod.ponder.foundation.PonderScene);
+  public void tick(net.createmod.ponder.foundation.PonderScene);
+  public void setPositionOffset(net.minecraft.world.phys.Vec3, boolean);
+  public void setRotation(net.minecraft.world.phys.Vec3, boolean);
+  public net.minecraft.world.phys.Vec3 getPositionOffset();
+  public net.minecraft.world.phys.Vec3 getRotation();
+  public void setPose(net.createmod.ponder.api.element.ParrotPose);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.element.PonderElementBase
+================================================================================
+Compiled from "PonderElementBase.java"
+public abstract class net.createmod.ponder.foundation.element.PonderElementBase implements net.createmod.ponder.api.element.PonderElement {
+  public net.createmod.ponder.foundation.element.PonderElementBase();
+  public boolean isVisible();
+  public void setVisible(boolean);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.element.TextWindowElement
+================================================================================
+Compiled from "TextWindowElement.java"
+public class net.createmod.ponder.foundation.element.TextWindowElement extends net.createmod.ponder.foundation.element.AnimatedOverlayElementBase {
+  public static final net.createmod.catnip.data.Couple<net.createmod.catnip.theme.Color> COLOR_WINDOW_BORDER;
+  public net.createmod.ponder.foundation.element.TextWindowElement();
+  public net.createmod.ponder.api.element.TextElementBuilder builder(net.createmod.ponder.foundation.PonderScene);
+  public void render(net.createmod.ponder.foundation.PonderScene, net.createmod.ponder.foundation.ui.PonderUI, net.minecraft.client.gui.GuiGraphics, float, float);
+  public net.createmod.ponder.api.PonderPalette getPalette();
+}
+
+================================================================================
+### net.createmod.ponder.foundation.element.TextWindowElement$Builder
+================================================================================
+Compiled from "TextWindowElement.java"
+class net.createmod.ponder.foundation.element.TextWindowElement$Builder implements net.createmod.ponder.api.element.TextElementBuilder {
+  public net.createmod.ponder.foundation.element.TextWindowElement$Builder(net.createmod.ponder.foundation.element.TextWindowElement, net.createmod.ponder.foundation.PonderScene);
+  public net.createmod.ponder.foundation.element.TextWindowElement$Builder colored(net.createmod.ponder.api.PonderPalette);
+  public net.createmod.ponder.foundation.element.TextWindowElement$Builder pointAt(net.minecraft.world.phys.Vec3);
+  public net.createmod.ponder.foundation.element.TextWindowElement$Builder independent(int);
+  public net.createmod.ponder.foundation.element.TextWindowElement$Builder text(java.lang.String);
+  public net.createmod.ponder.api.element.TextElementBuilder text(java.lang.String, java.lang.Object...);
+  public net.createmod.ponder.foundation.element.TextWindowElement$Builder sharedText(net.minecraft.resources.ResourceLocation);
+  public net.createmod.ponder.api.element.TextElementBuilder sharedText(net.minecraft.resources.ResourceLocation, java.lang.Object...);
+  public net.createmod.ponder.foundation.element.TextWindowElement$Builder sharedText(java.lang.String);
+  public net.createmod.ponder.api.element.TextElementBuilder sharedText(java.lang.String, java.lang.Object...);
+  public net.createmod.ponder.foundation.element.TextWindowElement$Builder placeNearTarget();
+  public net.createmod.ponder.foundation.element.TextWindowElement$Builder attachKeyFrame();
+  public net.createmod.ponder.api.element.TextElementBuilder attachKeyFrame();
+  public net.createmod.ponder.api.element.TextElementBuilder placeNearTarget();
+  public net.createmod.ponder.api.element.TextElementBuilder sharedText(java.lang.String);
+  public net.createmod.ponder.api.element.TextElementBuilder sharedText(net.minecraft.resources.ResourceLocation);
+  public net.createmod.ponder.api.element.TextElementBuilder text(java.lang.String);
+  public net.createmod.ponder.api.element.TextElementBuilder independent(int);
+  public net.createmod.ponder.api.element.TextElementBuilder pointAt(net.minecraft.world.phys.Vec3);
+  public net.createmod.ponder.api.element.TextElementBuilder colored(net.createmod.ponder.api.PonderPalette);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.element.TrackedElementBase
+================================================================================
+Compiled from "TrackedElementBase.java"
+public abstract class net.createmod.ponder.foundation.element.TrackedElementBase<T> extends net.createmod.ponder.foundation.element.PonderElementBase implements net.createmod.ponder.api.element.TrackedElement<T> {
+  public net.createmod.ponder.foundation.element.TrackedElementBase(T);
+  public void ifPresent(java.util.function.Consumer<T>);
+  public void renderFirst(net.createmod.ponder.api.level.PonderLevel, net.minecraft.client.renderer.MultiBufferSource, net.minecraft.client.gui.GuiGraphics, float);
+  public void renderLayer(net.createmod.ponder.api.level.PonderLevel, net.minecraft.client.renderer.MultiBufferSource, net.minecraft.client.renderer.RenderType, net.minecraft.client.gui.GuiGraphics, float);
+  public void renderLast(net.createmod.ponder.api.level.PonderLevel, net.minecraft.client.renderer.MultiBufferSource, net.minecraft.client.gui.GuiGraphics, float);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.element.WorldSectionElementImpl
+================================================================================
+Compiled from "WorldSectionElementImpl.java"
+public class net.createmod.ponder.foundation.element.WorldSectionElementImpl extends net.createmod.ponder.foundation.element.AnimatedSceneElementBase implements net.createmod.ponder.api.element.WorldSectionElement {
+  public static final net.createmod.catnip.render.SuperByteBufferCache$Compartment<net.createmod.catnip.data.Pair<java.lang.Integer, java.lang.Integer>> PONDER_WORLD_SECTION;
+  public net.createmod.ponder.foundation.element.WorldSectionElementImpl();
+  public net.createmod.ponder.foundation.element.WorldSectionElementImpl(net.createmod.ponder.api.scene.Selection);
+  public void mergeOnto(net.createmod.ponder.api.element.WorldSectionElement);
+  public void set(net.createmod.ponder.api.scene.Selection);
+  public void add(net.createmod.ponder.api.scene.Selection);
+  public void erase(net.createmod.ponder.api.scene.Selection);
+  public void setCenterOfRotation(net.minecraft.world.phys.Vec3);
+  public void stabilizeRotation(net.minecraft.world.phys.Vec3);
+  public void reset(net.createmod.ponder.foundation.PonderScene);
+  public void selectBlock(net.minecraft.core.BlockPos);
+  public void resetSelectedBlock();
+  public void resetAnimatedTransform();
+  public void queueRedraw();
+  public boolean isEmpty();
+  public void setEmpty();
+  public void setAnimatedRotation(net.minecraft.world.phys.Vec3, boolean);
+  public net.minecraft.world.phys.Vec3 getAnimatedRotation();
+  public void setAnimatedOffset(net.minecraft.world.phys.Vec3, boolean);
+  public net.minecraft.world.phys.Vec3 getAnimatedOffset();
+  public boolean isVisible();
+  public net.createmod.catnip.data.Pair<net.minecraft.world.phys.Vec3, net.minecraft.world.phys.BlockHitResult> rayTrace(net.createmod.ponder.api.level.PonderLevel, net.minecraft.world.phys.Vec3, net.minecraft.world.phys.Vec3);
+  public void transformMS(com.mojang.blaze3d.vertex.PoseStack, float);
+  public void tick(net.createmod.ponder.foundation.PonderScene);
+  public void whileSkipping(net.createmod.ponder.foundation.PonderScene);
+  public void renderFirst(net.createmod.ponder.api.level.PonderLevel, net.minecraft.client.renderer.MultiBufferSource, net.minecraft.client.gui.GuiGraphics, float, float);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.element.WorldSectionElementImpl$SbbBuilder
+================================================================================
+Compiled from "WorldSectionElementImpl.java"
+class net.createmod.ponder.foundation.element.WorldSectionElementImpl$SbbBuilder extends net.createmod.catnip.render.SuperByteBufferBuilder implements net.createmod.catnip.client.render.model.ShadeSeparatedResultConsumer {
+  public void prepare(net.minecraft.client.renderer.RenderType);
+  public void accept(net.minecraft.client.renderer.RenderType, boolean, com.mojang.blaze3d.vertex.MeshData);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.element.WorldSectionElementImpl$ThreadLocalObjects
+================================================================================
+Compiled from "WorldSectionElementImpl.java"
+class net.createmod.ponder.foundation.element.WorldSectionElementImpl$ThreadLocalObjects {
+  public final net.createmod.ponder.foundation.element.WorldSectionElementImpl$SbbBuilder sbbBuilder;
+}
+
+================================================================================
+### net.createmod.ponder.foundation.element.package-info
+================================================================================
+Compiled from "package-info.java"
+interface net.createmod.ponder.foundation.element.package-info {
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.AnimateElementInstruction
+================================================================================
+Compiled from "AnimateElementInstruction.java"
+public class net.createmod.ponder.foundation.instruction.AnimateElementInstruction<T extends net.createmod.ponder.api.element.PonderSceneElement> extends net.createmod.ponder.foundation.instruction.TickingInstruction {
+  public void tick(net.createmod.ponder.foundation.PonderScene);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.AnimateMinecartInstruction
+================================================================================
+Compiled from "AnimateMinecartInstruction.java"
+public class net.createmod.ponder.foundation.instruction.AnimateMinecartInstruction extends net.createmod.ponder.foundation.instruction.AnimateElementInstruction<net.createmod.ponder.api.element.MinecartElement> {
+  public static net.createmod.ponder.foundation.instruction.AnimateMinecartInstruction rotate(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.MinecartElement>, float, int);
+  public static net.createmod.ponder.foundation.instruction.AnimateMinecartInstruction move(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.MinecartElement>, net.minecraft.world.phys.Vec3, int);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.AnimateParrotInstruction
+================================================================================
+Compiled from "AnimateParrotInstruction.java"
+public class net.createmod.ponder.foundation.instruction.AnimateParrotInstruction extends net.createmod.ponder.foundation.instruction.AnimateElementInstruction<net.createmod.ponder.api.element.ParrotElement> {
+  public static net.createmod.ponder.foundation.instruction.AnimateParrotInstruction rotate(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.ParrotElement>, net.minecraft.world.phys.Vec3, int);
+  public static net.createmod.ponder.foundation.instruction.AnimateParrotInstruction move(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.ParrotElement>, net.minecraft.world.phys.Vec3, int);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.AnimateWorldSectionInstruction
+================================================================================
+Compiled from "AnimateWorldSectionInstruction.java"
+public class net.createmod.ponder.foundation.instruction.AnimateWorldSectionInstruction extends net.createmod.ponder.foundation.instruction.AnimateElementInstruction<net.createmod.ponder.api.element.WorldSectionElement> {
+  public static net.createmod.ponder.foundation.instruction.AnimateWorldSectionInstruction rotate(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.WorldSectionElement>, net.minecraft.world.phys.Vec3, int);
+  public static net.createmod.ponder.foundation.instruction.AnimateWorldSectionInstruction move(net.createmod.ponder.api.element.ElementLink<net.createmod.ponder.api.element.WorldSectionElement>, net.minecraft.world.phys.Vec3, int);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.BlockEntityDataInstruction
+================================================================================
+Compiled from "BlockEntityDataInstruction.java"
+public class net.createmod.ponder.foundation.instruction.BlockEntityDataInstruction extends net.createmod.ponder.foundation.instruction.WorldModifyInstruction {
+  public net.createmod.ponder.foundation.instruction.BlockEntityDataInstruction(net.createmod.ponder.api.scene.Selection, java.lang.Class<? extends net.minecraft.world.level.block.entity.BlockEntity>, java.util.function.UnaryOperator<net.minecraft.nbt.CompoundTag>, boolean);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.ChaseAABBInstruction
+================================================================================
+Compiled from "ChaseAABBInstruction.java"
+public class net.createmod.ponder.foundation.instruction.ChaseAABBInstruction extends net.createmod.ponder.foundation.instruction.TickingInstruction {
+  public net.createmod.ponder.foundation.instruction.ChaseAABBInstruction(net.createmod.ponder.api.PonderPalette, java.lang.Object, net.minecraft.world.phys.AABB, int);
+  public void tick(net.createmod.ponder.foundation.PonderScene);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.CreateMinecartInstruction
+================================================================================
+Compiled from "CreateMinecartInstruction.java"
+public class net.createmod.ponder.foundation.instruction.CreateMinecartInstruction extends net.createmod.ponder.foundation.instruction.FadeIntoSceneInstruction<net.createmod.ponder.api.element.MinecartElement> {
+  public net.createmod.ponder.foundation.instruction.CreateMinecartInstruction(int, net.minecraft.core.Direction, net.createmod.ponder.api.element.MinecartElement);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.CreateParrotInstruction
+================================================================================
+Compiled from "CreateParrotInstruction.java"
+public class net.createmod.ponder.foundation.instruction.CreateParrotInstruction extends net.createmod.ponder.foundation.instruction.FadeIntoSceneInstruction<net.createmod.ponder.api.element.ParrotElement> {
+  public net.createmod.ponder.foundation.instruction.CreateParrotInstruction(int, net.minecraft.core.Direction, net.createmod.ponder.api.element.ParrotElement);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.DelayInstruction
+================================================================================
+Compiled from "DelayInstruction.java"
+public class net.createmod.ponder.foundation.instruction.DelayInstruction extends net.createmod.ponder.foundation.instruction.TickingInstruction {
+  public net.createmod.ponder.foundation.instruction.DelayInstruction(int);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.DisplayWorldSectionInstruction
+================================================================================
+Compiled from "DisplayWorldSectionInstruction.java"
+public class net.createmod.ponder.foundation.instruction.DisplayWorldSectionInstruction extends net.createmod.ponder.foundation.instruction.FadeIntoSceneInstruction<net.createmod.ponder.api.element.WorldSectionElement> {
+  public net.createmod.ponder.foundation.instruction.DisplayWorldSectionInstruction(int, net.minecraft.core.Direction, net.createmod.ponder.api.scene.Selection, java.util.function.Supplier<net.createmod.ponder.api.element.WorldSectionElement>);
+  public net.createmod.ponder.foundation.instruction.DisplayWorldSectionInstruction(int, net.minecraft.core.Direction, net.createmod.ponder.api.scene.Selection, java.util.function.Supplier<net.createmod.ponder.api.element.WorldSectionElement>, net.minecraft.core.BlockPos);
+  public void tick(net.createmod.ponder.foundation.PonderScene);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.EmitParticlesInstruction
+================================================================================
+Compiled from "EmitParticlesInstruction.java"
+public class net.createmod.ponder.foundation.instruction.EmitParticlesInstruction extends net.createmod.ponder.foundation.instruction.TickingInstruction {
+  public net.createmod.ponder.foundation.instruction.EmitParticlesInstruction(net.minecraft.world.phys.Vec3, net.createmod.ponder.api.ParticleEmitter, float, int);
+  public void tick(net.createmod.ponder.foundation.PonderScene);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.FadeInOutInstruction
+================================================================================
+Compiled from "FadeInOutInstruction.java"
+public abstract class net.createmod.ponder.foundation.instruction.FadeInOutInstruction extends net.createmod.ponder.foundation.instruction.TickingInstruction {
+  public net.createmod.ponder.foundation.instruction.FadeInOutInstruction(int);
+  public void tick(net.createmod.ponder.foundation.PonderScene);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.FadeIntoSceneInstruction
+================================================================================
+Compiled from "FadeIntoSceneInstruction.java"
+public abstract class net.createmod.ponder.foundation.instruction.FadeIntoSceneInstruction<T extends net.createmod.ponder.api.element.AnimatedSceneElement> extends net.createmod.ponder.foundation.instruction.TickingInstruction {
+  public net.createmod.ponder.foundation.instruction.FadeIntoSceneInstruction(int, net.minecraft.core.Direction, T);
+  public void tick(net.createmod.ponder.foundation.PonderScene);
+  public net.createmod.ponder.api.element.ElementLink<T> createLink(net.createmod.ponder.foundation.PonderScene);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.FadeOutOfSceneInstruction
+================================================================================
+Compiled from "FadeOutOfSceneInstruction.java"
+public class net.createmod.ponder.foundation.instruction.FadeOutOfSceneInstruction<T extends net.createmod.ponder.api.element.AnimatedSceneElement> extends net.createmod.ponder.foundation.instruction.TickingInstruction {
+  public net.createmod.ponder.foundation.instruction.FadeOutOfSceneInstruction(int, net.minecraft.core.Direction, net.createmod.ponder.api.element.ElementLink<T>);
+  public void tick(net.createmod.ponder.foundation.PonderScene);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.HideAllInstruction
+================================================================================
+Compiled from "HideAllInstruction.java"
+public class net.createmod.ponder.foundation.instruction.HideAllInstruction extends net.createmod.ponder.foundation.instruction.TickingInstruction {
+  public net.createmod.ponder.foundation.instruction.HideAllInstruction(int, net.minecraft.core.Direction);
+  public void tick(net.createmod.ponder.foundation.PonderScene);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.HighlightValueBoxInstruction
+================================================================================
+Compiled from "HighlightValueBoxInstruction.java"
+public class net.createmod.ponder.foundation.instruction.HighlightValueBoxInstruction extends net.createmod.ponder.foundation.instruction.TickingInstruction {
+  public net.createmod.ponder.foundation.instruction.HighlightValueBoxInstruction(net.minecraft.world.phys.Vec3, net.minecraft.world.phys.Vec3, int);
+  public void tick(net.createmod.ponder.foundation.PonderScene);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.KeyframeInstruction
+================================================================================
+Compiled from "KeyframeInstruction.java"
+public class net.createmod.ponder.foundation.instruction.KeyframeInstruction extends net.createmod.ponder.foundation.instruction.PonderInstruction {
+  public static final net.createmod.ponder.foundation.instruction.KeyframeInstruction IMMEDIATE;
+  public static final net.createmod.ponder.foundation.instruction.KeyframeInstruction DELAYED;
+  public boolean isComplete();
+  public void tick(net.createmod.ponder.foundation.PonderScene);
+  public void onScheduled(net.createmod.ponder.foundation.PonderScene);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.LineInstruction
+================================================================================
+Compiled from "LineInstruction.java"
+public class net.createmod.ponder.foundation.instruction.LineInstruction extends net.createmod.ponder.foundation.instruction.TickingInstruction {
+  public net.createmod.ponder.foundation.instruction.LineInstruction(net.createmod.ponder.api.PonderPalette, net.minecraft.world.phys.Vec3, net.minecraft.world.phys.Vec3, int, boolean);
+  public void tick(net.createmod.ponder.foundation.PonderScene);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.MarkAsFinishedInstruction
+================================================================================
+Compiled from "MarkAsFinishedInstruction.java"
+public class net.createmod.ponder.foundation.instruction.MarkAsFinishedInstruction extends net.createmod.ponder.foundation.instruction.PonderInstruction {
+  public net.createmod.ponder.foundation.instruction.MarkAsFinishedInstruction();
+  public boolean isComplete();
+  public void tick(net.createmod.ponder.foundation.PonderScene);
+  public void onScheduled(net.createmod.ponder.foundation.PonderScene);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.MovePoiInstruction
+================================================================================
+Compiled from "MovePoiInstruction.java"
+public class net.createmod.ponder.foundation.instruction.MovePoiInstruction extends net.createmod.ponder.foundation.instruction.PonderInstruction {
+  public net.createmod.ponder.foundation.instruction.MovePoiInstruction(net.minecraft.world.phys.Vec3);
+  public boolean isComplete();
+  public void tick(net.createmod.ponder.foundation.PonderScene);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.OutlineSelectionInstruction
+================================================================================
+Compiled from "OutlineSelectionInstruction.java"
+public class net.createmod.ponder.foundation.instruction.OutlineSelectionInstruction extends net.createmod.ponder.foundation.instruction.TickingInstruction {
+  public net.createmod.ponder.foundation.instruction.OutlineSelectionInstruction(net.createmod.ponder.api.PonderPalette, java.lang.Object, net.createmod.ponder.api.scene.Selection, int);
+  public void tick(net.createmod.ponder.foundation.PonderScene);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.PonderInstruction
+================================================================================
+Compiled from "PonderInstruction.java"
+public abstract class net.createmod.ponder.foundation.instruction.PonderInstruction {
+  public net.createmod.ponder.foundation.instruction.PonderInstruction();
+  public boolean isBlocking();
+  public void reset(net.createmod.ponder.foundation.PonderScene);
+  public abstract boolean isComplete();
+  public void onScheduled(net.createmod.ponder.foundation.PonderScene);
+  public abstract void tick(net.createmod.ponder.foundation.PonderScene);
+  public static net.createmod.ponder.foundation.instruction.PonderInstruction simple(java.util.function.Consumer<net.createmod.ponder.foundation.PonderScene>);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.PonderInstruction$Simple
+================================================================================
+Compiled from "PonderInstruction.java"
+class net.createmod.ponder.foundation.instruction.PonderInstruction$Simple extends net.createmod.ponder.foundation.instruction.PonderInstruction {
+  public net.createmod.ponder.foundation.instruction.PonderInstruction$Simple(java.util.function.Consumer<net.createmod.ponder.foundation.PonderScene>);
+  public boolean isComplete();
+  public void tick(net.createmod.ponder.foundation.PonderScene);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.ReplaceBlocksInstruction
+================================================================================
+Compiled from "ReplaceBlocksInstruction.java"
+public class net.createmod.ponder.foundation.instruction.ReplaceBlocksInstruction extends net.createmod.ponder.foundation.instruction.WorldModifyInstruction {
+  public net.createmod.ponder.foundation.instruction.ReplaceBlocksInstruction(net.createmod.ponder.api.scene.Selection, java.util.function.UnaryOperator<net.minecraft.world.level.block.state.BlockState>, boolean, boolean);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.RotateSceneInstruction
+================================================================================
+Compiled from "RotateSceneInstruction.java"
+public class net.createmod.ponder.foundation.instruction.RotateSceneInstruction extends net.createmod.ponder.foundation.instruction.PonderInstruction {
+  public net.createmod.ponder.foundation.instruction.RotateSceneInstruction(float, float, boolean);
+  public boolean isComplete();
+  public void tick(net.createmod.ponder.foundation.PonderScene);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.ShowInputInstruction
+================================================================================
+Compiled from "ShowInputInstruction.java"
+public class net.createmod.ponder.foundation.instruction.ShowInputInstruction extends net.createmod.ponder.foundation.instruction.FadeInOutInstruction {
+  public net.createmod.ponder.foundation.instruction.ShowInputInstruction(net.createmod.ponder.foundation.element.InputWindowElement, int);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.TextInstruction
+================================================================================
+Compiled from "TextInstruction.java"
+public class net.createmod.ponder.foundation.instruction.TextInstruction extends net.createmod.ponder.foundation.instruction.FadeInOutInstruction {
+  public net.createmod.ponder.foundation.instruction.TextInstruction(net.createmod.ponder.foundation.element.TextWindowElement, int);
+  public net.createmod.ponder.foundation.instruction.TextInstruction(net.createmod.ponder.foundation.element.TextWindowElement, int, net.createmod.ponder.api.scene.Selection);
+  public void tick(net.createmod.ponder.foundation.PonderScene);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.TickingInstruction
+================================================================================
+Compiled from "TickingInstruction.java"
+public abstract class net.createmod.ponder.foundation.instruction.TickingInstruction extends net.createmod.ponder.foundation.instruction.PonderInstruction {
+  public net.createmod.ponder.foundation.instruction.TickingInstruction(boolean, int);
+  public void reset(net.createmod.ponder.foundation.PonderScene);
+  public void onScheduled(net.createmod.ponder.foundation.PonderScene);
+  public void tick(net.createmod.ponder.foundation.PonderScene);
+  public boolean isComplete();
+  public boolean isBlocking();
+}
+
+================================================================================
+### net.createmod.ponder.foundation.instruction.WorldModifyInstruction
+================================================================================
+Compiled from "WorldModifyInstruction.java"
+public abstract class net.createmod.ponder.foundation.instruction.WorldModifyInstruction extends net.createmod.ponder.foundation.instruction.PonderInstruction {
+  public net.createmod.ponder.foundation.instruction.WorldModifyInstruction(net.createmod.ponder.api.scene.Selection);
+  public boolean isComplete();
+  public void tick(net.createmod.ponder.foundation.PonderScene);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.package-info
+================================================================================
+Compiled from "package-info.java"
+interface net.createmod.ponder.foundation.package-info {
+}
+
+================================================================================
+### net.createmod.ponder.foundation.registration.DefaultPonderSceneRegistrationHelper
+================================================================================
+Compiled from "DefaultPonderSceneRegistrationHelper.java"
+public class net.createmod.ponder.foundation.registration.DefaultPonderSceneRegistrationHelper implements net.createmod.ponder.api.registration.PonderSceneRegistrationHelper<net.minecraft.resources.ResourceLocation> {
+  public net.createmod.ponder.foundation.registration.DefaultPonderSceneRegistrationHelper(java.lang.String, net.createmod.ponder.foundation.registration.PonderSceneRegistry);
+  public <T> net.createmod.ponder.foundation.registration.GenericPonderSceneRegistrationHelper<T> withKeyFunction(java.util.function.Function<T, net.minecraft.resources.ResourceLocation>);
+  public net.createmod.ponder.api.registration.StoryBoardEntry addStoryBoard(net.minecraft.resources.ResourceLocation, net.minecraft.resources.ResourceLocation, net.createmod.ponder.api.scene.PonderStoryBoard, net.minecraft.resources.ResourceLocation...);
+  public net.createmod.ponder.api.registration.StoryBoardEntry addStoryBoard(net.minecraft.resources.ResourceLocation, java.lang.String, net.createmod.ponder.api.scene.PonderStoryBoard, net.minecraft.resources.ResourceLocation...);
+  public net.createmod.ponder.api.registration.MultiSceneBuilder forComponents(net.minecraft.resources.ResourceLocation...);
+  public net.createmod.ponder.api.registration.MultiSceneBuilder forComponents(java.lang.Iterable<? extends net.minecraft.resources.ResourceLocation>);
+  public net.minecraft.resources.ResourceLocation asLocation(java.lang.String);
+  public net.createmod.ponder.api.registration.MultiSceneBuilder forComponents(java.lang.Object[]);
+  public net.createmod.ponder.api.registration.StoryBoardEntry addStoryBoard(java.lang.Object, java.lang.String, net.createmod.ponder.api.scene.PonderStoryBoard, net.minecraft.resources.ResourceLocation[]);
+  public net.createmod.ponder.api.registration.StoryBoardEntry addStoryBoard(java.lang.Object, net.minecraft.resources.ResourceLocation, net.createmod.ponder.api.scene.PonderStoryBoard, net.minecraft.resources.ResourceLocation[]);
+  public net.createmod.ponder.api.registration.PonderSceneRegistrationHelper withKeyFunction(java.util.function.Function);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.registration.DefaultPonderTagRegistrationHelper
+================================================================================
+Compiled from "DefaultPonderTagRegistrationHelper.java"
+public class net.createmod.ponder.foundation.registration.DefaultPonderTagRegistrationHelper implements net.createmod.ponder.api.registration.PonderTagRegistrationHelper<net.minecraft.resources.ResourceLocation> {
+  public net.createmod.ponder.foundation.registration.DefaultPonderTagRegistrationHelper(java.lang.String, net.createmod.ponder.foundation.registration.PonderTagRegistry, net.createmod.ponder.foundation.registration.PonderLocalization);
+  public <T> net.createmod.ponder.api.registration.PonderTagRegistrationHelper<T> withKeyFunction(java.util.function.Function<T, net.minecraft.resources.ResourceLocation>);
+  public net.createmod.ponder.api.registration.TagBuilder registerTag(net.minecraft.resources.ResourceLocation);
+  public net.createmod.ponder.api.registration.TagBuilder registerTag(java.lang.String);
+  public void addTagToComponent(net.minecraft.resources.ResourceLocation, net.minecraft.resources.ResourceLocation);
+  public net.createmod.ponder.api.registration.MultiTagBuilder$Tag<net.minecraft.resources.ResourceLocation> addToTag(net.minecraft.resources.ResourceLocation);
+  public net.createmod.ponder.api.registration.MultiTagBuilder$Tag<net.minecraft.resources.ResourceLocation> addToTag(net.minecraft.resources.ResourceLocation...);
+  public net.createmod.ponder.api.registration.MultiTagBuilder$Component addToComponent(net.minecraft.resources.ResourceLocation);
+  public net.createmod.ponder.api.registration.MultiTagBuilder$Component addToComponent(net.minecraft.resources.ResourceLocation...);
+  public net.createmod.ponder.api.registration.MultiTagBuilder$Component addToComponent(java.lang.Object[]);
+  public net.createmod.ponder.api.registration.MultiTagBuilder$Component addToComponent(java.lang.Object);
+  public void addTagToComponent(java.lang.Object, net.minecraft.resources.ResourceLocation);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.registration.DefaultSharedTextRegistrationHelper
+================================================================================
+Compiled from "DefaultSharedTextRegistrationHelper.java"
+public class net.createmod.ponder.foundation.registration.DefaultSharedTextRegistrationHelper implements net.createmod.ponder.api.registration.SharedTextRegistrationHelper {
+  public net.createmod.ponder.foundation.registration.DefaultSharedTextRegistrationHelper(java.lang.String, net.createmod.ponder.foundation.registration.PonderLocalization);
+  public void registerSharedText(java.lang.String, java.lang.String);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.registration.GenericMultiSceneBuilder
+================================================================================
+Compiled from "GenericMultiSceneBuilder.java"
+public class net.createmod.ponder.foundation.registration.GenericMultiSceneBuilder<T> implements net.createmod.ponder.api.registration.MultiSceneBuilder {
+  public net.createmod.ponder.api.registration.MultiSceneBuilder addStoryBoard(net.minecraft.resources.ResourceLocation, net.createmod.ponder.api.scene.PonderStoryBoard);
+  public net.createmod.ponder.api.registration.MultiSceneBuilder addStoryBoard(net.minecraft.resources.ResourceLocation, net.createmod.ponder.api.scene.PonderStoryBoard, net.minecraft.resources.ResourceLocation...);
+  public net.createmod.ponder.api.registration.MultiSceneBuilder addStoryBoard(net.minecraft.resources.ResourceLocation, net.createmod.ponder.api.scene.PonderStoryBoard, java.util.function.Consumer<net.createmod.ponder.api.registration.StoryBoardEntry>);
+  public net.createmod.ponder.api.registration.MultiSceneBuilder addStoryBoard(java.lang.String, net.createmod.ponder.api.scene.PonderStoryBoard);
+  public net.createmod.ponder.api.registration.MultiSceneBuilder addStoryBoard(java.lang.String, net.createmod.ponder.api.scene.PonderStoryBoard, net.minecraft.resources.ResourceLocation...);
+  public net.createmod.ponder.api.registration.MultiSceneBuilder addStoryBoard(java.lang.String, net.createmod.ponder.api.scene.PonderStoryBoard, java.util.function.Consumer<net.createmod.ponder.api.registration.StoryBoardEntry>);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.registration.GenericMultiTagBuilder
+================================================================================
+Compiled from "GenericMultiTagBuilder.java"
+public class net.createmod.ponder.foundation.registration.GenericMultiTagBuilder<T> implements net.createmod.ponder.api.registration.MultiTagBuilder {
+  public net.createmod.ponder.foundation.registration.GenericMultiTagBuilder();
+}
+
+================================================================================
+### net.createmod.ponder.foundation.registration.GenericMultiTagBuilder$Component
+================================================================================
+Compiled from "GenericMultiTagBuilder.java"
+public class net.createmod.ponder.foundation.registration.GenericMultiTagBuilder$Component implements net.createmod.ponder.api.registration.MultiTagBuilder$Component {
+  public net.createmod.ponder.foundation.registration.GenericMultiTagBuilder$Component(net.createmod.ponder.api.registration.PonderTagRegistrationHelper<T>, java.lang.Iterable<T>);
+  public net.createmod.ponder.foundation.registration.GenericMultiTagBuilder<T>.Component add(net.minecraft.resources.ResourceLocation);
+  public net.createmod.ponder.api.registration.MultiTagBuilder$Component add(net.minecraft.resources.ResourceLocation);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.registration.GenericMultiTagBuilder$Tag
+================================================================================
+Compiled from "GenericMultiTagBuilder.java"
+public class net.createmod.ponder.foundation.registration.GenericMultiTagBuilder$Tag implements net.createmod.ponder.api.registration.MultiTagBuilder$Tag<T> {
+  public net.createmod.ponder.foundation.registration.GenericMultiTagBuilder$Tag(net.createmod.ponder.api.registration.PonderTagRegistrationHelper<T>, java.lang.Iterable<net.minecraft.resources.ResourceLocation>);
+  public net.createmod.ponder.foundation.registration.GenericMultiTagBuilder<T>.Tag add(T);
+  public net.createmod.ponder.api.registration.MultiTagBuilder$Tag add(java.lang.Object);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.registration.GenericPonderSceneRegistrationHelper
+================================================================================
+Compiled from "GenericPonderSceneRegistrationHelper.java"
+public class net.createmod.ponder.foundation.registration.GenericPonderSceneRegistrationHelper<T> implements net.createmod.ponder.api.registration.PonderSceneRegistrationHelper<T> {
+  public net.createmod.ponder.foundation.registration.GenericPonderSceneRegistrationHelper(net.createmod.ponder.api.registration.PonderSceneRegistrationHelper<net.minecraft.resources.ResourceLocation>, java.util.function.Function<T, net.minecraft.resources.ResourceLocation>);
+  public <S> net.createmod.ponder.api.registration.PonderSceneRegistrationHelper<S> withKeyFunction(java.util.function.Function<S, T>);
+  public net.createmod.ponder.api.registration.StoryBoardEntry addStoryBoard(T, net.minecraft.resources.ResourceLocation, net.createmod.ponder.api.scene.PonderStoryBoard, net.minecraft.resources.ResourceLocation...);
+  public net.createmod.ponder.api.registration.StoryBoardEntry addStoryBoard(T, java.lang.String, net.createmod.ponder.api.scene.PonderStoryBoard, net.minecraft.resources.ResourceLocation...);
+  public net.createmod.ponder.api.registration.MultiSceneBuilder forComponents(java.lang.Iterable<? extends T>);
+  public final net.createmod.ponder.api.registration.MultiSceneBuilder forComponents(T...);
+  public net.minecraft.resources.ResourceLocation asLocation(java.lang.String);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.registration.GenericPonderTagRegistrationHelper
+================================================================================
+Compiled from "GenericPonderTagRegistrationHelper.java"
+public class net.createmod.ponder.foundation.registration.GenericPonderTagRegistrationHelper<T> implements net.createmod.ponder.api.registration.PonderTagRegistrationHelper<T> {
+  public net.createmod.ponder.foundation.registration.GenericPonderTagRegistrationHelper(net.createmod.ponder.api.registration.PonderTagRegistrationHelper<net.minecraft.resources.ResourceLocation>, java.util.function.Function<T, net.minecraft.resources.ResourceLocation>);
+  public <S> net.createmod.ponder.api.registration.PonderTagRegistrationHelper<S> withKeyFunction(java.util.function.Function<S, T>);
+  public net.createmod.ponder.api.registration.TagBuilder registerTag(net.minecraft.resources.ResourceLocation);
+  public net.createmod.ponder.api.registration.TagBuilder registerTag(java.lang.String);
+  public void addTagToComponent(T, net.minecraft.resources.ResourceLocation);
+  public net.createmod.ponder.api.registration.MultiTagBuilder$Tag<T> addToTag(net.minecraft.resources.ResourceLocation);
+  public net.createmod.ponder.api.registration.MultiTagBuilder$Tag<T> addToTag(net.minecraft.resources.ResourceLocation...);
+  public net.createmod.ponder.api.registration.MultiTagBuilder$Component addToComponent(T);
+  public net.createmod.ponder.api.registration.MultiTagBuilder$Component addToComponent(T...);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.registration.PonderIndexExclusionHelper
+================================================================================
+Compiled from "PonderIndexExclusionHelper.java"
+public class net.createmod.ponder.foundation.registration.PonderIndexExclusionHelper implements net.createmod.ponder.api.registration.IndexExclusionHelper {
+  public net.createmod.ponder.foundation.registration.PonderIndexExclusionHelper();
+  public static java.util.stream.Stream<java.util.function.Predicate<net.minecraft.world.level.ItemLike>> pluginToExclusions(net.createmod.ponder.api.registration.PonderPlugin);
+  public java.util.stream.Stream<java.util.function.Predicate<net.minecraft.world.level.ItemLike>> getExclusions();
+  public net.createmod.ponder.api.registration.IndexExclusionHelper exclude(net.minecraft.world.level.ItemLike);
+  public net.createmod.ponder.api.registration.IndexExclusionHelper excludeItemVariants(java.lang.Class<? extends net.minecraft.world.item.Item>, net.minecraft.world.item.Item);
+  public net.createmod.ponder.api.registration.IndexExclusionHelper excludeBlockVariants(java.lang.Class<? extends net.minecraft.world.level.block.Block>, net.minecraft.world.level.block.Block);
+  public net.createmod.ponder.api.registration.IndexExclusionHelper exclude(java.util.function.Predicate<net.minecraft.world.level.ItemLike>);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.registration.PonderLocalization
+================================================================================
+Compiled from "PonderLocalization.java"
+public class net.createmod.ponder.foundation.registration.PonderLocalization implements net.createmod.ponder.api.registration.LangRegistryAccess {
+  public static final java.lang.String LANG_PREFIX;
+  public static final java.lang.String UI_PREFIX;
+  public final java.util.Map<net.minecraft.resources.ResourceLocation, java.lang.String> shared;
+  public final java.util.Map<net.minecraft.resources.ResourceLocation, net.createmod.catnip.data.Couple<java.lang.String>> tag;
+  public final java.util.Map<net.minecraft.resources.ResourceLocation, java.util.Map<java.lang.String, java.lang.String>> specific;
+  public net.createmod.ponder.foundation.registration.PonderLocalization();
+  public void clearAll();
+  public void clearShared();
+  public void registerShared(net.minecraft.resources.ResourceLocation, java.lang.String);
+  public void registerTag(net.minecraft.resources.ResourceLocation, java.lang.String, java.lang.String);
+  public void registerSpecific(net.minecraft.resources.ResourceLocation, java.lang.String, java.lang.String);
+  public java.lang.String getShared(net.minecraft.resources.ResourceLocation);
+  public java.lang.String getShared(net.minecraft.resources.ResourceLocation, java.lang.Object...);
+  public java.lang.String getTagName(net.minecraft.resources.ResourceLocation);
+  public java.lang.String getTagDescription(net.minecraft.resources.ResourceLocation);
+  public java.lang.String getSpecific(net.minecraft.resources.ResourceLocation, java.lang.String);
+  public java.lang.String getSpecific(net.minecraft.resources.ResourceLocation, java.lang.String, java.lang.Object...);
+  public void generateSceneLang();
+  public void provideLang(java.lang.String, java.util.function.BiConsumer<java.lang.String, java.lang.String>);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.registration.PonderSceneRegistry
+================================================================================
+Compiled from "PonderSceneRegistry.java"
+public class net.createmod.ponder.foundation.registration.PonderSceneRegistry implements net.createmod.ponder.api.registration.SceneRegistryAccess {
+  public net.createmod.ponder.foundation.registration.PonderSceneRegistry(net.createmod.ponder.foundation.registration.PonderLocalization);
+  public void clearRegistry();
+  public void addStoryBoard(net.createmod.ponder.api.registration.StoryBoardEntry);
+  public java.util.Collection<java.util.Map$Entry<net.minecraft.resources.ResourceLocation, net.createmod.ponder.api.registration.StoryBoardEntry>> getRegisteredEntries();
+  public boolean doScenesExistForId(net.minecraft.resources.ResourceLocation);
+  public java.util.List<net.createmod.ponder.foundation.PonderScene> compile(net.minecraft.resources.ResourceLocation);
+  public java.util.List<net.createmod.ponder.foundation.PonderScene> compile(java.util.Collection<net.createmod.ponder.api.registration.StoryBoardEntry>);
+  public static net.createmod.ponder.foundation.PonderScene compileScene(net.createmod.ponder.foundation.registration.PonderLocalization, net.createmod.ponder.api.registration.StoryBoardEntry, net.createmod.ponder.api.level.PonderLevel);
+  public static net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate loadSchematic(net.minecraft.resources.ResourceLocation);
+  public static net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate loadSchematic(net.minecraft.server.packs.resources.ResourceManager, net.minecraft.resources.ResourceLocation);
+  public static net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate loadSchematic(java.io.InputStream) throws java.io.IOException;
+}
+
+================================================================================
+### net.createmod.ponder.foundation.registration.PonderTagBuilder
+================================================================================
+Compiled from "PonderTagBuilder.java"
+public class net.createmod.ponder.foundation.registration.PonderTagBuilder implements net.createmod.ponder.api.registration.TagBuilder {
+  public net.createmod.ponder.foundation.registration.PonderTagBuilder(net.minecraft.resources.ResourceLocation, java.util.function.Consumer<net.createmod.ponder.foundation.registration.PonderTagBuilder>);
+  public net.createmod.ponder.api.registration.TagBuilder title(java.lang.String);
+  public net.createmod.ponder.api.registration.TagBuilder description(java.lang.String);
+  public net.createmod.ponder.api.registration.TagBuilder addToIndex();
+  public net.createmod.ponder.api.registration.TagBuilder icon(net.minecraft.resources.ResourceLocation);
+  public net.createmod.ponder.api.registration.TagBuilder icon(java.lang.String);
+  public net.createmod.ponder.api.registration.TagBuilder idAsIcon();
+  public net.createmod.ponder.api.registration.TagBuilder item(net.minecraft.world.level.ItemLike, boolean, boolean);
+  public void register();
+}
+
+================================================================================
+### net.createmod.ponder.foundation.registration.PonderTagRegistry
+================================================================================
+Compiled from "PonderTagRegistry.java"
+public class net.createmod.ponder.foundation.registration.PonderTagRegistry implements net.createmod.ponder.api.registration.TagRegistryAccess {
+  public net.createmod.ponder.foundation.registration.PonderTagRegistry(net.createmod.ponder.foundation.registration.PonderLocalization);
+  public void clearRegistry();
+  public void registerTag(net.createmod.ponder.foundation.PonderTag);
+  public void listTag(net.createmod.ponder.foundation.PonderTag);
+  public void addTagToComponent(net.minecraft.resources.ResourceLocation, net.minecraft.resources.ResourceLocation);
+  public net.createmod.ponder.foundation.PonderTag getRegisteredTag(net.minecraft.resources.ResourceLocation);
+  public java.util.List<net.createmod.ponder.foundation.PonderTag> getListedTags();
+  public java.util.Set<net.createmod.ponder.foundation.PonderTag> getTags(net.minecraft.resources.ResourceLocation);
+  public java.util.Set<net.minecraft.resources.ResourceLocation> getItems(net.minecraft.resources.ResourceLocation);
+  public java.util.Set<net.minecraft.resources.ResourceLocation> getItems(net.createmod.ponder.foundation.PonderTag);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.registration.package-info
+================================================================================
+Compiled from "package-info.java"
+interface net.createmod.ponder.foundation.registration.package-info {
+}
+
+================================================================================
+### net.createmod.ponder.foundation.ui.AbstractPonderScreen
+================================================================================
+Compiled from "AbstractPonderScreen.java"
+public abstract class net.createmod.ponder.foundation.ui.AbstractPonderScreen extends net.createmod.catnip.gui.NavigatableSimiScreen {
+  public static final java.lang.String INDEX_TITLE;
+  public static final java.lang.String WELCOME;
+  public static final java.lang.String CATEGORIES;
+  public static final java.lang.String DESCRIPTION;
+  public static final java.lang.String PONDERING;
+  public static final java.lang.String PONDERING_TAG;
+  public static final java.lang.String IDENTIFY_MODE;
+  public static final java.lang.String IN_CHAPTER;
+  public static final java.lang.String IDENTIFY;
+  public static final java.lang.String PREVIOUS;
+  public static final java.lang.String CLOSE;
+  public static final java.lang.String NEXT;
+  public static final java.lang.String NEXT_UP;
+  public static final java.lang.String REPLAY;
+  public static final java.lang.String SLOW_TEXT;
+  public static final java.lang.String THINK_BACK;
+  public static final java.lang.String EXIT;
+  public static final java.lang.String ASSOCIATED;
+  public net.createmod.ponder.foundation.ui.AbstractPonderScreen();
+}
+
+================================================================================
+### net.createmod.ponder.foundation.ui.ChapterLabel
+================================================================================
+Compiled from "ChapterLabel.java"
+public class net.createmod.ponder.foundation.ui.ChapterLabel extends net.createmod.catnip.gui.widget.AbstractSimiWidget {
+  public net.createmod.ponder.foundation.ui.ChapterLabel(net.createmod.ponder.foundation.PonderChapter, int, int, java.util.function.BiConsumer<java.lang.Integer, java.lang.Integer>);
+  public void render(net.minecraft.client.gui.GuiGraphics, int, int, float);
+  public void onClick(double, double);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.ui.PonderButton
+================================================================================
+Compiled from "PonderButton.java"
+public class net.createmod.ponder.foundation.ui.PonderButton extends net.createmod.catnip.gui.widget.BoxWidget {
+  public static final net.createmod.catnip.data.Couple<net.createmod.catnip.theme.Color> COLOR_IDLE;
+  public static final net.createmod.catnip.data.Couple<net.createmod.catnip.theme.Color> COLOR_HOVER;
+  public static final net.createmod.catnip.data.Couple<net.createmod.catnip.theme.Color> COLOR_CLICK;
+  public static final net.createmod.catnip.data.Couple<net.createmod.catnip.theme.Color> COLOR_DISABLED;
+  public net.createmod.ponder.foundation.ui.PonderButton(int, int);
+  public net.createmod.ponder.foundation.ui.PonderButton(int, int, int, int);
+  public <T extends net.createmod.ponder.foundation.ui.PonderButton> T withShortcut(net.minecraft.client.KeyMapping);
+  public <T extends net.createmod.ponder.foundation.ui.PonderButton> T showingTag(net.createmod.ponder.foundation.PonderTag);
+  public <T extends net.createmod.ponder.foundation.ui.PonderButton> T showing(net.minecraft.world.item.ItemStack);
+  public void flash();
+  public void dim();
+  public void tick();
+  public void doRender(net.minecraft.client.gui.GuiGraphics, int, int, float);
+  public boolean isFocused();
+  public boolean keyPressed(int, int, int);
+  public net.minecraft.world.item.ItemStack getItem();
+  public net.createmod.ponder.foundation.PonderTag getTag();
+  public boolean isVisible();
+}
+
+================================================================================
+### net.createmod.ponder.foundation.ui.PonderIndexScreen
+================================================================================
+Compiled from "PonderIndexScreen.java"
+public class net.createmod.ponder.foundation.ui.PonderIndexScreen extends net.createmod.ponder.foundation.ui.AbstractPonderScreen {
+  public net.createmod.ponder.foundation.ui.PonderIndexScreen();
+  public void tick();
+  public boolean isEquivalentTo(net.createmod.catnip.gui.NavigatableSimiScreen);
+  public net.minecraft.world.item.ItemStack getHoveredTooltipItem();
+  public boolean isPauseScreen();
+}
+
+================================================================================
+### net.createmod.ponder.foundation.ui.PonderIndexScreen$ItemEntry
+================================================================================
+Compiled from "PonderIndexScreen.java"
+public final class net.createmod.ponder.foundation.ui.PonderIndexScreen$ItemEntry extends java.lang.Record {
+  public net.createmod.ponder.foundation.ui.PonderIndexScreen$ItemEntry(net.minecraft.world.level.ItemLike, net.minecraft.resources.ResourceLocation);
+  public final java.lang.String toString();
+  public final int hashCode();
+  public final boolean equals(java.lang.Object);
+  public net.minecraft.world.level.ItemLike item();
+  public net.minecraft.resources.ResourceLocation key();
+}
+
+================================================================================
+### net.createmod.ponder.foundation.ui.PonderProgressBar
+================================================================================
+Compiled from "PonderProgressBar.java"
+public class net.createmod.ponder.foundation.ui.PonderProgressBar extends net.createmod.catnip.gui.widget.AbstractSimiWidget {
+  public static final net.createmod.catnip.data.Couple<net.createmod.catnip.theme.Color> BAR_COLORS;
+  public net.createmod.ponder.foundation.ui.PonderProgressBar(net.createmod.ponder.foundation.ui.PonderUI, int, int, int, int);
+  public void tick();
+  public void setFocused(boolean);
+  public void onClick(double, double);
+  public int getHoveredKeyframeIndex(net.createmod.ponder.foundation.PonderScene, double);
+  public void doRender(net.minecraft.client.gui.GuiGraphics, int, int, float);
+  public void playDownSound(net.minecraft.client.sounds.SoundManager);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.ui.PonderTagIndexScreen
+================================================================================
+Compiled from "PonderTagIndexScreen.java"
+public class net.createmod.ponder.foundation.ui.PonderTagIndexScreen extends net.createmod.ponder.foundation.ui.AbstractPonderScreen {
+  public net.createmod.ponder.foundation.ui.PonderTagIndexScreen();
+  public void tick();
+  public boolean isPauseScreen();
+  public void removed();
+}
+
+================================================================================
+### net.createmod.ponder.foundation.ui.PonderTagIndexScreen$ModTagsEntry
+================================================================================
+Compiled from "PonderTagIndexScreen.java"
+public final class net.createmod.ponder.foundation.ui.PonderTagIndexScreen$ModTagsEntry extends java.lang.Record {
+  public net.createmod.ponder.foundation.ui.PonderTagIndexScreen$ModTagsEntry(java.lang.String, int, net.minecraft.client.renderer.Rect2i, int);
+  public final java.lang.String toString();
+  public final int hashCode();
+  public final boolean equals(java.lang.Object);
+  public java.lang.String modName();
+  public int tagCount();
+  public net.minecraft.client.renderer.Rect2i layoutArea();
+  public int yPos();
+}
+
+================================================================================
+### net.createmod.ponder.foundation.ui.PonderTagScreen
+================================================================================
+Compiled from "PonderTagScreen.java"
+public class net.createmod.ponder.foundation.ui.PonderTagScreen extends net.createmod.ponder.foundation.ui.AbstractPonderScreen {
+  public net.createmod.ponder.foundation.ui.PonderTagScreen(net.minecraft.resources.ResourceLocation);
+  public net.createmod.ponder.foundation.ui.PonderTagScreen(net.createmod.ponder.foundation.PonderTag);
+  public void tick();
+  public int getItemsY();
+  public net.minecraft.world.item.ItemStack getHoveredTooltipItem();
+  public boolean isEquivalentTo(net.createmod.catnip.gui.NavigatableSimiScreen);
+  public boolean isPauseScreen();
+  public net.createmod.ponder.foundation.PonderTag getTag();
+  public void removed();
+}
+
+================================================================================
+### net.createmod.ponder.foundation.ui.PonderTagScreen$ItemEntry
+================================================================================
+Compiled from "PonderTagScreen.java"
+public final class net.createmod.ponder.foundation.ui.PonderTagScreen$ItemEntry extends java.lang.Record {
+  public net.createmod.ponder.foundation.ui.PonderTagScreen$ItemEntry(net.minecraft.world.level.ItemLike, net.minecraft.resources.ResourceLocation);
+  public final java.lang.String toString();
+  public final int hashCode();
+  public final boolean equals(java.lang.Object);
+  public net.minecraft.world.level.ItemLike item();
+  public net.minecraft.resources.ResourceLocation key();
+}
+
+================================================================================
+### net.createmod.ponder.foundation.ui.PonderUI
+================================================================================
+Compiled from "PonderUI.java"
+public class net.createmod.ponder.foundation.ui.PonderUI extends net.createmod.ponder.foundation.ui.AbstractPonderScreen {
+  public static int ponderTicks;
+  public static float ponderPartialTicksPaused;
+  public static final net.createmod.catnip.theme.Color BACKGROUND_TRANSPARENT;
+  public static final net.createmod.catnip.theme.Color BACKGROUND_FLAT;
+  public static final net.createmod.catnip.theme.Color BACKGROUND_IMPORTANT;
+  public static final net.createmod.catnip.data.Couple<net.createmod.catnip.theme.Color> COLOR_IDLE;
+  public static final net.createmod.catnip.data.Couple<net.createmod.catnip.theme.Color> COLOR_HOVER;
+  public static final net.createmod.catnip.data.Couple<net.createmod.catnip.theme.Color> COLOR_HIGHLIGHT;
+  public static final net.createmod.catnip.data.Couple<net.createmod.catnip.theme.Color> MISSING_VANILLA_ENTRY;
+  public static final net.createmod.catnip.data.Couple<net.createmod.catnip.theme.Color> MISSING_MODDED_ENTRY;
+  public static net.createmod.ponder.foundation.ui.PonderUI of(net.minecraft.resources.ResourceLocation);
+  public static net.createmod.ponder.foundation.ui.PonderUI of(net.minecraft.world.item.ItemStack);
+  public static net.createmod.ponder.foundation.ui.PonderUI of(net.minecraft.world.item.ItemStack, net.createmod.ponder.foundation.PonderTag);
+  public void tick();
+  public net.createmod.ponder.foundation.PonderScene getActiveScene();
+  public void seekToTime(int);
+  public void updateIdentifiedItem(net.createmod.ponder.foundation.PonderScene);
+  public boolean mouseScrolled(double, double, double, double);
+  public boolean mouseClicked(double, double, int);
+  public net.minecraft.client.gui.Font getFontRenderer();
+  public static void renderSpeechBox(net.minecraft.client.gui.GuiGraphics, int, int, int, int, boolean, net.createmod.catnip.math.Pointing, boolean);
+  public net.minecraft.world.item.ItemStack getHoveredTooltipItem();
+  public net.minecraft.world.item.ItemStack getSubject();
+  public boolean isEquivalentTo(net.createmod.catnip.gui.NavigatableSimiScreen);
+  public void shareContextWith(net.createmod.catnip.gui.NavigatableSimiScreen);
+  public static float getPartialTicks();
+  public boolean isPauseScreen();
+  public void coolDownAfterSkip();
+  public void removed();
+  public boolean isComfyReadingEnabled();
+  public void setComfyReadingEnabled(boolean);
+}
+
+================================================================================
+### net.createmod.ponder.foundation.ui.PonderUI$1
+================================================================================
+Compiled from "PonderUI.java"
+class net.createmod.ponder.foundation.ui.PonderUI$1 {
+}
+
+================================================================================
+### net.createmod.ponder.foundation.ui.package-info
+================================================================================
+Compiled from "package-info.java"
+interface net.createmod.ponder.foundation.ui.package-info {
+}
+
+================================================================================
+### net.createmod.catnip.animation.LerpedFloat
+================================================================================
+Compiled from "LerpedFloat.java"
+public class net.createmod.catnip.animation.LerpedFloat {
+  public net.createmod.catnip.animation.LerpedFloat(net.createmod.catnip.animation.LerpedFloat$Interpolator);
+  public static net.createmod.catnip.animation.LerpedFloat linear();
+  public static net.createmod.catnip.animation.LerpedFloat angular();
+  public net.createmod.catnip.animation.LerpedFloat startWithValue(double);
+  public net.createmod.catnip.animation.LerpedFloat chase(double, double, net.createmod.catnip.animation.LerpedFloat$Chaser);
+  public net.createmod.catnip.animation.LerpedFloat chaseTimed(double, int);
+  public net.createmod.catnip.animation.LerpedFloat disableSmartAngleChasing();
+  public void updateChaseTarget(float);
+  public boolean updateChaseSpeed(double);
+  public void tickChaser();
+  public void setValueNoUpdate(double);
+  public void setValue(double);
+  public float getValue();
+  public float getValue(float);
+  public boolean settled();
+  public float getChaseTarget();
+  public void forceNextSync();
+  public net.minecraft.nbt.CompoundTag writeNBT();
+  public void readNBT(net.minecraft.nbt.CompoundTag, boolean);
+}
+
+================================================================================
+### net.createmod.catnip.outliner.Outliner
+================================================================================
+Compiled from "Outliner.java"
+public class net.createmod.catnip.outliner.Outliner {
+  public static net.createmod.catnip.outliner.Outliner getInstance();
+  public net.createmod.catnip.outliner.Outliner();
+  public net.createmod.catnip.outliner.Outline$OutlineParams showOutline(java.lang.Object, net.createmod.catnip.outliner.Outline);
+  public net.createmod.catnip.outliner.Outline$OutlineParams showLine(java.lang.Object, net.minecraft.world.phys.Vec3, net.minecraft.world.phys.Vec3);
+  public net.createmod.catnip.outliner.Outline$OutlineParams endChasingLine(java.lang.Object, net.minecraft.world.phys.Vec3, net.minecraft.world.phys.Vec3, float, boolean);
+  public net.createmod.catnip.outliner.Outline$OutlineParams showAABB(java.lang.Object, net.minecraft.world.phys.AABB, int);
+  public net.createmod.catnip.outliner.Outline$OutlineParams showAABB(java.lang.Object, net.minecraft.world.phys.AABB);
+  public net.createmod.catnip.outliner.Outline$OutlineParams chaseAABB(java.lang.Object, net.minecraft.world.phys.AABB);
+  public net.createmod.catnip.outliner.Outline$OutlineParams showCluster(java.lang.Object, java.lang.Iterable<net.minecraft.core.BlockPos>);
+  public net.createmod.catnip.outliner.Outline$OutlineParams showItem(java.lang.Object, net.minecraft.world.phys.Vec3, net.minecraft.world.item.ItemStack);
+  public void keep(java.lang.Object);
+  public void remove(java.lang.Object);
+  public java.util.Optional<net.createmod.catnip.outliner.Outline$OutlineParams> edit(java.lang.Object);
+  public java.util.Map<java.lang.Object, net.createmod.catnip.outliner.Outliner$OutlineEntry> getOutlines();
+  public void tickOutlines();
+  public void renderOutlines(com.mojang.blaze3d.vertex.PoseStack, net.createmod.catnip.render.SuperRenderTypeBuffer, net.minecraft.world.phys.Vec3, float);
+}
+
+================================================================================
+### net.createmod.catnip.math.Pointing
+================================================================================
+Compiled from "Pointing.java"
+public final class net.createmod.catnip.math.Pointing extends java.lang.Enum<net.createmod.catnip.math.Pointing> implements net.minecraft.util.StringRepresentable {
+  public static final net.createmod.catnip.math.Pointing UP;
+  public static final net.createmod.catnip.math.Pointing LEFT;
+  public static final net.createmod.catnip.math.Pointing DOWN;
+  public static final net.createmod.catnip.math.Pointing RIGHT;
+  public static net.createmod.catnip.math.Pointing[] values();
+  public static net.createmod.catnip.math.Pointing valueOf(java.lang.String);
+  public java.lang.String getSerializedName();
+  public int getXRotation();
+  public net.minecraft.core.Direction getCombinedDirection(net.minecraft.core.Direction);
+}
+

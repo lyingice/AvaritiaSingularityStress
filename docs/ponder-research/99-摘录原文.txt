@@ -1,0 +1,1135 @@
+==============================================================================
+99 · 摘录原文汇总（供人工复核）
+==============================================================================
+
+说明：
+  · 每一段都是源码逐行复制，未做任何格式化、缩进调整或改写；
+  · 段落头部的 [文件:起-止] 是该段在本仓库中的精确出处（1-based 行号）；
+  · 路径均相对于工作区根 C:\Users\12501\MCreatorWorkspaces\AvaritiaSingularityStress；
+  · 按被引用文档分组，组内按文件归类。
+
+
+##############################################################################
+## 被引用于: docs/ponder-research/01-入口与注册.md
+##############################################################################
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/CreateClient.java   (全文 165 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/CreateClient.java:45-49]
+
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/CreateClient.java:51-52]
+
+@Mod(value = Create.ID, dist = Dist.CLIENT)
+public class CreateClient {
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/CreateClient.java:70-78]
+
+	public CreateClient(IEventBus modEventBus) {
+		onCtorClient(modEventBus);
+	}
+
+	public static void onCtorClient(IEventBus modEventBus) {
+		IEventBus neoEventBus = NeoForge.EVENT_BUS;
+
+		modEventBus.addListener(CreateClient::clientInit);
+		modEventBus.addListener(AllParticleTypes::registerFactories);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/CreateClient.java:92-92]
+
+	public static void clientInit(final FMLClientSetupEvent event) {
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/CreateClient.java:109-115]
+
+
+		//AllPonderTags.register();
+		//PonderIndex.register();
+		PonderIndex.addPlugin(new CreatePonderPlugin());
+
+		setupConfigUIBackground();
+	}
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/CreateClient.java:112-112]
+
+		PonderIndex.addPlugin(new CreatePonderPlugin());
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/foundation/ponder/CreatePonderPlugin.java   (全文 60 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/foundation/ponder/CreatePonderPlugin.java:1-60]
+
+package com.simibubi.create.foundation.ponder;
+
+import com.simibubi.create.AllBlocks;
+import com.simibubi.create.Create;
+import com.simibubi.create.content.kinetics.crank.ValveHandleBlock;
+import com.simibubi.create.content.logistics.packagePort.postbox.PostboxBlock;
+import com.simibubi.create.content.logistics.tableCloth.TableClothBlock;
+import com.simibubi.create.infrastructure.ponder.AllCreatePonderScenes;
+import com.simibubi.create.infrastructure.ponder.AllCreatePonderTags;
+
+import net.createmod.ponder.api.level.PonderLevel;
+import net.createmod.ponder.api.registration.IndexExclusionHelper;
+import net.createmod.ponder.api.registration.PonderPlugin;
+import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
+import net.createmod.ponder.api.registration.PonderTagRegistrationHelper;
+import net.createmod.ponder.api.registration.SharedTextRegistrationHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.DyeColor;
+
+public class CreatePonderPlugin implements PonderPlugin {
+
+	@Override
+	public String getModId() {
+		return Create.ID;
+	}
+
+	@Override
+	public void registerScenes(PonderSceneRegistrationHelper<ResourceLocation> helper) {
+		AllCreatePonderScenes.register(helper);
+	}
+
+	@Override
+	public void registerTags(PonderTagRegistrationHelper<ResourceLocation> helper) {
+		AllCreatePonderTags.register(helper);
+	}
+
+	@Override
+	public void registerSharedText(SharedTextRegistrationHelper helper) {
+		helper.registerSharedText("rpm8", "8 RPM");
+		helper.registerSharedText("rpm16", "16 RPM");
+		helper.registerSharedText("rpm16_source", "Source: 16 RPM");
+		helper.registerSharedText("rpm32", "32 RPM");
+
+		helper.registerSharedText("movement_anchors", "With the help of Super Glue, larger structures can be moved.");
+		helper.registerSharedText("behaviour_modify_value_panel", "This behaviour can be modified using the value panel");
+		helper.registerSharedText("storage_on_contraption", "Inventories attached to the Contraption will pick up their drops automatically");
+	}
+
+	@Override
+	public void onPonderLevelRestore(PonderLevel ponderLevel) {
+		PonderWorldBlockEntityFix.fixControllerBlockEntities(ponderLevel);
+	}
+
+	@Override
+	public void indexExclusions(IndexExclusionHelper helper) {
+		helper.excludeBlockVariants(ValveHandleBlock.class, AllBlocks.COPPER_VALVE_HANDLE.get());
+		helper.excludeBlockVariants(PostboxBlock.class, AllBlocks.PACKAGE_POSTBOXES.get(DyeColor.WHITE).get());
+		helper.excludeBlockVariants(TableClothBlock.class, AllBlocks.TABLE_CLOTHS.get(DyeColor.WHITE).get());
+	}
+}
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/foundation/ponder/CreatePonderPlugin.java:49-52]
+
+	@Override
+	public void onPonderLevelRestore(PonderLevel ponderLevel) {
+		PonderWorldBlockEntityFix.fixControllerBlockEntities(ponderLevel);
+	}
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/foundation/ponder/CreatePonderPlugin.java:54-59]
+
+	@Override
+	public void indexExclusions(IndexExclusionHelper helper) {
+		helper.excludeBlockVariants(ValveHandleBlock.class, AllBlocks.COPPER_VALVE_HANDLE.get());
+		helper.excludeBlockVariants(PostboxBlock.class, AllBlocks.PACKAGE_POSTBOXES.get(DyeColor.WHITE).get());
+		helper.excludeBlockVariants(TableClothBlock.class, AllBlocks.TABLE_CLOTHS.get(DyeColor.WHITE).get());
+	}
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/data/CreateDatagen.java   (全文 108 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/data/CreateDatagen.java:102-107]
+
+	private static void providePonderLang(BiConsumer<String, String> consumer) {
+		// Register this since FMLClientSetupEvent does not run during datagen
+		PonderIndex.addPlugin(new CreatePonderPlugin());
+
+		PonderIndex.getLangAccess().provideLang(Create.ID, consumer);
+	}
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/AllCreatePonderScenes.java   (全文 436 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/AllCreatePonderScenes.java:69-73]
+
+public class AllCreatePonderScenes {
+
+	public static void register(PonderSceneRegistrationHelper<ResourceLocation> helper) {
+		PonderSceneRegistrationHelper<ItemProviderEntry<?, ?>> HELPER = helper.withKeyFunction(RegistryEntry::getId);
+
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/AllCreatePonderScenes.java:79-82]
+
+		HELPER.forComponents(AllBlocks.COGWHEEL)
+			.addStoryBoard("cog/small", KineticsScenes::cogAsRelay, AllCreatePonderTags.KINETIC_RELAYS)
+			.addStoryBoard("cog/speedup", KineticsScenes::cogsSpeedUp)
+			.addStoryBoard("cog/encasing", KineticsScenes::cogwheelsCanBeEncased);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/AllCreatePonderScenes.java:102-103]
+
+		HELPER.addStoryBoard(AllBlocks.CLUTCH, "clutch", KineticsScenes::clutch, AllCreatePonderTags.KINETIC_RELAYS);
+		HELPER.addStoryBoard(AllBlocks.GEARSHIFT, "gearshift", KineticsScenes::gearshift, AllCreatePonderTags.KINETIC_RELAYS);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/AllCreatePonderScenes.java:391-402]
+
+		HELPER.forComponents(TrackMaterial.allBlocks()
+				.stream()
+				.map((trackSupplier) -> new BlockEntry<TrackBlock>(
+					// note: these blocks probably WON'T be in the Create Registrate, but a simple
+					// code trace reveals the Entry's registrate isn't used
+					Create.registrate(),
+					DeferredHolder.create(Registries.BLOCK, BuiltInRegistries.BLOCK.getKey(trackSupplier.get()))
+				))
+				.toArray(BlockEntry[]::new))
+			.addStoryBoard("train_track/placement", TrackScenes::placement)
+			.addStoryBoard("train_track/portal", TrackScenes::portal)
+			.addStoryBoard("train_track/chunks", TrackScenes::chunks);
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/AllCreatePonderTags.java   (全文 439 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/AllCreatePonderTags.java:19-45]
+
+public class AllCreatePonderTags {
+
+	public static final ResourceLocation
+
+	KINETIC_RELAYS = loc("kinetic_relays"),
+	KINETIC_SOURCES = loc("kinetic_sources"),
+	KINETIC_APPLIANCES = loc("kinetic_appliances"),
+	FLUIDS = loc("fluids"),
+	LOGISTICS = loc("logistics"),
+	HIGH_LOGISTICS = loc("high_logistics"),
+	REDSTONE = loc("redstone"),
+	DECORATION = loc("decoration"),
+	CREATIVE = loc("creative"),
+	MOVEMENT_ANCHOR = loc("movement_anchor"),
+	CONTRAPTION_ACTOR = loc("contraption_actor"),
+	CONTRAPTION_ASSEMBLY = loc("contraption_assembly"),
+	SAILS = loc("windmill_sails"),
+	ARM_TARGETS = loc("arm_targets"),
+	TRAIN_RELATED = loc("train_related"),
+//	RECENTLY_UPDATED = loc("recently_updated"),
+	DISPLAY_SOURCES = loc("display_sources"),
+	DISPLAY_TARGETS = loc("display_targets"),
+	THRESHOLD_SWITCH_TARGETS = loc("threshold_switch_targets");
+
+	private static ResourceLocation loc(String id) {
+		return Create.asResource(id);
+	}
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/AllCreatePonderTags.java:47-59]
+
+	public static void register(PonderTagRegistrationHelper<ResourceLocation> helper) {
+
+		PonderTagRegistrationHelper<RegistryEntry<?, ?>> HELPER = helper.withKeyFunction(RegistryEntry::getId);
+
+		PonderTagRegistrationHelper<ItemLike> itemHelper = helper.withKeyFunction(
+				RegisteredObjectsHelper::getKeyOrThrow);
+
+		helper.registerTag(KINETIC_RELAYS)
+				.addToIndex()
+				.item(AllBlocks.COGWHEEL.get(), true, false)
+				.title("Kinetic Blocks")
+				.description("Components which help relaying Rotational Force elsewhere")
+				.register();
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/AllCreatePonderTags.java:49-52]
+
+		PonderTagRegistrationHelper<RegistryEntry<?, ?>> HELPER = helper.withKeyFunction(RegistryEntry::getId);
+
+		PonderTagRegistrationHelper<ItemLike> itemHelper = helper.withKeyFunction(
+				RegisteredObjectsHelper::getKeyOrThrow);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/AllCreatePonderTags.java:184-197]
+
+		HELPER.addToTag(KINETIC_RELAYS)
+				.add(AllBlocks.SHAFT)
+				.add(AllBlocks.COGWHEEL)
+				.add(AllBlocks.LARGE_COGWHEEL)
+				.add(AllItems.BELT_CONNECTOR)
+				.add(AllBlocks.GEARBOX)
+				.add(AllItems.VERTICAL_GEARBOX)
+				.add(AllBlocks.CLUTCH)
+				.add(AllBlocks.GEARSHIFT)
+				.add(AllBlocks.ENCASED_CHAIN_DRIVE)
+				.add(AllBlocks.ADJUSTABLE_CHAIN_GEARSHIFT)
+				.add(AllBlocks.CHAIN_CONVEYOR)
+				.add(AllBlocks.SEQUENCED_GEARSHIFT)
+				.add(AllBlocks.ROTATION_SPEED_CONTROLLER);
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/build.gradle   (全文 312 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/build.gradle:140-145]
+
+    jarJar(api("net.createmod.ponder:ponder-neoforge:$ponder_version+mc$minecraft_version") {
+        version {
+            strictly "[$ponder_version+mc$minecraft_version,)"
+            prefer "$ponder_version+mc$minecraft_version"
+        }
+    })
+
+----------------------------------------------------------------------
+### build.gradle   (全文 90 行)
+----------------------------------------------------------------------
+
+[build.gradle:82-82]
+
+    implementation("net.createmod.ponder:ponder-neoforge:${ponder_version}+mc${minecraft_version}")
+
+##############################################################################
+## 被引用于: docs/ponder-research/02-场景范式.md
+##############################################################################
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/TemplateScenes.java   (全文 20 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/TemplateScenes.java:9-20]
+
+public class TemplateScenes {
+
+	public static void templateMethod(SceneBuilder builder, SceneBuildingUtil util) {
+		CreateSceneBuilder scene = new CreateSceneBuilder(builder);
+		scene.title("", "");
+		scene.configureBasePlate(0, 0, 5);
+		scene.world().showSection(util.select().layer(0), Direction.UP);
+		scene.idle(5);
+		scene.world().showSection(util.select().layersFrom(1), Direction.DOWN);
+	}
+
+}
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/KineticsScenes.java   (全文 1432 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/KineticsScenes.java:41-42]
+
+	public static void shaftAsRelay(SceneBuilder builder, SceneBuildingUtil util) {
+		CreateSceneBuilder scene = new CreateSceneBuilder(builder);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/KineticsScenes.java:41-73]
+
+	public static void shaftAsRelay(SceneBuilder builder, SceneBuildingUtil util) {
+		CreateSceneBuilder scene = new CreateSceneBuilder(builder);
+		scene.title("shaft", "Relaying rotational force using Shafts");
+		scene.configureBasePlate(0, 0, 5);
+		scene.world().showSection(util.select().layer(0), Direction.UP);
+
+		BlockPos gaugePos = util.grid().at(0, 1, 2);
+		Selection gauge = util.select().position(gaugePos);
+		scene.world().showSection(gauge, Direction.UP);
+		scene.world().setKineticSpeed(gauge, 0);
+
+		scene.idle(5);
+		scene.world().showSection(util.select().position(5, 1, 2), Direction.DOWN);
+		scene.idle(10);
+
+		for (int i = 4; i >= 1; i--) {
+			if (i == 2)
+				scene.rotateCameraY(70);
+			scene.idle(5);
+			scene.world().showSection(util.select().position(i, 1, 2), Direction.DOWN);
+		}
+
+		scene.world().setKineticSpeed(gauge, 64);
+		scene.effects().indicateSuccess(gaugePos);
+		scene.idle(10);
+		scene.overlay().showText(1000)
+			.placeNearTarget()
+			.text("Shafts will relay rotation in a straight line.")
+			.pointAt(util.vector().of(3, 1.5, 2.5));
+
+		scene.idle(20);
+		scene.markAsFinished();
+	}
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/KineticsScenes.java:52-65]
+
+		scene.idle(5);
+		scene.world().showSection(util.select().position(5, 1, 2), Direction.DOWN);
+		scene.idle(10);
+
+		for (int i = 4; i >= 1; i--) {
+			if (i == 2)
+				scene.rotateCameraY(70);
+			scene.idle(5);
+			scene.world().showSection(util.select().position(i, 1, 2), Direction.DOWN);
+		}
+
+		scene.world().setKineticSpeed(gauge, 64);
+		scene.effects().indicateSuccess(gaugePos);
+		scene.idle(10);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/KineticsScenes.java:56-61]
+
+		for (int i = 4; i >= 1; i--) {
+			if (i == 2)
+				scene.rotateCameraY(70);
+			scene.idle(5);
+			scene.world().showSection(util.select().position(i, 1, 2), Direction.DOWN);
+		}
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/KineticsScenes.java:63-65]
+
+		scene.world().setKineticSpeed(gauge, 64);
+		scene.effects().indicateSuccess(gaugePos);
+		scene.idle(10);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/KineticsScenes.java:71-73]
+
+		scene.idle(20);
+		scene.markAsFinished();
+	}
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/KineticsScenes.java:75-78]
+
+	public static void shaftsCanBeEncased(SceneBuilder builder, SceneBuildingUtil util) {
+		CreateSceneBuilder scene = new CreateSceneBuilder(builder);
+		scene.title("shaft_casing", "Encasing Shafts");
+		scene.configureBasePlate(0, 0, 5);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/KineticsScenes.java:91-93]
+
+		scene.overlay().showControls(util.vector().topOf(3, 1, 2), Pointing.DOWN, 60).rightClick()
+			.withItem(andesiteCasingItem);
+		scene.idle(7);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/KineticsScenes.java:91-97]
+
+		scene.overlay().showControls(util.vector().topOf(3, 1, 2), Pointing.DOWN, 60).rightClick()
+			.withItem(andesiteCasingItem);
+		scene.idle(7);
+		scene.world().setBlocks(andesite, andesiteEncased.getDefaultState()
+			.setValue(EncasedShaftBlock.AXIS, Axis.X), true);
+		scene.world().setKineticSpeed(shaft, 32);
+		scene.idle(10);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/KineticsScenes.java:895-898]
+
+		scene.world().setKineticSpeed(util.select().everywhere(), 32);
+		scene.world().modifyKineticSpeed(util.select().column(1, 3), f -> f * -2);
+		scene.effects().rotationDirectionIndicator(handlePos);
+		scene.effects().indicateSuccess(gaugePos);
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/BearingScenes.java   (全文 746 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/BearingScenes.java:36-38]
+
+		scene.configureBasePlate(1, 1, 5);
+		scene.setSceneOffsetY(-1);
+		scene.scaleSceneView(.9f);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/BearingScenes.java:40-50]
+
+		scene.world().showSection(util.select().fromTo(1, 0, 1, 5, 0, 5), Direction.UP);
+		scene.world().setBlock(util.grid().at(2, -1, 0), AllBlocks.SAIL.getDefaultState()
+			.setValue(SailBlock.FACING, Direction.NORTH), false);
+		scene.idle(5);
+		Selection kinetics = util.select().fromTo(3, 1, 1, 4, 1, 4);
+		Selection largeCog = util.select().position(3, 2, 2);
+		BlockPos windmill = util.grid().at(3, 2, 1);
+		scene.world().showSection(kinetics.add(largeCog), Direction.DOWN);
+		scene.idle(10);
+
+		scene.world().showSection(util.select().position(windmill), Direction.DOWN);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/BearingScenes.java:41-43]
+
+		scene.world().setBlock(util.grid().at(2, -1, 0), AllBlocks.SAIL.getDefaultState()
+			.setValue(SailBlock.FACING, Direction.NORTH), false);
+		scene.idle(5);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/BearingScenes.java:54-60]
+
+		scene.overlay().showOutlineWithText(util.select().position(anchorPos), 60)
+			.colored(PonderPalette.GREEN)
+			.pointAt(util.vector().blockSurface(windmill, Direction.WEST))
+			.attachKeyFrame()
+			.placeNearTarget()
+			.text("Windmill Bearings attach to the block in front of them");
+		scene.idle(50);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/BearingScenes.java:62-90]
+
+		ElementLink<WorldSectionElement> structure =
+			scene.world().showIndependentSection(util.select().position(anchorPos), Direction.SOUTH);
+		scene.idle(10);
+		for (Direction d : Iterate.directions)
+			if (d.getAxis() != Axis.Z)
+				scene.world().showSectionAndMerge(util.select().fromTo(anchorPos.relative(d, 1), anchorPos.relative(d, 2)),
+												  d.getOpposite(), structure);
+		scene.idle(10);
+
+		scene.world().showSectionAndMerge(util.select().fromTo(anchorPos.above()
+			.east(),
+															   anchorPos.above(3)
+				.east()),
+										  Direction.WEST, structure);
+		scene.world().showSectionAndMerge(util.select().fromTo(anchorPos.below()
+			.west(),
+															   anchorPos.below(3)
+				.west()),
+										  Direction.EAST, structure);
+		scene.world().showSectionAndMerge(util.select().fromTo(anchorPos.east()
+			.below(),
+															   anchorPos.east(3)
+				.below()),
+										  Direction.UP, structure);
+		scene.world().showSectionAndMerge(util.select().fromTo(anchorPos.west()
+			.above(),
+															   anchorPos.west(3)
+				.above()),
+										  Direction.DOWN, structure);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/BearingScenes.java:98-105]
+
+		AABB bb1 = new AABB(util.grid().at(5, 2, 0));
+		AABB bb2 = new AABB(util.grid().at(3, 4, 0));
+		scene.overlay().chaseBoundingBoxOutline(PonderPalette.GREEN, bb1, bb1, 1);
+		scene.overlay().chaseBoundingBoxOutline(PonderPalette.GREEN, bb1, bb1.expandTowards(-4, 0, 0), 75);
+		scene.idle(5);
+		scene.overlay().chaseBoundingBoxOutline(PonderPalette.GREEN, bb2, bb2, 1);
+		scene.overlay().chaseBoundingBoxOutline(PonderPalette.GREEN, bb2, bb2.expandTowards(0, -4, 0), 80);
+		scene.idle(10);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/BearingScenes.java:110-115]
+
+		scene.overlay().showText(60)
+			.pointAt(util.vector().blockSurface(util.grid().at(1, 2, 0), Direction.NORTH))
+			.attachKeyFrame()
+			.placeNearTarget()
+			.text("Create a movable structure with the help of Super Glue");
+		scene.idle(70);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/BearingScenes.java:155-157]
+
+		scene.overlay().showControls(surface, Pointing.DOWN, 60).rightClick();
+		scene.overlay().showFilterSlotInput(surface, Direction.WEST, 50);
+		scene.overlay().showText(60)
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/BearingScenes.java:269-274]
+
+		ElementLink<WorldSectionElement> plank =
+			scene.world().showIndependentSection(util.select().position(bearingPos.above()
+				.east()
+				.north()), Direction.DOWN);
+		scene.world().moveSection(plank, util.vector().of(-1, 0, 1), 0);
+		scene.idle(20);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/BearingScenes.java:280-282]
+
+		scene.effects().rotationSpeedIndicator(bearingPos.below());
+		scene.world().rotateBearing(bearingPos, 360, 37 * 2);
+		scene.world().rotateSection(plank, 0, 360, 0, 37 * 2);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/BearingScenes.java:293-299]
+
+		scene.world().hideIndependentSection(plank, Direction.UP);
+		scene.idle(15);
+		Selection plank2 = util.select().position(4, 3, 2);
+		ElementLink<WorldSectionElement> contraption = scene.world().showIndependentSection(util.select().layersFrom(3)
+			.substract(plank2), Direction.DOWN);
+		scene.world().replaceBlocks(util.select().fromTo(2, 4, 3, 4, 3, 3), Blocks.OAK_PLANKS.defaultBlockState(), false);
+		scene.idle(10);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/BearingScenes.java:295-298]
+
+		Selection plank2 = util.select().position(4, 3, 2);
+		ElementLink<WorldSectionElement> contraption = scene.world().showIndependentSection(util.select().layersFrom(3)
+			.substract(plank2), Direction.DOWN);
+		scene.world().replaceBlocks(util.select().fromTo(2, 4, 3, 4, 3, 3), Blocks.OAK_PLANKS.defaultBlockState(), false);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/BearingScenes.java:298-298]
+
+		scene.world().replaceBlocks(util.select().fromTo(2, 4, 3, 4, 3, 3), Blocks.OAK_PLANKS.defaultBlockState(), false);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/BearingScenes.java:311-316]
+
+		scene.overlay().showText(120)
+			.pointAt(util.vector().topOf(bearingPos.above()))
+			.placeNearTarget()
+			.attachKeyFrame()
+			.sharedText("movement_anchors");
+		scene.idle(25);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/BearingScenes.java:318-325]
+
+		scene.world().configureCenterOfRotation(contraption, util.vector().topOf(bearingPos));
+		scene.world().setKineticSpeed(cog1, -8);
+		scene.world().setKineticSpeed(cog2, 8);
+		scene.world().setKineticSpeed(cog3, -16);
+		scene.world().setKineticSpeed(cog4, 16);
+		scene.effects().rotationSpeedIndicator(bearingPos.below());
+		scene.world().rotateBearing(bearingPos, 360 * 2, 37 * 4);
+		scene.world().rotateSection(contraption, 0, 360 * 2, 0, 37 * 4);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/BearingScenes.java:472-476]
+
+		ElementLink<WorldSectionElement> subContraption =
+			scene.world().showIndependentSection(util.select().fromTo(4, 4, 1, 2, 4, 1), Direction.SOUTH);
+		scene.world().configureCenterOfRotation(subContraption, util.vector().centerOf(parentBearingPos));
+		scene.world().configureStabilization(subContraption, util.vector().centerOf(bearingPos));
+		scene.idle(20);
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/DetectorScenes.java   (全文 398 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/DetectorScenes.java:231-245]
+
+		for (int i = 0; i < 5; i++) {
+			scene.world().createItemOnBelt(util.grid().at(3, 0, 0), Direction.NORTH, ironIngot);
+			scene.idle(10);
+			scene.world().removeItemsFromBelt(util.grid().at(3, 0, 2));
+			scene.world().flapFunnel(util.grid().at(3, 1, 2), false);
+
+			if (i % 2 == 1)
+				scene.world().cycleBlockProperty(switchPos, ThresholdSwitchBlock.LEVEL);
+		}
+
+		scene.addLazyKeyframe();
+		scene.world().createItemOnBelt(util.grid().at(3, 0, 0), Direction.NORTH, ironIngot);
+		scene.world().removeItemsFromBelt(util.grid().at(3, 0, 2));
+		scene.world().multiplyKineticSpeed(util.select().everywhere(), 1 / 8f);
+		scene.idle(10);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/DetectorScenes.java:243-245]
+
+		scene.world().removeItemsFromBelt(util.grid().at(3, 0, 2));
+		scene.world().multiplyKineticSpeed(util.select().everywhere(), 1 / 8f);
+		scene.idle(10);
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/ElevatorScenes.java   (全文 500 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/ElevatorScenes.java:30-34]
+
+		scene.title("elevator_pulley", "Using the Elevator Pulley");
+		scene.configureBasePlate(1, 0, 5);
+		scene.scaleSceneView(.85f);
+		scene.removeShadow();
+		scene.setSceneOffsetY(-1.5f);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/ElevatorScenes.java:235-250]
+
+		scene.overlay().showText(70)
+			.placeNearTarget()
+			.pointAt(util.vector().centerOf(util.grid().at(2, 3, 3)))
+			.text("The movement speed depends on the rotation input on the pulley");
+		scene.idle(80);
+		scene.addLazyKeyframe();
+		scene.idle(10);
+
+		scene.overlay().showControls(util.vector().blockSurface(util.grid().at(4, 2, 2), Direction.UP), Pointing.DOWN, 60)
+			.scroll();
+		scene.idle(15);
+		scene.overlay().showText(90)
+			.placeNearTarget()
+			.pointAt(util.vector().blockSurface(util.grid().at(4, 2, 2), Direction.UP))
+			.text("Scroll and click on the controls block to choose a floor while on-board");
+		scene.idle(85);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/ElevatorScenes.java:243-245]
+
+		scene.overlay().showControls(util.vector().blockSurface(util.grid().at(4, 2, 2), Direction.UP), Pointing.DOWN, 60)
+			.scroll();
+		scene.idle(15);
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/GantryScenes.java   (全文 320 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/GantryScenes.java:267-271]
+
+		scene.world().modifyKineticSpeed(util.select().everywhere(), f -> -2 * f);
+		scene.world().showSection(util.select().layer(0)
+			.add(util.select().column(5, 3))
+			.add(util.select().fromTo(2, 1, 3, 4, 1, 3)), Direction.UP);
+		scene.idle(10);
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/trains/TrackScenes.java   (全文 464 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/trains/TrackScenes.java:307-318]
+
+		for (ElementLink<WorldSectionElement> e : List.of(t3, t2, t1)) {
+			scene.idle(2);
+			scene.world().hideIndependentSection(e, Direction.SOUTH);
+		}
+
+		scene.world().hideSection(util.select().layers(0, 1), Direction.UP);
+		scene.rotateCameraY(360);
+		scene.idle(15);
+		scene.special().movePointOfInterest(util.grid().at(4, 4, 0));
+		ElementLink<WorldSectionElement> nether =
+			scene.world().showIndependentSection(util.select().layers(7, 1), Direction.UP);
+		scene.world().moveSection(nether, util.vector().of(0, -7, 0), 0);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/trains/TrackScenes.java:312-320]
+
+		scene.world().hideSection(util.select().layers(0, 1), Direction.UP);
+		scene.rotateCameraY(360);
+		scene.idle(15);
+		scene.special().movePointOfInterest(util.grid().at(4, 4, 0));
+		ElementLink<WorldSectionElement> nether =
+			scene.world().showIndependentSection(util.select().layers(7, 1), Direction.UP);
+		scene.world().moveSection(nether, util.vector().of(0, -7, 0), 0);
+		scene.special().moveParrot(birb, util.vector().of(0, 0, -.1f), 1);
+		scene.idle(25);
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/ChassisScenes.java   (全文 647 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/ChassisScenes.java:182-186]
+
+		Vec3 blockSurface = util.vector().blockSurface(chassisPos, Direction.NORTH);
+		scene.overlay().showCenteredScrollInput(chassisPos, Direction.NORTH, 50);
+		scene.overlay().showControls(blockSurface, Pointing.UP, 50).rightClick()
+			.withItem(AllItems.WRENCH.asStack());
+
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/ChassisScenes.java:188-195]
+
+		scene.overlay().showOutline(PonderPalette.WHITE, chassis, column3, 20);
+		scene.idle(10);
+		scene.overlay().showOutline(PonderPalette.WHITE, chassis, column2, 20);
+		scene.idle(10);
+		scene.overlay().showOutline(PonderPalette.WHITE, chassis, column1, 20);
+		scene.idle(10);
+		scene.overlay().showOutline(PonderPalette.WHITE, chassis, column2, 15);
+		scene.idle(10);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/ChassisScenes.java:464-471]
+
+		scene.world().destroyBlock(util.grid().at(1, 2, 0));
+		scene.idle(1);
+		scene.world().destroyBlock(util.grid().at(1, 2, 1));
+		scene.idle(1);
+		scene.world().destroyBlock(util.grid().at(1, 2, 3));
+		scene.idle(1);
+		scene.world().destroyBlock(util.grid().at(1, 2, 4));
+		scene.idle(10);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/ChassisScenes.java:570-580]
+
+		scene.world().movePulley(pulleyPos, -1, 20);
+		scene.world().setKineticSpeed(kinetics, -24);
+		ElementLink<WorldSectionElement> contraption = scene.world().makeSectionIndependent(toMove);
+		scene.world().moveSection(contraption, util.vector().of(0, 1, 0), 20);
+		scene.idle(20);
+		scene.world().setKineticSpeed(kinetics, 0);
+		scene.idle(10);
+
+		scene.world().movePulley(pulleyPos, 1, 20);
+		scene.world().setKineticSpeed(kinetics, 24);
+		scene.world().moveSection(contraption, util.vector().of(0, -1, 0), 20);
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/CartAssemblerScenes.java   (全文 551 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/CartAssemblerScenes.java:79-86]
+
+		ElementLink<WorldSectionElement> plank =
+			scene.world().makeSectionIndependent(util.select().position(assemblerPos.above()));
+		ElementLink<WorldSectionElement> anchor =
+			scene.world().showIndependentSectionImmediately(util.select().position(assemblerPos.east()));
+		scene.world().moveSection(anchor, util.vector().of(-1, 0, 0), 0);
+		scene.effects().indicateSuccess(assemblerPos);
+		scene.idle(1);
+		scene.world().moveSection(anchor, util.vector().of(0, 0, -2), 20);
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/ChuteScenes.java   (全文 280 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/ChuteScenes.java:46-52]
+
+		ItemStack stack = new ItemStack(Items.COPPER_BLOCK);
+		scene.world().createItemEntity(util.vector().centerOf(util.grid().at(3, 3, 2)), util.vector().of(0, -0.1, 0), stack);
+		scene.idle(20);
+		ElementLink<EntityElement> remove =
+			scene.world().createItemEntity(util.vector().centerOf(util.grid().at(1, 5, 2)), util.vector().of(0, 0.1, 0), stack);
+		scene.idle(15);
+		scene.world().modifyEntity(remove, Entity::discard);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/ChuteScenes.java:98-100]
+
+		scene.addKeyframe();
+
+		scene.rotateCameraY(-90);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/ChuteScenes.java:101-103]
+
+		scene.world().modifyBlock(util.grid().at(2, 2, 1), s -> s.setValue(SHAPE, Shape.NORMAL), false);
+		scene.world().modifyBlock(util.grid().at(2, 3, 2), s -> s.setValue(SHAPE, Shape.INTERSECTION), false);
+		scene.world().showSection(util.select().fromTo(2, 1, 1, 2, 2, 1), Direction.DOWN);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/ChuteScenes.java:106-112]
+
+		scene.overlay().showControls(util.vector().blockSurface(util.grid().at(2, 2, 1), Direction.SOUTH), Pointing.LEFT, 30)
+				.rightClick()
+				.withItem(chuteItem);
+		scene.idle(7);
+		scene.world().showSection(util.select().position(2, 3, 2), Direction.NORTH);
+		scene.world().restoreBlocks(util.select().position(2, 2, 1));
+		scene.idle(15);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/ChuteScenes.java:128-131]
+
+		scene.idle(15);
+		scene.rotateCameraY(90);
+
+		scene.idle(35);
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/CrafterScenes.java   (全文 443 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/CrafterScenes.java:60-65]
+
+		scene.overlay().showControls(util.vector().blockSurface(util.grid().at(2, 3, 2), Direction.NORTH), Pointing.RIGHT, 40)
+				.rightClick()
+				.withItem(AllItems.WRENCH.asStack());
+		scene.idle(7);
+		scene.world().cycleBlockProperty(util.grid().at(2, 3, 2), MechanicalCrafterBlock.POINTING);
+		scene.idle(10);
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/ArmScenes.java   (全文 613 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/ArmScenes.java:102-104]
+
+		scene.overlay().showControls(util.vector().topOf(util.grid().at(1, 1, 0)), Pointing.DOWN, 30).leftClick()
+				.withItem(armItem);
+		scene.idle(50);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/ArmScenes.java:551-575]
+
+		for (int i = 0; i < 3; i++) {
+			scene.idle(12);
+
+			if (i == 1) {
+				scene.world().toggleRedstonePower(redstone);
+				scene.effects().indicateRedstone(leverPos);
+				scene.idle(10);
+
+				scene.overlay().showText(60)
+					.colored(PonderPalette.RED)
+					.attachKeyFrame()
+					.pointAt(util.vector().topOf(armPos))
+					.placeNearTarget()
+					.text("When powered by Redstone, Mechanical Arms will not activate");
+				scene.idle(70);
+				scene.world().toggleRedstonePower(redstone);
+			}
+
+			if (i == 2) {
+				scene.idle(60);
+				scene.world().toggleRedstonePower(redstone);
+				scene.idle(3);
+				scene.world().toggleRedstonePower(redstone);
+				scene.effects().indicateRedstone(leverPos);
+			}
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/ArmScenes.java:555-557]
+
+				scene.world().toggleRedstonePower(redstone);
+				scene.effects().indicateRedstone(leverPos);
+				scene.idle(10);
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/DeployerScenes.java   (全文 592 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/DeployerScenes.java:88-92]
+
+
+		scene.overlay().showText(80)
+			.attachKeyFrame()
+			.independent(40)
+			.placeNearTarget()
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/DeployerScenes.java:181-203]
+
+		ElementLink<EntityElement> sheep = scene.world().createEntity(w -> {
+			Sheep entity = EntityType.SHEEP.create(w);
+			entity.setColor(DyeColor.PINK);
+			Vec3 p = util.vector().topOf(util.grid().at(1, 0, 2));
+			entity.setPos(p.x, p.y, p.z);
+			entity.xo = p.x;
+			entity.yo = p.y;
+			entity.zo = p.z;
+			WalkAnimationState animation = entity.walkAnimation;
+			animation.update(-animation.position(), 1);
+			animation.setSpeed(1);
+			entity.yRotO = 210;
+			entity.setYRot(210);
+			entity.yHeadRotO = 210;
+			entity.yHeadRot = 210;
+			return entity;
+		});
+		scene.idle(20);
+		scene.world().showSection(util.select().position(deployerPos.above()), Direction.WEST);
+		entity1 = scene.world().createItemEntity(entitySpawn, util.vector().of(0, 0.2, 0), shears);
+		scene.idle(17);
+		scene.world().modifyEntity(entity1, Entity::discard);
+		scene.world().modifyBlockEntityNBT(deployerSelection, teType, nbt -> nbt.put("HeldItem", shears.saveOptional(scene.world().getHolderLookupProvider())));
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/DeployerScenes.java:215-219]
+
+		scene.effects().emitParticles(util.vector().topOf(deployerPos.west(2))
+						.add(0, -.25, 0),
+				scene.effects().particleEmitterWithinBlockSpace(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.PINK_WOOL.defaultBlockState()),
+						util.vector().of(0, 0, 0)),
+				25, 1);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/DeployerScenes.java:377-377]
+
+		scene.debug().enqueueCallback(s -> SandPaperItem.spawnParticles(targetV, quartz, s.getWorld()));
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/BeltScenes.java   (全文 594 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/BeltScenes.java:111-114]
+
+		scene.overlay().showControls(falseSelection, Pointing.DOWN, 20).rightClick()
+			.withItem(beltItem)
+			.whileSneaking();
+		scene.idle(60);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/BeltScenes.java:197-200]
+
+		scene.overlay().showLine(PonderPalette.RED, from, to, 70);
+		scene.idle(10);
+		scene.overlay().showLine(PonderPalette.GREEN, to.add(-1, -1, 0), from, 60);
+		scene.overlay().showLine(PonderPalette.GREEN, from.add(0, 3, 0), from, 60);
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/BeltScenes.java:378-380]
+
+		scene.world().setKineticSpeed(util.select().everywhere(), 0f);
+		scene.idle(10);
+		scene.world().modifyEntities(ItemEntity.class, Entity::discard);
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/RedstoneScenes.java   (全文 836 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/RedstoneScenes.java:250-252]
+
+		scene.overlay().showRepeaterScrollInput(circuitPos, 60);
+		scene.overlay().showControls(circuitTop, Pointing.DOWN, 60).rightClick();
+		scene.idle(10);
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/FanScenes.java   (全文 274 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/FanScenes.java:126-127]
+
+		scene.effects().emitParticles(itemVec.add(0, 0.2f, 0), scene.effects().simpleParticleEmitter(ParticleTypes.LARGE_SMOKE, Vec3.ZERO), 1,
+				60);
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/EjectorScenes.java   (全文 374 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/EjectorScenes.java:242-245]
+
+		BlockPos tunnel = util.grid().at(2, 2, 3);
+		scene.overlay().showControls(util.vector().topOf(tunnel), Pointing.DOWN, 80).showing(AllIcons.I_TUNNEL_PREFER_NEAREST);
+		scene.idle(10);
+		scene.overlay().showCenteredScrollInput(tunnel, Direction.UP, 100);
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/highLogistics/FrogAndConveyorScenes.java   (全文 923 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/infrastructure/ponder/scenes/highLogistics/FrogAndConveyorScenes.java:235-242]
+
+		ElementLink<ParrotElement> parrot = new ElementLinkImpl<>(ParrotElement.class);
+		Vec3 parrotStart = util.vector()
+			.centerOf(conv2)
+			.add(0, -1.45, 1);
+		ChainConveyorParrotElement element =
+			new ChainConveyorParrotElement(parrotStart, ParrotPose.FacePointOfInterestPose::new);
+		scene.addInstruction(new CreateParrotInstruction(0, Direction.DOWN, element));
+		scene.addInstruction(s -> s.linkElement(element, parrot));
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/foundation/ponder/CreateSceneBuilder.java   (全文 377 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/foundation/ponder/CreateSceneBuilder.java:161-188]
+
+		public ElementLink<BeltItemElement> createItemOnBelt(BlockPos beltLocation, Direction insertionSide,
+															 ItemStack stack) {
+			ElementLink<BeltItemElement> link = new ElementLinkImpl<>(BeltItemElement.class);
+			addInstruction(scene -> {
+				PonderLevel world = scene.getWorld();
+				BlockEntity blockEntity = world.getBlockEntity(beltLocation);
+				if (!(blockEntity instanceof BeltBlockEntity beltBlockEntity))
+					return;
+
+				DirectBeltInputBehaviour behaviour = beltBlockEntity.getBehaviour(DirectBeltInputBehaviour.TYPE);
+				behaviour.handleInsertion(stack, insertionSide.getOpposite(), false);
+
+				BeltBlockEntity controllerBE = beltBlockEntity.getControllerBE();
+				if (controllerBE != null)
+					controllerBE.tick();
+
+				com.simibubi.create.content.kinetics.belt.behaviour.TransportedItemStackHandlerBehaviour transporter =
+					beltBlockEntity.getBehaviour(com.simibubi.create.content.kinetics.belt.behaviour.TransportedItemStackHandlerBehaviour.TYPE);
+				transporter.handleProcessingOnAllItems(tis -> {
+					BeltItemElement tracker = new BeltItemElement(tis);
+					scene.addElement(tracker);
+					scene.linkElement(tracker, link);
+					return com.simibubi.create.content.kinetics.belt.behaviour.TransportedItemStackHandlerBehaviour.TransportedResult.doNothing();
+				});
+			});
+			flapFunnel(beltLocation.above(), true);
+			return link;
+		}
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/foundation/ponder/CreateSceneBuilder.java:204-210]
+
+		public void stallBeltItem(ElementLink<BeltItemElement> link, boolean stalled) {
+			addInstruction(scene -> {
+				BeltItemElement resolve = scene.resolve(link);
+				if (resolve != null)
+					resolve.ifPresent(tis -> tis.locked = stalled);
+			});
+		}
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/foundation/ponder/CreateSceneBuilder.java:242-246]
+
+		public void setFilterData(Selection selection, Class<? extends BlockEntity> teType, ItemStack filter) {
+			modifyBlockEntityNBT(selection, teType, nbt -> {
+				nbt.put("Filter", filter.saveOptional(world().getHolderLookupProvider()));
+			});
+		}
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/foundation/ponder/CreateSceneBuilder.java:248-257]
+
+		public void instructArm(BlockPos armLocation, ArmBlockEntity.Phase phase, ItemStack heldItem,
+								int targetedPoint) {
+			modifyBlockEntityNBT(scene.getSceneBuildingUtil().select().position(armLocation), ArmBlockEntity.class,
+				compound -> {
+					NBTHelper.writeEnum(compound, "Phase", phase);
+					compound.put("HeldItem", heldItem.saveOptional(world().getHolderLookupProvider()));
+					compound.putInt("TargetPointIndex", targetedPoint);
+					compound.putFloat("MovementProgress", 0);
+				});
+		}
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/foundation/ponder/CreateSceneBuilder.java:306-322]
+
+		@Override
+		public void restoreBlocks(Selection selection) {
+			super.restoreBlocks(selection);
+			markSmartBlockEntityVirtual(selection);
+		}
+
+		@Override
+		public void setBlocks(Selection selection, BlockState state, boolean spawnParticles) {
+			super.setBlocks(selection, state, spawnParticles);
+			markSmartBlockEntityVirtual(selection);
+		}
+
+		@Override
+		public void modifyBlocks(Selection selection, UnaryOperator<BlockState> stateFunc, boolean spawnParticles) {
+			super.modifyBlocks(selection, stateFunc, spawnParticles);
+			markSmartBlockEntityVirtual(selection);
+		}
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/foundation/ponder/CreateSceneBuilder.java:324-329]
+
+		private void markSmartBlockEntityVirtual(Selection selection) {
+			addInstruction(scene -> selection.forEach(pos -> {
+				if (scene.getWorld().getBlockEntity(pos) instanceof SmartBlockEntity smartBlockEntity)
+					smartBlockEntity.markVirtual();
+			}));
+		}
+
+##############################################################################
+## 被引用于: docs/ponder-research/03-调试与排错.md
+##############################################################################
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/foundation/ponder/PonderWorldBlockEntityFix.java   (全文 44 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/foundation/ponder/PonderWorldBlockEntityFix.java:11-44]
+
+public class PonderWorldBlockEntityFix {
+
+	public static void fixControllerBlockEntities(PonderLevel world) {
+		for (BlockEntity blockEntity : world.getBlockEntities()) {
+
+			if (blockEntity instanceof BeltBlockEntity beltBlockEntity) {
+				if (!beltBlockEntity.isController())
+					continue;
+				BlockPos controllerPos = blockEntity.getBlockPos();
+				for (BlockPos blockPos : BeltBlock.getBeltChain(world, controllerPos)) {
+					BlockEntity blockEntity2 = world.getBlockEntity(blockPos);
+					if (!(blockEntity2 instanceof BeltBlockEntity belt2))
+						continue;
+					belt2.setController(controllerPos);
+				}
+			}
+
+			if (blockEntity instanceof IMultiBlockEntityContainer multiBlockEntity) {
+				BlockPos lastKnown = multiBlockEntity.getLastKnownPos();
+				BlockPos current = blockEntity.getBlockPos();
+				if (lastKnown == null || current == null)
+					continue;
+				if (multiBlockEntity.isController())
+					continue;
+				if (!lastKnown.equals(current)) {
+					BlockPos newControllerPos = multiBlockEntity.getController().offset(current.subtract(lastKnown));
+					multiBlockEntity.setController(newControllerPos);
+				}
+			}
+
+		}
+	}
+
+}
+
+----------------------------------------------------------------------
+### allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/content/equipment/armor/BacktankUtil.java   (全文 207 行)
+----------------------------------------------------------------------
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/content/equipment/armor/BacktankUtil.java:12-12]
+
+import com.simibubi.create.foundation.utility.DistExecutor;
+
+[allapis/Create-mc1.21.1-dev/src/main/java/com/simibubi/create/content/equipment/armor/BacktankUtil.java:146-146]
+
+		Player player = DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> Minecraft.getInstance().player);
+
+==============================================================================
+END OF EXCERPTS
+==============================================================================
