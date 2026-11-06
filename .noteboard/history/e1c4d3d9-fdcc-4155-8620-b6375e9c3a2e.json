@@ -1,0 +1,178 @@
+{
+  "id": "e1c4d3d9-fdcc-4155-8620-b6375e9c3a2e",
+  "root": "c:\\Users\\12501\\MCreatorWorkspaces\\AvaritiaSingularityStress",
+  "journal": "c:\\Users\\12501\\MCreatorWorkspaces\\AvaritiaSingularityStress\\.noteboard\\history\\e1c4d3d9-fdcc-4155-8620-b6375e9c3a2e.json",
+  "label": "创建便签",
+  "created": "2026-11-04T09:05:13.864Z",
+  "status": "complete",
+  "files": [
+    {
+      "path": ".noteboard/notes/2026-11-04-D1-上下文：画在哪-8b22.md",
+      "before": null,
+      "after": "---\ntype: note\ncolor: blue\ntags:\n  - D1\n  - 维度\nid: 8b22\ntitle: D1 上下文：画在哪\ncreated: 2026-11-04T09:05:13.866Z\nsource: null\nderivedFrom: []\n---\n取值：\n#D1/真实世界 #D1/装配体(contraption) #D1/思索(Ponder) #D1/GUI-JEI #D1/手持物品\n\n先答这个：同一个方块真实世界正常、装配体里消失 → 不是 visual 写错，而是没走 contraption 语言（ContraptionMatrices / ActorVisual）。",
+      "applied": "---\ntype: note\ncolor: blue\ntags:\n  - D1\n  - 维度\nid: 8b22\ntitle: D1 上下文：画在哪\ncreated: 2026-11-04T09:05:13.866Z\nsource: null\nderivedFrom: []\n---\n取值：\n#D1/真实世界 #D1/装配体(contraption) #D1/思索(Ponder) #D1/GUI-JEI #D1/手持物品\n\n先答这个：同一个方块真实世界正常、装配体里消失 → 不是 visual 写错，而是没走 contraption 语言（ContraptionMatrices / ActorVisual）。",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/notes/2026-11-04-D2-谁画：5-个机制-c773.md",
+      "before": null,
+      "after": "---\ntype: note\ncolor: green\ntags:\n  - D2\n  - 维度\nid: c773\ntitle: D2 谁画：5 个机制\ncreated: 2026-11-04T09:05:13.875Z\nsource: null\nderivedFrom: []\n---\n取值：\n#D2/visual（Flywheel 实例化）\n#D2/BER（BlockEntityRenderer）\n#D2/chunk模型（blockstate→models）\n#D2/粒子\n#D2/世界级特效（shader/post）\n\n一个方块可以同时有多层——「双层渲染」就是 D2 里两个取值同时存在。",
+      "applied": "---\ntype: note\ncolor: green\ntags:\n  - D2\n  - 维度\nid: c773\ntitle: D2 谁画：5 个机制\ncreated: 2026-11-04T09:05:13.875Z\nsource: null\nderivedFrom: []\n---\n取值：\n#D2/visual（Flywheel 实例化）\n#D2/BER（BlockEntityRenderer）\n#D2/chunk模型（blockstate→models）\n#D2/粒子\n#D2/世界级特效（shader/post）\n\n一个方块可以同时有多层——「双层渲染」就是 D2 里两个取值同时存在。",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/notes/2026-11-04-D2a-visual-=-默认答案-f153.md",
+      "before": null,
+      "after": "---\ntype: note\ncolor: green\ntags:\n  - D2\n  - visual\nid: f153\ntitle: D2a visual = 默认答案\ncreated: 2026-11-04T09:05:13.884Z\nsource: null\nderivedFrom: []\n---\n会动的机械部件几乎都走 visual（用户原话：大部分机械动力的东西都需要那个 V）。\n锚点：AllBlockEntityTypes.java:263 创造马达 .visual(() -> OrientedRotatingVisual.of(SHAFT_HALF), false)\n判据：可视化开启时 KineticBlockEntityRenderer 第一行 return（T17）→ 只注册 BER 等于没画。",
+      "applied": "---\ntype: note\ncolor: green\ntags:\n  - D2\n  - visual\nid: f153\ntitle: D2a visual = 默认答案\ncreated: 2026-11-04T09:05:13.884Z\nsource: null\nderivedFrom: []\n---\n会动的机械部件几乎都走 visual（用户原话：大部分机械动力的东西都需要那个 V）。\n锚点：AllBlockEntityTypes.java:263 创造马达 .visual(() -> OrientedRotatingVisual.of(SHAFT_HALF), false)\n判据：可视化开启时 KineticBlockEntityRenderer 第一行 return（T17）→ 只注册 BER 等于没画。",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/notes/2026-11-04-D2b-BER-只在两种场合有意义-efe5.md",
+      "before": null,
+      "after": "---\ntype: note\ncolor: green\ntags:\n  - D2\n  - BER\nid: efe5\ntitle: D2b BER 只在两种场合有意义\ncreated: 2026-11-04T09:05:13.895Z\nsource: null\nderivedFrom: []\n---\n① SmartBlockEntityRenderer / SafeBlockEntityRenderer 子类（画文字、图标、门帘、过滤槽）\n② 没有 Flywheel 可视化的降级路径\n\n❌ KineticBlockEntityRenderer：可视化开启时早退，是死代码（T17）。本工程还留着 3 个这种死 BER。",
+      "applied": "---\ntype: note\ncolor: green\ntags:\n  - D2\n  - BER\nid: efe5\ntitle: D2b BER 只在两种场合有意义\ncreated: 2026-11-04T09:05:13.895Z\nsource: null\nderivedFrom: []\n---\n① SmartBlockEntityRenderer / SafeBlockEntityRenderer 子类（画文字、图标、门帘、过滤槽）\n② 没有 Flywheel 可视化的降级路径\n\n❌ KineticBlockEntityRenderer：可视化开启时早退，是死代码（T17）。本工程还留着 3 个这种死 BER。",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/notes/2026-11-04-D2c-chunk-模型：cutout-在这一层-771b.md",
+      "before": null,
+      "after": "---\ntype: note\ncolor: green\ntags:\n  - D2\n  - chunk模型\n  - cutout\nid: 771b\ntitle: D2c chunk 模型：cutout 在这一层\ncreated: 2026-11-04T09:05:13.908Z\nsource: null\nderivedFrom: []\n---\nblockstate → models/block/**。\n#D2/chunk模型 的老坑：skipVanillaRender 只跳 BER，不跳它 → 和 visual 叠成双层（T11）。\n透明/留空必须 render_type: cutout，否则透明处变黑块——机器查：node dsh-create-mode/check-cutout.mjs",
+      "applied": "---\ntype: note\ncolor: green\ntags:\n  - D2\n  - chunk模型\n  - cutout\nid: 771b\ntitle: D2c chunk 模型：cutout 在这一层\ncreated: 2026-11-04T09:05:13.908Z\nsource: null\nderivedFrom: []\n---\nblockstate → models/block/**。\n#D2/chunk模型 的老坑：skipVanillaRender 只跳 BER，不跳它 → 和 visual 叠成双层（T11）。\n透明/留空必须 render_type: cutout，否则透明处变黑块——机器查：node dsh-create-mode/check-cutout.mjs",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/notes/2026-11-04-D3-实例类型（InstanceType）-831b.md",
+      "before": null,
+      "after": "---\ntype: note\ncolor: purple\ntags:\n  - D3\n  - 维度\nid: 831b\ntitle: D3 实例类型（InstanceType）\ncreated: 2026-11-04T09:05:13.922Z\nsource: null\nderivedFrom: []\n---\nCreate 在 AllInstanceTypes 注册了 4 种：\nROTATING (:24) · SCROLLING (:56) · SCROLLING_TRANSFORMED (:95) · FLUID (:127)\n\n选错实例类型 = 旋转/滚动语义不对；ROTATING 字段单位见 RotatingInstance:15（SPEED_MULTIPLIER=6）。",
+      "applied": "---\ntype: note\ncolor: purple\ntags:\n  - D3\n  - 维度\nid: 831b\ntitle: D3 实例类型（InstanceType）\ncreated: 2026-11-04T09:05:13.922Z\nsource: null\nderivedFrom: []\n---\nCreate 在 AllInstanceTypes 注册了 4 种：\nROTATING (:24) · SCROLLING (:56) · SCROLLING_TRANSFORMED (:95) · FLUID (:127)\n\n选错实例类型 = 旋转/滚动语义不对；ROTATING 字段单位见 RotatingInstance:15（SPEED_MULTIPLIER=6）。",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/notes/2026-11-04-D3b-visual-的四种接口-fa1a.md",
+      "before": null,
+      "after": "---\ntype: note\ncolor: purple\ntags:\n  - D3\n  - 接口\nid: fa1a\ntitle: D3b visual 的四种接口\ncreated: 2026-11-04T09:05:13.939Z\nsource: null\nderivedFrom: []\n---\nSimpleDynamicVisual（最常用，beginFrame+update）\nSimpleTickableVisual（要 tick）\nShaderLightVisual（吃 shader 光）\nVisualizationLevel（决定哪些层要重绘）\n\n统计（Create 源码）：SimpleDynamicVisual 24 处、SimpleTickableVisual 4 处。",
+      "applied": "---\ntype: note\ncolor: purple\ntags:\n  - D3\n  - 接口\nid: fa1a\ntitle: D3b visual 的四种接口\ncreated: 2026-11-04T09:05:13.939Z\nsource: null\nderivedFrom: []\n---\nSimpleDynamicVisual（最常用，beginFrame+update）\nSimpleTickableVisual（要 tick）\nShaderLightVisual（吃 shader 光）\nVisualizationLevel（决定哪些层要重绘）\n\n统计（Create 源码）：SimpleDynamicVisual 24 处、SimpleTickableVisual 4 处。",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/notes/2026-11-04-D4-生命周期：谁在什么时候被调-b50b.md",
+      "before": null,
+      "after": "---\ntype: note\ncolor: yellow\ntags:\n  - D4\n  - 维度\nid: b50b\ntitle: D4 生命周期：谁在什么时候被调\ncreated: 2026-11-04T09:05:13.954Z\nsource: null\nderivedFrom: []\n---\ncreateVisual → beginFrame(逐帧) / tick(每刻) / update(float)(被 queueUpdate 踢) → setVisible / delete\n\n关键：queueUpdate 只调 update(float)，**不重建**（T12）。邻居变了要在 tick 里自己判 + 切实例。",
+      "applied": "---\ntype: note\ncolor: yellow\ntags:\n  - D4\n  - 维度\nid: b50b\ntitle: D4 生命周期：谁在什么时候被调\ncreated: 2026-11-04T09:05:13.954Z\nsource: null\nderivedFrom: []\n---\ncreateVisual → beginFrame(逐帧) / tick(每刻) / update(float)(被 queueUpdate 踢) → setVisible / delete\n\n关键：queueUpdate 只调 update(float)，**不重建**（T12）。邻居变了要在 tick 里自己判 + 切实例。",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/notes/2026-11-04-D4b-不要-new-visual-1a0b.md",
+      "before": null,
+      "after": "---\ntype: note\ncolor: yellow\ntags:\n  - D4\n  - 实例\nid: 1a0b\ntitle: D4b 不要 new visual\ncreated: 2026-11-04T09:05:13.965Z\nsource: null\nderivedFrom: []\n---\n重建 = 泄漏 + 首帧闪烁。\n正确：两套实例并存，用 Instance.setVisible(bool) 切；复用用 Instancer.stealInstance(I)（ContraptionVisual.java:111-119）。\n写完实例字段必须 setChanged()。",
+      "applied": "---\ntype: note\ncolor: yellow\ntags:\n  - D4\n  - 实例\nid: 1a0b\ntitle: D4b 不要 new visual\ncreated: 2026-11-04T09:05:13.965Z\nsource: null\nderivedFrom: []\n---\n重建 = 泄漏 + 首帧闪烁。\n正确：两套实例并存，用 Instance.setVisible(bool) 切；复用用 Instancer.stealInstance(I)（ContraptionVisual.java:111-119）。\n写完实例字段必须 setChanged()。",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/notes/2026-11-04-D5-坐标：相对谁-a015.md",
+      "before": null,
+      "after": "---\ntype: note\ncolor: orange\ntags:\n  - D5\n  - 维度\nid: a015\ntitle: D5 坐标：相对谁\ncreated: 2026-11-04T09:05:13.980Z\nsource: null\nderivedFrom: []\n---\nrenderOrigin()（VisualizationContext）是区块段原点；实例位置用 getVisualPosition()。\n写死世界坐标 = 走出区块段后漂移/消失。\n症状「离远了看不见、走近才出现」→ 先查 D5，再查 D7/cull。",
+      "applied": "---\ntype: note\ncolor: orange\ntags:\n  - D5\n  - 维度\nid: a015\ntitle: D5 坐标：相对谁\ncreated: 2026-11-04T09:05:13.980Z\nsource: null\nderivedFrom: []\n---\nrenderOrigin()（VisualizationContext）是区块段原点；实例位置用 getVisualPosition()。\n写死世界坐标 = 走出区块段后漂移/消失。\n症状「离远了看不见、走近才出现」→ 先查 D5，再查 D7/cull。",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/notes/2026-11-04-D5b-朝向：rotateToFace(from-7331.md",
+      "before": null,
+      "after": "---\ntype: note\ncolor: orange\ntags:\n  - D5\n  - 朝向\n  - T18\nid: \"7331\"\ntitle: D5b 朝向：rotateToFace(from,to)\ncreated: 2026-11-04T09:05:13.996Z\nsource: null\nderivedFrom: []\n---\nSHAFT_HALF 模型默认朝 +Z，所以 from 必须 SOUTH。\nOrientedRotatingVisual.of() 写死 to = FACING（:41-49）→ 若 hasShaftTowards 认 FACING.getOpposite()，轴就画到背面（T18）。\n要改朝向：直接 new OrientedRotatingVisual(ctx,be,pt,SOUTH,to,model)。",
+      "applied": "---\ntype: note\ncolor: orange\ntags:\n  - D5\n  - 朝向\n  - T18\nid: \"7331\"\ntitle: D5b 朝向：rotateToFace(from,to)\ncreated: 2026-11-04T09:05:13.996Z\nsource: null\nderivedFrom: []\n---\nSHAFT_HALF 模型默认朝 +Z，所以 from 必须 SOUTH。\nOrientedRotatingVisual.of() 写死 to = FACING（:41-49）→ 若 hasShaftTowards 认 FACING.getOpposite()，轴就画到背面（T18）。\n要改朝向：直接 new OrientedRotatingVisual(ctx,be,pt,SOUTH,to,model)。",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/notes/2026-11-04-D6-光照与-overlay-b4fc.md",
+      "before": null,
+      "after": "---\ntype: note\ncolor: pink\ntags:\n  - D6\n  - 光照\nid: b4fc\ntitle: D6 光照与 overlay\ncreated: 2026-11-04T09:05:14.014Z\nsource: null\nderivedFrom: []\n---\ncomputePackedLight() 拿光；relight(...) 6 个重载；updateLight 在光源变化时刷新。\n方块实体挪位置/变亮变暗后不刷新 → 画面「半黑」或「突然全亮」。",
+      "applied": "---\ntype: note\ncolor: pink\ntags:\n  - D6\n  - 光照\nid: b4fc\ntitle: D6 光照与 overlay\ncreated: 2026-11-04T09:05:14.014Z\nsource: null\nderivedFrom: []\n---\ncomputePackedLight() 拿光；relight(...) 6 个重载；updateLight 在光源变化时刷新。\n方块实体挪位置/变亮变暗后不刷新 → 画面「半黑」或「突然全亮」。",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/notes/2026-11-04-D6b-颜色：overstress-必须最后做-e1be.md",
+      "before": null,
+      "after": "---\ntype: note\ncolor: pink\ntags:\n  - D6\n  - 颜色\nid: e1be\ntitle: D6b 颜色：overstress 必须最后做\ncreated: 2026-11-04T09:05:14.032Z\nsource: null\nderivedFrom: []\n---\nKineticBlockEntityVisual.applyOverstressEffect(be, instances)（:43-59）会覆盖颜色并 setChanged。\n顺序反了 = 过载不变红/不变绿。\nOrientedRotatingVisual 没实现 SimpleTickableVisual → 天生没这效果，得自己挂 tick。",
+      "applied": "---\ntype: note\ncolor: pink\ntags:\n  - D6\n  - 颜色\nid: e1be\ntitle: D6b 颜色：overstress 必须最后做\ncreated: 2026-11-04T09:05:14.032Z\nsource: null\nderivedFrom: []\n---\nKineticBlockEntityVisual.applyOverstressEffect(be, instances)（:43-59）会覆盖颜色并 setChanged。\n顺序反了 = 过载不变红/不变绿。\nOrientedRotatingVisual 没实现 SimpleTickableVisual → 天生没这效果，得自己挂 tick。",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/notes/2026-11-04-D7-可见性与剔除-d7bc.md",
+      "before": null,
+      "after": "---\ntype: note\ncolor: gray\ntags:\n  - D7\n  - 维度\nid: d7bc\ntitle: D7 可见性与剔除\ncreated: 2026-11-04T09:05:14.045Z\nsource: null\nderivedFrom: []\n---\n三个开关：\n#D7/cull（cull shader，rotating.glsl）\n#D7/isVisible（Instance.setVisible）\n#D7/skipVanillaRender（只影响 BER）\n\n「看着看着不见了」= 90% 是 cull shader + renderOrigin 不匹配，不是没画。",
+      "applied": "---\ntype: note\ncolor: gray\ntags:\n  - D7\n  - 维度\nid: d7bc\ntitle: D7 可见性与剔除\ncreated: 2026-11-04T09:05:14.045Z\nsource: null\nderivedFrom: []\n---\n三个开关：\n#D7/cull（cull shader，rotating.glsl）\n#D7/isVisible（Instance.setVisible）\n#D7/skipVanillaRender（只影响 BER）\n\n「看着看着不见了」= 90% 是 cull shader + renderOrigin 不匹配，不是没画。",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/notes/2026-11-04-D7b-渲染层（RenderType）-d2df.md",
+      "before": null,
+      "after": "---\ntype: note\ncolor: gray\ntags:\n  - D7\n  - cutout\n  - T13\nid: d2df\ntitle: D7b 渲染层（RenderType）\ncreated: 2026-11-04T09:05:14.062Z\nsource: null\nderivedFrom: []\n---\n取值：solid / cutout / cutout_mipped / translucent / entity 系\n\n规则：纹理有 alpha<255 或几何留空 → 方块模型顶层写 render_type: minecraft:cutout。\n漏了不报错、编译也绿，只在游戏里变黑块。物品模型不需要（不吃这个字段）。",
+      "applied": "---\ntype: note\ncolor: gray\ntags:\n  - D7\n  - cutout\n  - T13\nid: d2df\ntitle: D7b 渲染层（RenderType）\ncreated: 2026-11-04T09:05:14.062Z\nsource: null\nderivedFrom: []\n---\n取值：solid / cutout / cutout_mipped / translucent / entity 系\n\n规则：纹理有 alpha<255 或几何留空 → 方块模型顶层写 render_type: minecraft:cutout。\n漏了不报错、编译也绿，只在游戏里变黑块。物品模型不需要（不吃这个字段）。",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/notes/2026-11-04-D8-注册点（三个，别混）-1d07.md",
+      "before": null,
+      "after": "---\ntype: note\ncolor: blue\ntags:\n  - D8\n  - 注册\nid: 1d07\ntitle: D8 注册点（三个，别混）\ncreated: 2026-11-04T09:05:14.080Z\nsource: null\nderivedFrom: []\n---\n① blockstate/模型 → 资源\n② ModRenderers.register(RegisterRenderers 事件) → BER\n③ ModVisualizers.register() → VisualizerRegistry.setVisualizer(beType, SimpleBlockEntityVisualizer(factory, skipVanillaRender))\n\nCreate 内部还有 CreateBlockEntityBuilder.visual(factory, renderNormally)。",
+      "applied": "---\ntype: note\ncolor: blue\ntags:\n  - D8\n  - 注册\nid: 1d07\ntitle: D8 注册点（三个，别混）\ncreated: 2026-11-04T09:05:14.080Z\nsource: null\nderivedFrom: []\n---\n① blockstate/模型 → 资源\n② ModRenderers.register(RegisterRenderers 事件) → BER\n③ ModVisualizers.register() → VisualizerRegistry.setVisualizer(beType, SimpleBlockEntityVisualizer(factory, skipVanillaRender))\n\nCreate 内部还有 CreateBlockEntityBuilder.visual(factory, renderNormally)。",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/notes/2026-11-04-D8b-skipVanillaRender-语义-51ec.md",
+      "before": null,
+      "after": "---\ntype: note\ncolor: blue\ntags:\n  - D8\n  - skipVanillaRender\nid: 51ec\ntitle: D8b skipVanillaRender 语义\ncreated: 2026-11-04T09:05:14.097Z\nsource: null\nderivedFrom: []\n---\ntrue = 隐藏静态 chunk 网格（整个方块由 visual 画）\nfalse = 保留静态网格（visual 只补动态部分）\n\n本工程：包壳齿轮/轴 = true（skip）；crafter = false（所以有双层风险 T11）。",
+      "applied": "---\ntype: note\ncolor: blue\ntags:\n  - D8\n  - skipVanillaRender\nid: 51ec\ntitle: D8b skipVanillaRender 语义\ncreated: 2026-11-04T09:05:14.097Z\nsource: null\nderivedFrom: []\n---\ntrue = 隐藏静态 chunk 网格（整个方块由 visual 画）\nfalse = 保留静态网格（visual 只补动态部分）\n\n本工程：包壳齿轮/轴 = true（skip）；crafter = false（所以有双层风险 T11）。",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/notes/2026-11-04-D9-状态来源-cdde.md",
+      "before": null,
+      "after": "---\ntype: note\ncolor: yellow\ntags:\n  - D9\n  - 维度\nid: cdde\ntitle: D9 状态来源\ncreated: 2026-11-04T09:05:14.116Z\nsource: null\nderivedFrom: []\n---\n① BE 字段（服务端算，sendData 同步）\n② blockstate（属性，自带同步）\n③ KineticBlockEntity network（speed/angle，客户端自己转）\n\n画面不动先分类：没同步（D9①）、属性没变（D9②）、还是 visual 没重建（D4）。",
+      "applied": "---\ntype: note\ncolor: yellow\ntags:\n  - D9\n  - 维度\nid: cdde\ntitle: D9 状态来源\ncreated: 2026-11-04T09:05:14.116Z\nsource: null\nderivedFrom: []\n---\n① BE 字段（服务端算，sendData 同步）\n② blockstate（属性，自带同步）\n③ KineticBlockEntity network（speed/angle，客户端自己转）\n\n画面不动先分类：没同步（D9①）、属性没变（D9②）、还是 visual 没重建（D4）。",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/notes/2026-11-04-症状：双层、一层不转-d684.md",
+      "before": null,
+      "after": "---\ntype: note\ncolor: gray\ntags:\n  - 症状\n  - T11\nid: d684\ntitle: 症状：双层、一层不转\ncreated: 2026-11-04T09:05:14.134Z\nsource: null\nderivedFrom: []\n---\n#D2/chunk模型 + #D2/visual + #D8/skipVanillaRender=false\n\n= blockstate 静态模型还在，visual 又画一份。\n修法：blockstate 指空模型（无 elements），或 skipVanillaRender=true。见 T11。",
+      "applied": "---\ntype: note\ncolor: gray\ntags:\n  - 症状\n  - T11\nid: d684\ntitle: 症状：双层、一层不转\ncreated: 2026-11-04T09:05:14.134Z\nsource: null\nderivedFrom: []\n---\n#D2/chunk模型 + #D2/visual + #D8/skipVanillaRender=false\n\n= blockstate 静态模型还在，visual 又画一份。\n修法：blockstate 指空模型（无 elements），或 skipVanillaRender=true。见 T11。",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/notes/2026-11-04-症状：方块在、轴不转-没轴-9e8f.md",
+      "before": null,
+      "after": "---\ntype: note\ncolor: gray\ntags:\n  - 症状\n  - T17\n  - T18\nid: 9e8f\ntitle: 症状：方块在、轴不转/没轴\ncreated: 2026-11-04T09:05:14.153Z\nsource: null\nderivedFrom: []\n---\n#D2/BER（死路径，T17）或 #D5/朝向（T18）\n\n三问：基类是 KineticBlockEntityRenderer？→ 早退，白写。\nBE 类型有 .visual(...) 吗？没有 → 没人画轴。\n轴画在哪一面？of() 写死 FACING，接网面是 FACING.getOpposite() → 画到背面。",
+      "applied": "---\ntype: note\ncolor: gray\ntags:\n  - 症状\n  - T17\n  - T18\nid: 9e8f\ntitle: 症状：方块在、轴不转/没轴\ncreated: 2026-11-04T09:05:14.153Z\nsource: null\nderivedFrom: []\n---\n#D2/BER（死路径，T17）或 #D5/朝向（T18）\n\n三问：基类是 KineticBlockEntityRenderer？→ 早退，白写。\nBE 类型有 .visual(...) 吗？没有 → 没人画轴。\n轴画在哪一面？of() 写死 FACING，接网面是 FACING.getOpposite() → 画到背面。",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/notes/2026-11-04-症状：状态变了画面不变-e534.md",
+      "before": null,
+      "after": "---\ntype: note\ncolor: gray\ntags:\n  - 症状\n  - T12\nid: e534\ntitle: 症状：状态变了画面不变\ncreated: 2026-11-04T09:05:14.174Z\nsource: null\nderivedFrom: []\n---\n#D4/update(float)（queueUpdate 只调 update，不重建）+ #D9/状态来源\n\n修法：tick 里判状态 → Instance.setVisible(...) 切两套实例。见 T12。",
+      "applied": "---\ntype: note\ncolor: gray\ntags:\n  - 症状\n  - T12\nid: e534\ntitle: 症状：状态变了画面不变\ncreated: 2026-11-04T09:05:14.174Z\nsource: null\nderivedFrom: []\n---\n#D4/update(float)（queueUpdate 只调 update，不重建）+ #D9/状态来源\n\n修法：tick 里判状态 → Instance.setVisible(...) 切两套实例。见 T12。",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/notes/2026-11-04-症状：透明处变黑-镂空被填-90f7.md",
+      "before": null,
+      "after": "---\ntype: note\ncolor: gray\ntags:\n  - 症状\n  - cutout\nid: 90f7\ntitle: 症状：透明处变黑/镂空被填\ncreated: 2026-11-04T09:05:14.195Z\nsource: null\nderivedFrom: []\n---\n#D7b/cutout 缺失。\n\n一行修法：模型顶层 \"render_type\": \"minecraft:cutout\"。\n机器查：node dsh-create-mode/check-cutout.mjs（退出码 1 = 有缺口）\n本次扫描：8 个缺口（隧道 5 + 应力传输器 3），全是 main 手写模型。",
+      "applied": "---\ntype: note\ncolor: gray\ntags:\n  - 症状\n  - cutout\nid: 90f7\ntitle: 症状：透明处变黑/镂空被填\ncreated: 2026-11-04T09:05:14.195Z\nsource: null\nderivedFrom: []\n---\n#D7b/cutout 缺失。\n\n一行修法：模型顶层 \"render_type\": \"minecraft:cutout\"。\n机器查：node dsh-create-mode/check-cutout.mjs（退出码 1 = 有缺口）\n本次扫描：8 个缺口（隧道 5 + 应力传输器 3），全是 main 手写模型。",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/notes/2026-11-04-用法：定位-=-填满-9-个取值-ab2e.md",
+      "before": null,
+      "after": "---\ntype: note\ncolor: gray\ntags:\n  - 用法\nid: ab2e\ntitle: 用法：定位 = 填满 9 个取值\ncreated: 2026-11-04T09:05:14.214Z\nsource: null\nderivedFrom: []\n---\n拿到一个渲染问题，先写九个标签，不写代码：\n[D1 真实世界][D2 visual][D3 ROTATING][D4 update][D5 renderOrigin][D6 lit][D7 cull][D8 VisualizerRegistry][D9 network]\n\n填不出来的那个格子，就是要去源码里查的东西。记忆负担从「几十个类」降到「9 个格子」。",
+      "applied": "---\ntype: note\ncolor: gray\ntags:\n  - 用法\nid: ab2e\ntitle: 用法：定位 = 填满 9 个取值\ncreated: 2026-11-04T09:05:14.214Z\nsource: null\nderivedFrom: []\n---\n拿到一个渲染问题，先写九个标签，不写代码：\n[D1 真实世界][D2 visual][D3 ROTATING][D4 update][D5 renderOrigin][D6 lit][D7 cull][D8 VisualizerRegistry][D9 network]\n\n填不出来的那个格子，就是要去源码里查的东西。记忆负担从「几十个类」降到「9 个格子」。",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/canvases/Main.canvas",
+      "before": "{\n  \"nodes\": [\n    {\n      \"id\": \"0f74\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-多维度的机械动力渲染-0f74]]\",\n      \"x\": 168,\n      \"y\": 144,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"3\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    }\n  ],\n  \"edges\": [],\n  \"groups\": [],\n  \"noteboard\": {\n    \"suppressedTagHeadings\": []\n  }\n}\n",
+      "after": "{\n  \"nodes\": [\n    {\n      \"id\": \"0f74\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-多维度的机械动力渲染-0f74]]\",\n      \"x\": 168,\n      \"y\": 144,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"3\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"8b22\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D1-上下文：画在哪-8b22]]\",\n      \"x\": 0,\n      \"y\": -40,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"5\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"c773\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D2-谁画：5-个机制-c773]]\",\n      \"x\": -118,\n      \"y\": 162,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"4\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"f153\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D2a-visual-=-默认答案-f153]]\",\n      \"x\": -92,\n      \"y\": -222,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"4\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"efe5\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D2b-BER-只在两种场合有意义-efe5]]\",\n      \"x\": -278,\n      \"y\": -31,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"4\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"771b\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D2c-chunk-模型：cutout-在这一层-771b]]\",\n      \"x\": 264,\n      \"y\": -92,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"4\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"831b\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D3-实例类型（InstanceType）-831b]]\",\n      \"x\": 152,\n      \"y\": 326,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"6\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"fa1a\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D3b-visual-的四种接口-fa1a]]\",\n      \"x\": 180,\n      \"y\": -312,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"6\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"b50b\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D4-生命周期：谁在什么时候被调-b50b]]\",\n      \"x\": -124,\n      \"y\": 380,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"3\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"1a0b\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D4b-不要-new-visual-1a0b]]\",\n      \"x\": 430,\n      \"y\": 94,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"3\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"a015\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D5-坐标：相对谁-a015]]\",\n      \"x\": -386,\n      \"y\": 211,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"2\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"7331\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D5b-朝向：rotateToFace(from-7331]]\",\n      \"x\": -386,\n      \"y\": -211,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"2\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"b4fc\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D6-光照与-overlay-b4fc]]\",\n      \"x\": -154,\n      \"y\": -412,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"1\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"e1be\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D6b-颜色：overstress-必须最后做-e1be]]\",\n      \"x\": 428,\n      \"y\": 295,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"1\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"d7bc\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D7-可见性与剔除-d7bc]]\",\n      \"x\": 124,\n      \"y\": -505,\n      \"width\": 260,\n      \"height\": 180,\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"d2df\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D7b-渲染层（RenderType）-d2df]]\",\n      \"x\": 214,\n      \"y\": 517,\n      \"width\": 260,\n      \"height\": 180,\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"1d07\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D8-注册点（三个，别混）-1d07]]\",\n      \"x\": -396,\n      \"y\": 396,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"5\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"51ec\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D8b-skipVanillaRender-语义-51ec]]\",\n      \"x\": -559,\n      \"y\": 31,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"5\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"cdde\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D9-状态来源-cdde]]\",\n      \"x\": 457,\n      \"y\": -324,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"3\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"d684\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-症状：双层、一层不转-d684]]\",\n      \"x\": 546,\n      \"y\": -125,\n      \"width\": 260,\n      \"height\": 180,\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"9e8f\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-症状：方块在、轴不转-没轴-9e8f]]\",\n      \"x\": -63,\n      \"y\": 597,\n      \"width\": 260,\n      \"height\": 180,\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"e534\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-症状：状态变了画面不变-e534]]\",\n      \"x\": -446,\n      \"y\": -401,\n      \"width\": 260,\n      \"height\": 180,\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"90f7\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-症状：透明处变黑-镂空被填-90f7]]\",\n      \"x\": -216,\n      \"y\": -603,\n      \"width\": 260,\n      \"height\": 180,\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"ab2e\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-用法：定位-=-填满-9-个取值-ab2e]]\",\n      \"x\": 481,\n      \"y\": 481,\n      \"width\": 260,\n      \"height\": 180,\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    }\n  ],\n  \"edges\": [],\n  \"groups\": [],\n  \"noteboard\": {\n    \"suppressedTagHeadings\": []\n  }\n}\n",
+      "applied": "{\n  \"nodes\": [\n    {\n      \"id\": \"0f74\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-多维度的机械动力渲染-0f74]]\",\n      \"x\": 168,\n      \"y\": 144,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"3\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"8b22\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D1-上下文：画在哪-8b22]]\",\n      \"x\": 0,\n      \"y\": -40,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"5\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"c773\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D2-谁画：5-个机制-c773]]\",\n      \"x\": -118,\n      \"y\": 162,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"4\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"f153\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D2a-visual-=-默认答案-f153]]\",\n      \"x\": -92,\n      \"y\": -222,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"4\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"efe5\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D2b-BER-只在两种场合有意义-efe5]]\",\n      \"x\": -278,\n      \"y\": -31,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"4\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"771b\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D2c-chunk-模型：cutout-在这一层-771b]]\",\n      \"x\": 264,\n      \"y\": -92,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"4\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"831b\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D3-实例类型（InstanceType）-831b]]\",\n      \"x\": 152,\n      \"y\": 326,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"6\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"fa1a\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D3b-visual-的四种接口-fa1a]]\",\n      \"x\": 180,\n      \"y\": -312,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"6\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"b50b\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D4-生命周期：谁在什么时候被调-b50b]]\",\n      \"x\": -124,\n      \"y\": 380,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"3\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"1a0b\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D4b-不要-new-visual-1a0b]]\",\n      \"x\": 430,\n      \"y\": 94,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"3\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"a015\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D5-坐标：相对谁-a015]]\",\n      \"x\": -386,\n      \"y\": 211,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"2\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"7331\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D5b-朝向：rotateToFace(from-7331]]\",\n      \"x\": -386,\n      \"y\": -211,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"2\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"b4fc\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D6-光照与-overlay-b4fc]]\",\n      \"x\": -154,\n      \"y\": -412,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"1\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"e1be\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D6b-颜色：overstress-必须最后做-e1be]]\",\n      \"x\": 428,\n      \"y\": 295,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"1\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"d7bc\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D7-可见性与剔除-d7bc]]\",\n      \"x\": 124,\n      \"y\": -505,\n      \"width\": 260,\n      \"height\": 180,\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"d2df\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D7b-渲染层（RenderType）-d2df]]\",\n      \"x\": 214,\n      \"y\": 517,\n      \"width\": 260,\n      \"height\": 180,\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"1d07\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D8-注册点（三个，别混）-1d07]]\",\n      \"x\": -396,\n      \"y\": 396,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"5\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"51ec\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D8b-skipVanillaRender-语义-51ec]]\",\n      \"x\": -559,\n      \"y\": 31,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"5\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"cdde\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-D9-状态来源-cdde]]\",\n      \"x\": 457,\n      \"y\": -324,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"3\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"d684\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-症状：双层、一层不转-d684]]\",\n      \"x\": 546,\n      \"y\": -125,\n      \"width\": 260,\n      \"height\": 180,\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"9e8f\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-症状：方块在、轴不转-没轴-9e8f]]\",\n      \"x\": -63,\n      \"y\": 597,\n      \"width\": 260,\n      \"height\": 180,\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"e534\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-症状：状态变了画面不变-e534]]\",\n      \"x\": -446,\n      \"y\": -401,\n      \"width\": 260,\n      \"height\": 180,\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"90f7\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-症状：透明处变黑-镂空被填-90f7]]\",\n      \"x\": -216,\n      \"y\": -603,\n      \"width\": 260,\n      \"height\": 180,\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    },\n    {\n      \"id\": \"ab2e\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-用法：定位-=-填满-9-个取值-ab2e]]\",\n      \"x\": 481,\n      \"y\": 481,\n      \"width\": 260,\n      \"height\": 180,\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    }\n  ],\n  \"edges\": [],\n  \"groups\": [],\n  \"noteboard\": {\n    \"suppressedTagHeadings\": []\n  }\n}\n",
+      "completed": true
+    }
+  ]
+}

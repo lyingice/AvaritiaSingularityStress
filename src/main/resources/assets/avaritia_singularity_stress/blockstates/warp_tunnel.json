@@ -1,0 +1,76 @@
+{
+  "variants": {
+    "axis=x,shape=straight": [
+      {
+        "model": "avaritia_singularity_stress:block/warp_tunnel/straight",
+        "y": 0
+      }
+    ],
+    "axis=x,shape=window": [
+      {
+        "model": "avaritia_singularity_stress:block/warp_tunnel/window",
+        "y": 0
+      }
+    ],
+    "axis=x,shape=closed": [
+      {
+        "model": "avaritia_singularity_stress:block/warp_tunnel/straight",
+        "y": 0
+      }
+    ],
+    "axis=x,shape=t_left": [
+      {
+        "model": "avaritia_singularity_stress:block/warp_tunnel/t_left",
+        "y": 0
+      }
+    ],
+    "axis=x,shape=t_right": [
+      {
+        "model": "avaritia_singularity_stress:block/warp_tunnel/t_right",
+        "y": 0
+      }
+    ],
+    "axis=x,shape=cross": [
+      {
+        "model": "avaritia_singularity_stress:block/warp_tunnel/cross",
+        "y": 0
+      }
+    ],
+    "axis=z,shape=straight": [
+      {
+        "model": "avaritia_singularity_stress:block/warp_tunnel/straight",
+        "y": 90
+      }
+    ],
+    "axis=z,shape=window": [
+      {
+        "model": "avaritia_singularity_stress:block/warp_tunnel/window",
+        "y": 90
+      }
+    ],
+    "axis=z,shape=closed": [
+      {
+        "model": "avaritia_singularity_stress:block/warp_tunnel/straight",
+        "y": 90
+      }
+    ],
+    "axis=z,shape=t_left": [
+      {
+        "model": "avaritia_singularity_stress:block/warp_tunnel/t_left",
+        "y": 90
+      }
+    ],
+    "axis=z,shape=t_right": [
+      {
+        "model": "avaritia_singularity_stress:block/warp_tunnel/t_right",
+        "y": 90
+      }
+    ],
+    "axis=z,shape=cross": [
+      {
+        "model": "avaritia_singularity_stress:block/warp_tunnel/cross",
+        "y": 90
+      }
+    ]
+  }
+}

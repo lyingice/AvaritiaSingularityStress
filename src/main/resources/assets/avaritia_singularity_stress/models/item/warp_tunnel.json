@@ -1,0 +1,10 @@
+{
+  "parent": "create:block/belt_tunnel/item",
+  "textures": {
+    "tunnel": "avaritia_singularity_stress:block/warp_tunnel/warp_tunnel",
+    "top": "avaritia_singularity_stress:block/warp_tunnel/warp_tunnel_top",
+    "direction": "avaritia_singularity_stress:block/warp_tunnel/warp_direction",
+    "frame": "avaritia_singularity_stress:block/warp_tunnel/warp_frame",
+    "particle": "avaritia_singularity_stress:block/warp_tunnel/warp_particle"
+  }
+}

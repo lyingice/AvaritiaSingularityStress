@@ -1,0 +1,31 @@
+{
+  "id": "7b99bb93-c754-4075-9539-d3abd54a569e",
+  "root": "c:\\Users\\12501\\MCreatorWorkspaces\\AvaritiaSingularityStress",
+  "journal": "c:\\Users\\12501\\MCreatorWorkspaces\\AvaritiaSingularityStress\\.noteboard\\history\\7b99bb93-c754-4075-9539-d3abd54a569e.json",
+  "label": "创建便签",
+  "created": "2026-11-04T09:02:11.877Z",
+  "status": "complete",
+  "files": [
+    {
+      "path": ".noteboard/notes/2026-11-04-多维度的机械动力渲染-0f74.md",
+      "before": null,
+      "after": "---\ntype: note\ncolor: yellow\ntags: []\nid: 0f74\ntitle: 多维度的机械动力渲染\ncreated: 2026-11-04T09:02:11.878Z\nsource: null\nderivedFrom: []\n---\n无",
+      "applied": "---\ntype: note\ncolor: yellow\ntags: []\nid: 0f74\ntitle: 多维度的机械动力渲染\ncreated: 2026-11-04T09:02:11.878Z\nsource: null\nderivedFrom: []\n---\n无",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/canvases/Main.canvas",
+      "before": "{\n  \"nodes\": [],\n  \"edges\": [],\n  \"groups\": [],\n  \"noteboard\": {\n    \"suppressedTagHeadings\": []\n  }\n}\n",
+      "after": "{\n  \"nodes\": [\n    {\n      \"id\": \"0f74\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-多维度的机械动力渲染-0f74]]\",\n      \"x\": 168,\n      \"y\": 144,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"3\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    }\n  ],\n  \"edges\": [],\n  \"groups\": [],\n  \"noteboard\": {\n    \"suppressedTagHeadings\": []\n  }\n}\n",
+      "applied": "{\n  \"nodes\": [\n    {\n      \"id\": \"0f74\",\n      \"type\": \"text\",\n      \"text\": \"[[.noteboard/notes/2026-11-04-多维度的机械动力渲染-0f74]]\",\n      \"x\": 168,\n      \"y\": 144,\n      \"width\": 260,\n      \"height\": 180,\n      \"color\": \"3\",\n      \"noteboard\": {\n        \"kind\": \"note\"\n      }\n    }\n  ],\n  \"edges\": [],\n  \"groups\": [],\n  \"noteboard\": {\n    \"suppressedTagHeadings\": []\n  }\n}\n",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/canvases/Main.backup.json",
+      "before": "{\n  \"nodes\": [],\n  \"edges\": [],\n  \"groups\": []\n}\n",
+      "after": null,
+      "applied": null,
+      "completed": true
+    }
+  ]
+}

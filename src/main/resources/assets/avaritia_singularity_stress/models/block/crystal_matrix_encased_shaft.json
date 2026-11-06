@@ -1,0 +1,8 @@
+{
+    "parent":  "create:block/encased_shaft/block",
+    "textures":  {
+                     "casing":  "avaritia_singularity_stress:block/crystal_matrix_casing",
+                     "opening":  "avaritia_singularity_stress:block/crystal_matrix_gearbox"
+                 },
+    "render_type":  "minecraft:cutout"
+}

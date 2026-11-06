@@ -1,0 +1,24 @@
+{
+  "id": "9a6d2074-48ef-4441-abf8-f979e3a5844c",
+  "root": "c:\\Users\\12501\\MCreatorWorkspaces\\AvaritiaSingularityStress",
+  "journal": "c:\\Users\\12501\\MCreatorWorkspaces\\AvaritiaSingularityStress\\.noteboard\\history\\9a6d2074-48ef-4441-abf8-f979e3a5844c.json",
+  "label": "整理布局",
+  "created": "2026-11-04T09:01:50.481Z",
+  "status": "complete",
+  "files": [
+    {
+      "path": ".noteboard/canvases/Main.backup.json",
+      "before": null,
+      "after": "{\n  \"nodes\": [],\n  \"edges\": [],\n  \"groups\": []\n}\n",
+      "applied": "{\n  \"nodes\": [],\n  \"edges\": [],\n  \"groups\": []\n}\n",
+      "completed": true
+    },
+    {
+      "path": ".noteboard/canvases/Main.canvas",
+      "before": "{\n  \"nodes\": [],\n  \"edges\": [],\n  \"groups\": []\n}\n",
+      "after": "{\n  \"nodes\": [],\n  \"edges\": [],\n  \"groups\": [],\n  \"noteboard\": {\n    \"suppressedTagHeadings\": []\n  }\n}\n",
+      "applied": "{\n  \"nodes\": [],\n  \"edges\": [],\n  \"groups\": [],\n  \"noteboard\": {\n    \"suppressedTagHeadings\": []\n  }\n}\n",
+      "completed": true
+    }
+  ]
+}

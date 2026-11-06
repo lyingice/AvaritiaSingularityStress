@@ -1,0 +1,597 @@
+{
+  "nodes": [
+    {
+      "id": "tag:D2",
+      "type": "text",
+      "text": "D2",
+      "noteboard": {
+        "kind": "heading",
+        "sourceTag": "D2",
+        "fontSize": 14
+      },
+      "x": 0,
+      "y": 0,
+      "width": 544,
+      "height": 40,
+      "color": "6"
+    },
+    {
+      "id": "tag:症状",
+      "type": "text",
+      "text": "症状",
+      "noteboard": {
+        "kind": "heading",
+        "sourceTag": "症状",
+        "fontSize": 14
+      },
+      "x": 640,
+      "y": 0,
+      "width": 544,
+      "height": 40,
+      "color": "6"
+    },
+    {
+      "id": "tag:D3",
+      "type": "text",
+      "text": "D3",
+      "noteboard": {
+        "kind": "heading",
+        "sourceTag": "D3",
+        "fontSize": 14
+      },
+      "x": 1280,
+      "y": 0,
+      "width": 544,
+      "height": 40,
+      "color": "6"
+    },
+    {
+      "id": "tag:D4",
+      "type": "text",
+      "text": "D4",
+      "noteboard": {
+        "kind": "heading",
+        "sourceTag": "D4",
+        "fontSize": 14
+      },
+      "x": 1920,
+      "y": 0,
+      "width": 544,
+      "height": 40,
+      "color": "6"
+    },
+    {
+      "id": "tag:D5",
+      "type": "text",
+      "text": "D5",
+      "noteboard": {
+        "kind": "heading",
+        "sourceTag": "D5",
+        "fontSize": 14
+      },
+      "x": 2560,
+      "y": 0,
+      "width": 544,
+      "height": 40,
+      "color": "6"
+    },
+    {
+      "id": "tag:D6",
+      "type": "text",
+      "text": "D6",
+      "noteboard": {
+        "kind": "heading",
+        "sourceTag": "D6",
+        "fontSize": 14
+      },
+      "x": 3200,
+      "y": 0,
+      "width": 544,
+      "height": 40,
+      "color": "6"
+    },
+    {
+      "id": "tag:D7",
+      "type": "text",
+      "text": "D7",
+      "noteboard": {
+        "kind": "heading",
+        "sourceTag": "D7",
+        "fontSize": 14
+      },
+      "x": 3840,
+      "y": 0,
+      "width": 544,
+      "height": 40,
+      "color": "6"
+    },
+    {
+      "id": "tag:D8",
+      "type": "text",
+      "text": "D8",
+      "noteboard": {
+        "kind": "heading",
+        "sourceTag": "D8",
+        "fontSize": 14
+      },
+      "x": 0,
+      "y": 520,
+      "width": 544,
+      "height": 40,
+      "color": "6"
+    },
+    {
+      "id": "tag:D1",
+      "type": "text",
+      "text": "D1",
+      "noteboard": {
+        "kind": "heading",
+        "sourceTag": "D1",
+        "fontSize": 14
+      },
+      "x": 640,
+      "y": 520,
+      "width": 260,
+      "height": 40,
+      "color": "6"
+    },
+    {
+      "id": "tag:D9",
+      "type": "text",
+      "text": "D9",
+      "noteboard": {
+        "kind": "heading",
+        "sourceTag": "D9",
+        "fontSize": 14
+      },
+      "x": 996,
+      "y": 520,
+      "width": 260,
+      "height": 40,
+      "color": "6"
+    },
+    {
+      "id": "tag:图例",
+      "type": "text",
+      "text": "图例",
+      "noteboard": {
+        "kind": "heading",
+        "sourceTag": "图例",
+        "fontSize": 14
+      },
+      "x": 1352,
+      "y": 520,
+      "width": 260,
+      "height": 40,
+      "color": "6"
+    },
+    {
+      "id": "tag:用法",
+      "type": "text",
+      "text": "用法",
+      "noteboard": {
+        "kind": "heading",
+        "sourceTag": "用法",
+        "fontSize": 14
+      },
+      "x": 1708,
+      "y": 520,
+      "width": 260,
+      "height": 40,
+      "color": "6"
+    },
+    {
+      "id": "295d",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-①-万能开头（每次先说这句）-295d]]",
+      "x": 4480,
+      "y": 40,
+      "width": 260,
+      "height": 180,
+      "color": "5",
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "426e",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-②-提需求三句式（照抄）-426e]]",
+      "x": 4764,
+      "y": 40,
+      "width": 260,
+      "height": 180,
+      "color": "4",
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "9730",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-③-现成口令-A（加方块-外观不对）-9730]]",
+      "x": 5048,
+      "y": 40,
+      "width": 260,
+      "height": 180,
+      "color": "4",
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "5f89",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-④-现成口令-B（转起来-透明-交付-卡住）-5f89]]",
+      "x": 4480,
+      "y": 244,
+      "width": 260,
+      "height": 180,
+      "color": "4",
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "f0bc",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-⑤-三条禁语（说了会走错路）-f0bc]]",
+      "x": 4764,
+      "y": 244,
+      "width": 260,
+      "height": 180,
+      "color": "1",
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "a318",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-⑥-验收三问（它说好了就问）-a318]]",
+      "x": 5048,
+      "y": 244,
+      "width": 260,
+      "height": 180,
+      "color": "3",
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "1bca",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-⑦-拉回正轨的三句话-1bca]]",
+      "x": 4480,
+      "y": 448,
+      "width": 260,
+      "height": 180,
+      "color": "5",
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "0774",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-⑧-你自己的检查清单-0774]]",
+      "x": 4764,
+      "y": 448,
+      "width": 260,
+      "height": 180,
+      "color": "3",
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "c773",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-D2-谁画：5-个机制-c773]]",
+      "x": 5404,
+      "y": 40,
+      "width": 260,
+      "height": 180,
+      "color": "4",
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "f153",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-D2a-visual-=-默认答案-f153]]",
+      "x": 5688,
+      "y": 40,
+      "width": 260,
+      "height": 180,
+      "color": "4",
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "efe5",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-D2b-BER-只在两种场合有意义-efe5]]",
+      "x": 5404,
+      "y": 244,
+      "width": 260,
+      "height": 180,
+      "color": "4",
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "771b",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-D2c-chunk-模型：cutout-在这一层-771b]]",
+      "x": 5688,
+      "y": 244,
+      "width": 260,
+      "height": 180,
+      "color": "4",
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "d684",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-症状：双层、一层不转-d684]]",
+      "x": 6044,
+      "y": 40,
+      "width": 260,
+      "height": 180,
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "9e8f",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-症状：方块在、轴不转-没轴-9e8f]]",
+      "x": 6328,
+      "y": 40,
+      "width": 260,
+      "height": 180,
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "e534",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-症状：状态变了画面不变-e534]]",
+      "x": 6044,
+      "y": 244,
+      "width": 260,
+      "height": 180,
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "90f7",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-症状：透明处变黑-镂空被填-90f7]]",
+      "x": 6328,
+      "y": 244,
+      "width": 260,
+      "height": 180,
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "831b",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-D3-实例类型（InstanceType）-831b]]",
+      "x": 6684,
+      "y": 40,
+      "width": 260,
+      "height": 180,
+      "color": "6",
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "fa1a",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-D3b-visual-的四种接口-fa1a]]",
+      "x": 6968,
+      "y": 40,
+      "width": 260,
+      "height": 180,
+      "color": "6",
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "b50b",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-D4-生命周期：谁在什么时候被调-b50b]]",
+      "x": 7324,
+      "y": 40,
+      "width": 260,
+      "height": 180,
+      "color": "3",
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "1a0b",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-D4b-不要-new-visual-1a0b]]",
+      "x": 7608,
+      "y": 40,
+      "width": 260,
+      "height": 180,
+      "color": "3",
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "a015",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-D5-坐标：相对谁-a015]]",
+      "x": 7964,
+      "y": 40,
+      "width": 260,
+      "height": 180,
+      "color": "2",
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "7331",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-D5b-朝向：rotateToFace(from-7331]]",
+      "x": 8248,
+      "y": 40,
+      "width": 260,
+      "height": 180,
+      "color": "2",
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "b4fc",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-D6-光照与-overlay-b4fc]]",
+      "x": 4480,
+      "y": 764,
+      "width": 260,
+      "height": 180,
+      "color": "1",
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "e1be",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-D6b-颜色：overstress-必须最后做-e1be]]",
+      "x": 4764,
+      "y": 764,
+      "width": 260,
+      "height": 180,
+      "color": "1",
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "d7bc",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-D7-可见性与剔除-d7bc]]",
+      "x": 5120,
+      "y": 764,
+      "width": 260,
+      "height": 180,
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "d2df",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-D7b-渲染层（RenderType）-d2df]]",
+      "x": 5404,
+      "y": 764,
+      "width": 260,
+      "height": 180,
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "1d07",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-D8-注册点（三个，别混）-1d07]]",
+      "x": 5760,
+      "y": 764,
+      "width": 260,
+      "height": 180,
+      "color": "5",
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "51ec",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-D8b-skipVanillaRender-语义-51ec]]",
+      "x": 6044,
+      "y": 764,
+      "width": 260,
+      "height": 180,
+      "color": "5",
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "8b22",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-D1-上下文：画在哪-8b22]]",
+      "x": 6400,
+      "y": 764,
+      "width": 260,
+      "height": 180,
+      "color": "5",
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "cdde",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-D9-状态来源-cdde]]",
+      "x": 6756,
+      "y": 764,
+      "width": 260,
+      "height": 180,
+      "color": "3",
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "0f74",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-多维度的机械动力渲染-0f74]]",
+      "x": 7112,
+      "y": 764,
+      "width": 260,
+      "height": 180,
+      "noteboard": {
+        "kind": "note"
+      }
+    },
+    {
+      "id": "ab2e",
+      "type": "text",
+      "text": "[[.noteboard/notes/2026-11-04-用法：定位-=-填满-9-个取值-ab2e]]",
+      "x": 7468,
+      "y": 764,
+      "width": 260,
+      "height": 180,
+      "noteboard": {
+        "kind": "note"
+      }
+    }
+  ],
+  "edges": [],
+  "groups": [],
+  "noteboard": {
+    "suppressedTagHeadings": []
+  }
+}

@@ -1,0 +1,11 @@
+{
+    "textures": {
+        "1": "avaritia_singularity_stress:block/blaze_cube_cogwheel_top",
+        "4": "avaritia_singularity_stress:block/blaze_cube_casing",
+        "casing": "avaritia_singularity_stress:block/blaze_cube_casing",
+        "particle": "avaritia_singularity_stress:block/blaze_cube_casing",
+        "side": "avaritia_singularity_stress:block/blaze_cube_encased_cogwheel_side"
+    },
+    "parent": "create:block/encased_cogwheel/block_bottom",
+    "render_type": "minecraft:cutout"
+}

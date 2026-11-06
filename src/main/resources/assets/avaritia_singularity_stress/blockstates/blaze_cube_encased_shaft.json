@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "axis=x": { "model": "avaritia_singularity_stress:block/blaze_cube_encased_shaft", "uvlock": true, "x": 90, "y": 90 },
+    "axis=y": { "model": "avaritia_singularity_stress:block/blaze_cube_encased_shaft", "uvlock": true },
+    "axis=z": { "model": "avaritia_singularity_stress:block/blaze_cube_encased_shaft", "uvlock": true, "x": 90, "y": 180 }
+  }
+}
