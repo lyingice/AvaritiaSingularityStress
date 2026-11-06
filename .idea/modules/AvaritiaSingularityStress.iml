@@ -9,6 +9,12 @@
       <excludeFolder url="file://$MODULE_DIR$/../../libs" />
       <excludeFolder url="file://$MODULE_DIR$/../../run" />
       <excludeFolder url="file://$MODULE_DIR$/../../run-server-verify" />
+      <excludeFolder url="file://$MODULE_DIR$/../../agent" />
+      <excludeFolder url="file://$MODULE_DIR$/../../dsh-create-mode/.cache" />
+      <excludeFolder url="file://$MODULE_DIR$/../../artifacts" />
+      <excludeFolder url="file://$MODULE_DIR$/../../dsh-create-mode" />
+      <excludeFolder url="file://$MODULE_DIR$/../../dsh-pendulum-mcp" />
+      <excludeFolder url="file://$MODULE_DIR$/../../pendulum" />
     </content>
   </component>
 </module>

@@ -1,9 +1,15 @@
-// 仅用于"隔离验证"本次无线系统改动：把 runServer 的游戏目录指到一个干净目录，
+// 仅用于"隔离验证"本次改动：把 runServer 的游戏目录指到一个干净目录，
 // 避免 run/mods 里的客户端专用模组（钠/iris 等）在专用服务器预启动阶段崩溃。
+//
+// 同时注入 -Davaritia.warp.selftest=true：让 WarpSelfTest 在服务端启动后
+// 自动跑 B15 分流规则自检（8 条断言）并 halt。不传这个属性时自检完全不执行，
+// 所以普通开服（不加载本脚本）不受影响。
+//
 // 用法： .\gradlew runServer --offline --init-script run-server-verify.init.gradle
 gradle.projectsEvaluated {
     def task = rootProject.tasks.findByName('runServer')
     if (task != null) {
         task.gameDirectory = rootProject.file('run-server-verify')
+        task.jvmArgs('-Davaritia.warp.selftest=true')
     }
 }

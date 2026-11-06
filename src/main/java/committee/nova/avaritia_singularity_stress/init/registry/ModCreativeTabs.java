@@ -48,6 +48,11 @@ public class ModCreativeTabs {
                         // B10 无线应力传输器（输出端 / 接收端）
                         output.accept(ModItems.WIRELESS_STRESS_BRIDGE_SENDER.get());
                         output.accept(ModItems.WIRELESS_STRESS_BRIDGE_RECEIVER.get());
+                        // B15 空间折跃隧道
+                        output.accept(ModItems.WARP_TUNNEL.get());
+                        // B19 机壳方块（封装产物不进创造栏，只放机壳本身）
+                        output.accept(ModItems.BLAZE_CUBE_CASING.get());
+                        // 但测试和搭场景需要直接拿，所以也放进创造栏（原设计只放机壳本身）。
                         // [B11 雪藏] B11 无线流体传输器：整体雪藏，暂不进创造栏。
                         // // B11 无线流体传输器（输出端 / 接收端）
                         // output.accept(ModItems.WIRELESS_FLUID_TRANSMITTER_SENDER.get());
@@ -60,3 +65,6 @@ public class ModCreativeTabs {
         // 仅用于触发类加载
     }
 }
+
+
+

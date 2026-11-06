@@ -1,5 +1,6 @@
 {
   "parent": "create:block/funnel/block_horizontal",
+  "render_type": "minecraft:cutout",
   "textures": {
     "back": "avaritia_singularity_stress:block/machine/wireless/funnel_back",
     "base": "avaritia_singularity_stress:block/machine/wireless/funnel_base",

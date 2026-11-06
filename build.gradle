@@ -3,7 +3,7 @@ plugins {
     id 'net.neoforged.moddev' version '2.0.141'
 }
 
-version = '0.1'
+version = '0.2'
 base.archivesName = "AvaritiaSingularityStress"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
@@ -24,6 +24,12 @@ neoForge {
     runs {
         client {
             client()
+
+            // 临时：实机验证时直接进世界，绕过当前环境里不可用的 GUI 输入
+            //（Pendulum 的 AWT Robot 在 headless 下不可用、Windows 前台锁又挡住 SendInput）。
+            // 验证完请删除这两行。
+            programArgument '--quickPlaySingleplayer'
+            programArgument '新的世界'
 
             def mcreatorJvmOptions = System.getenv('MCREATOR_JVM_OPTIONS')
             if (mcreatorJvmOptions) {

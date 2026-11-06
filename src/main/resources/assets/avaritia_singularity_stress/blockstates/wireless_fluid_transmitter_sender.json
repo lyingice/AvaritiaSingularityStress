@@ -1,4 +1,4 @@
-﻿{
+{
   "variants": {
     "facing=down,output=true,powered=false":  { "model": "avaritia_singularity_stress:block/wireless_fluid_transmitter", "x": 90 },
     "facing=up,output=true,powered=false":    { "model": "avaritia_singularity_stress:block/wireless_fluid_transmitter", "x": 270 },

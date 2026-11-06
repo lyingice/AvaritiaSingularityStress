@@ -15,6 +15,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -106,6 +108,42 @@ public class WirelessItemFunnelBlock extends FunnelBlock {
                 && placer instanceof Player player
                 && level.getBlockEntity(pos) instanceof WirelessItemFunnelBlockEntity funnels) {
             funnels.setOwner(player.getUUID());
+        }
+    }
+
+    /**
+     * 掉落物入口：把 ItemEntity 交给端口缓存，朝向投影判定与 Create {@code FunnelBlock.entityInside}
+     * 一致（{@code FunnelBlock.java:116-145}）。
+     * <p>
+     * <b>两种角色都接货</b>（与 Create 黄铜漏斗的 {@code canInsertIntoFunnel} 不同，是刻意的）：
+     * 本方块是无线端口，抽取端（extracting=true）的缓存要被对端接收端取走，
+     * 所以"把物品丢进发送端漏斗"必须能收进缓存，否则纯无线发送场景根本无法投料。
+     * 接收端的缓存则由 BE 每 tick 排向本地容器/世界，任何情况下都不会滞留成黑洞。
+     */
+    @Override
+    public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+        if (level.isClientSide || !(entity instanceof ItemEntity itemEntity)
+                || state.getValue(POWERED)
+                || !(level.getBlockEntity(pos) instanceof WirelessItemFunnelBlockEntity funnel)) {
+            return;
+        }
+        Direction facing = AbstractFunnelBlock.getFunnelFacing(state);
+        if (facing == null) {
+            return;
+        }
+        net.minecraft.world.phys.Vec3 openPos = net.minecraft.world.phys.Vec3.atCenterOf(pos)
+                .add(net.minecraft.world.phys.Vec3.atLowerCornerOf(facing.getNormal()).scale(-0.25));
+        net.minecraft.world.phys.Vec3 diff = entity.position().subtract(openPos);
+        double projected = facing.getAxis().choose(diff.x, diff.y, diff.z);
+        if (projected < 0 == (facing.getAxisDirection() == Direction.AxisDirection.POSITIVE)) {
+            return;
+        }
+        net.minecraft.world.item.ItemStack before = itemEntity.getItem();
+        net.minecraft.world.item.ItemStack remainder = funnel.absorbExternal(before, false);
+        if (remainder.isEmpty()) {
+            itemEntity.discard();
+        } else if (remainder.getCount() < before.getCount()) {
+            itemEntity.setItem(remainder);
         }
     }
 

@@ -74,21 +74,18 @@ public class ModPartialModels {
     public static final PartialModel SINGULARITY_STABILIZER =
             block("singularity_stabilizer/rotor");
 
-    // ============ 在这里声明你的 PartialModel ============
-
-    // 示例：奇异应力发生器的部件
-    // public static final PartialModel SINGULARITY_GENERATOR_COGS = block("singularity_generator/cogs");
-    // public static final PartialModel SINGULARITY_GENERATOR_SHAFT = block("singularity_generator/shaft");
-    // public static final PartialModel SINGULARITY_GENERATOR_CORE = block("singularity_generator/core");
-
-    // 示例：奇异水轮的部件
-    // public static final PartialModel SINGULARITY_WATER_WHEEL = block("singularity_water_wheel/wheel");
-    // public static final PartialModel LARGE_SINGULARITY_WATER_WHEEL = block("large_singularity_water_wheel/block");
-    // public static final PartialModel LARGE_SINGULARITY_WATER_WHEEL_EXTENSION = block("large_singularity_water_wheel/block_extension");
-
-    // 示例：奇异动力背罐的部件
-    // public static final PartialModel SINGULARITY_BACKTANK_COGS = block("singularity_backtank/cogs");
-    // public static final PartialModel SINGULARITY_BACKTANK_SHAFT = block("singularity_backtank/shaft");
+    // 水晶矩阵包壳齿轮的旋转齿面：几何照抄 Create，只换纹理槽
+    public static final PartialModel CRYSTAL_COGWHEEL_GEAR =
+            block("crystal_matrix/cogwheel_shaftless");
+    public static final PartialModel CRYSTAL_LARGE_COGWHEEL_GEAR =
+            block("crystal_matrix/large_cogwheel_shaftless");
+    // 炽骨立方包壳齿轮的旋转齿面：同上，几何照抄 Create，纹理槽换成本模组的
+    // blaze_cube_cogwheel / blaze_cube_large_cogwheel。
+    // 命名修正：这一套（常量、模型目录、贴图）之前误用了 andesite 前缀，实际是炽骨立方的素材。
+    public static final PartialModel BLAZE_COGWHEEL_GEAR =
+            block("blaze_cube/cogwheel_shaftless");
+    public static final PartialModel BLAZE_LARGE_COGWHEEL_GEAR =
+            block("blaze_cube/large_cogwheel_shaftless");
 
     // ============ 初始化方法 ============
     public static void init() {

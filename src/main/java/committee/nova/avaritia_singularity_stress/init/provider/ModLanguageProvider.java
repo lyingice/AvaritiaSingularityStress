@@ -45,6 +45,43 @@ public class ModLanguageProvider extends LanguageProvider {
         add(ModBlocks.WIRELESS_ITEM_FUNNEL.get(), "Wireless Item Funnel");
         add(ModBlocks.WIRELESS_STRESS_BRIDGE_SENDER.get(), "Wireless Stress Transmitter (Sender)");
         add(ModBlocks.WIRELESS_STRESS_BRIDGE_RECEIVER.get(), "Wireless Stress Transmitter (Receiver)");
+        // ===== B15 空间折跃隧道 =====
+        add(ModBlocks.WARP_TUNNEL.get(), "Spatial Fold Tunnel");
+        // ===== B18 水晶矩阵机壳封装（命名对齐 Create：Andesite/Brass Encased ...） =====
+        add(ModBlocks.CRYSTAL_MATRIX_ENCASED_SHAFT.get(), "Crystal Matrix Encased Shaft");
+        add(ModBlocks.BLAZE_CUBE_CASING.get(), "Blaze Cube Casing");
+        add(ModBlocks.BLAZE_CUBE_ENCASED_SHAFT.get(), "Blaze Cube Encased Shaft");
+        add(ModBlocks.BLAZE_CUBE_ENCASED_COGWHEEL.get(), "Blaze Cube Encased Cogwheel");
+        add(ModBlocks.BLAZE_CUBE_ENCASED_LARGE_COGWHEEL.get(), "Blaze Cube Encased Large Cogwheel");
+        add(ModBlocks.CRYSTAL_MATRIX_ENCASED_COGWHEEL.get(), "Crystal Matrix Encased Cogwheel");
+        add(ModBlocks.CRYSTAL_MATRIX_ENCASED_LARGE_COGWHEEL.get(), "Crystal Matrix Encased Large Cogwheel");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.filter.any", "Filter: accepts any item");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.filter.only", "Filter: only %s");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.filter.no_link", "[%s] face has no link - wrench it onto another tunnel first");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.filter.cleared", "[%s] face filter cleared");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.link.none", "[%s] face: not bound");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.link.info", "[%s] face -> [%s] at %s");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.link.selected", "[%1$s] face %2$s selected (sender) - wrench another tunnel's face to bind");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.config", "Warp Tunnel");
+        // B15 配置界面：与 B9/B10 共用同一套面板外观后，这两条文案改成 lang，界面里不再硬编码中文
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.config.export_filter", "Export filter");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.config.unset", "Not set");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.link.unmatched", "Frequency %2$s set, but no peer matched");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.link.cancel", "Selection cancelled");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.link.unbound", "[%1$s] face %2$s unbound");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.link.done", "Bound [%1$s %2$s] -> [%3$s %4$s] (arrow = item flow)");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.link.gone", "Selected tunnel is gone");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.dir.north", "N");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.dir.east", "E");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.dir.south", "S");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.dir.west", "W");
+        // 上下两面不接传送带：单独一条提示，避免顶面被当成"未绑定"。
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.dir.up", "Top");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.dir.down", "Bottom");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.link.not_bindable",
+                "[%s] face cannot take a belt - only the four side faces can be bound");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.link.no_belt",
+                "[%s] face has no belt attached - nothing to bind here");
         // [B11 雪藏] B11 无线流体传输器名称：整体雪藏。
         // add(ModBlocks.WIRELESS_FLUID_TRANSMITTER_SENDER.get(), "Wireless Fluid Transmitter (Sender)");
         // add(ModBlocks.WIRELESS_FLUID_TRANSMITTER_RECEIVER.get(), "Wireless Fluid Transmitter (Receiver)");
@@ -134,5 +171,31 @@ public class ModLanguageProvider extends LanguageProvider {
         add("gui.avaritia_singularity_stress.wireless.send_limit", "Send limit");
         add("gui.avaritia_singularity_stress.wireless.receive_limit", "Receive limit");
         add("gui.avaritia_singularity_stress.wireless.priority", "Priority");
+
+        // ===== B20 无线配置界面：运行状态区 + 套用频率卡 =====
+        // 状态文案复用 wireless.status.*（与护目镜同一套，避免两处措辞漂移）
+        add(prefix + "wireless.status.pending", "Detecting...");
+        add("gui.avaritia_singularity_stress.wireless.status_line", "Status: %s");
+        add("gui.avaritia_singularity_stress.wireless.bridge_flow", "Bridge flow: %s su");
+        add("gui.avaritia_singularity_stress.wireless.net_line", "Net cap/use/idle: %s/%s/%s");
+        add("gui.avaritia_singularity_stress.wireless.peers_ok", "Peers: 1 (range %s)");
+        // B23：并流/分流合法化后，拓扑改为如实报数量
+        add("gui.avaritia_singularity_stress.wireless.peers_targets", "Targets: %s receivers (range %s)");
+        add("gui.avaritia_singularity_stress.wireless.peers_sources", "Sources: %s senders (range %s)");
+        add("gui.avaritia_singularity_stress.wireless.peers_none", "No peer within %s blocks");
+        add("gui.avaritia_singularity_stress.wireless.peers_ambiguous", "Peers: %s - ambiguous, halted");
+        add("gui.avaritia_singularity_stress.wireless.peers_pending", "Peers: detecting...");
+        add("gui.avaritia_singularity_stress.wireless.apply_card", "Use frequency card");
+        add("gui.avaritia_singularity_stress.wireless.apply_card.no_card", "Hold a frequency card");
+        add("gui.avaritia_singularity_stress.wireless.apply_card.unset", "Card has no channel");
+        add("gui.avaritia_singularity_stress.wireless.apply_card.done", "Applied channel %s");
+        // B21 档位转速滚轮（贴面，创造马达同款）
+        add("gui.avaritia_singularity_stress.wireless.gear_speed", "Gear speed");
+        // B22 输出端百分比滚轮
+        add("gui.avaritia_singularity_stress.wireless.send_ratio", "Send ratio");
+        // B9 外部输出：开启后接收端把物品吐到漏斗口外（便于落到传送带上），关闭则直接插入朝向容器
+        add("gui.avaritia_singularity_stress.wireless.external_output", "External Output");
+        add(prefix + "wireless.goggles.gear_speed", "Gear speed: %1$s RPM");
     }
 }
+

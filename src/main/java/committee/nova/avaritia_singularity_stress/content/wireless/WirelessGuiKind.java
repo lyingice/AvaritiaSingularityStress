@@ -19,7 +19,10 @@ public enum WirelessGuiKind {
     ITEM_FUNNEL,
 
     /** B10 无线应力传输器:频率 + 可见性 + 数量字段。 */
-    STRESS_BRIDGE;
+    STRESS_BRIDGE,
+
+    /** B15 空间折跃隧道:频率(频道号) + 可见性,无数量字段。 */
+    WARP_TUNNEL;
 
     // ===== B11 无线流体传输器：整体雪藏（枚举常量一并注释，恢复时记得补回 ";" 的位置）=====
     // /** B11 无线流体传输器:只有频率 + 频道可见性。 */

@@ -70,8 +70,8 @@ public class ModModelProvider extends ItemModelProvider {
                 .texture("redstone", modLoc("block/machine/wireless/funnel_redstone"));
         // B10 两个注册名共用同一份方块模型（block/wireless_stress_bridge 是完整立方体，
         // 继承 minecraft:block/block 已自带物品显示变换）
-        withExistingParent("wireless_stress_bridge_sender", modLoc("block/wireless_stress_bridge"));
-        withExistingParent("wireless_stress_bridge_receiver", modLoc("block/wireless_stress_bridge"));
+        withExistingParent("wireless_stress_bridge_sender", modLoc("block/wireless_stress_bridge/item"));
+        withExistingParent("wireless_stress_bridge_receiver", modLoc("block/wireless_stress_bridge/item"));
         // [B11 雪藏] B11 无线流体传输器：整体雪藏，不再生成物品模型。
         // // B11 两个注册名共用同一份方块模型
         // withExistingParent("wireless_fluid_transmitter_sender", modLoc("block/wireless_fluid_transmitter"));
@@ -123,3 +123,4 @@ public class ModModelProvider extends ItemModelProvider {
                 );
     }
 }
+

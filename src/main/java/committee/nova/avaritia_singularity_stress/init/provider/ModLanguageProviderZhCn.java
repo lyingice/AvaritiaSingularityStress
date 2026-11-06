@@ -46,6 +46,43 @@ public class ModLanguageProviderZhCn extends LanguageProvider {
         add(ModBlocks.WIRELESS_ITEM_FUNNEL.get(), "无线物品传输漏斗");
         add(ModBlocks.WIRELESS_STRESS_BRIDGE_SENDER.get(), "无线应力传输器(输出端)");
         add(ModBlocks.WIRELESS_STRESS_BRIDGE_RECEIVER.get(), "无线应力传输器(接收端)");
+        // ===== B15 空间折跃隧道 =====
+        add(ModBlocks.WARP_TUNNEL.get(), "空间折跃隧道");
+        // ===== B18 水晶矩阵机壳封装（命名对齐 Create：安山/黄铜传动杆箱、齿轮箱、大齿轮箱） =====
+        add(ModBlocks.CRYSTAL_MATRIX_ENCASED_SHAFT.get(), "水晶矩阵传动杆箱");
+        add(ModBlocks.BLAZE_CUBE_CASING.get(), "炽骨立方机壳");
+        add(ModBlocks.BLAZE_CUBE_ENCASED_SHAFT.get(), "炽骨立方传动杆箱");
+        add(ModBlocks.BLAZE_CUBE_ENCASED_COGWHEEL.get(), "炽骨立方齿轮箱");
+        add(ModBlocks.BLAZE_CUBE_ENCASED_LARGE_COGWHEEL.get(), "炽骨立方大齿轮箱");
+        add(ModBlocks.CRYSTAL_MATRIX_ENCASED_COGWHEEL.get(), "水晶矩阵齿轮箱");
+        add(ModBlocks.CRYSTAL_MATRIX_ENCASED_LARGE_COGWHEEL.get(), "水晶矩阵大齿轮箱");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.filter.any", "过滤：接收任何物品");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.filter.only", "过滤：仅 %s");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.filter.no_link", "[%s]面还没有连接，先用扳手连到另一台隧道");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.filter.cleared", "[%s]面的过滤已清空");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.link.none", "[%s]面：未绑定");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.link.info", "[%s]面 → [%s]面 @ %s");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.link.selected", "已选中[%1$s]面 %2$s（发送方），扳手右键另一台隧道的面完成绑定");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.config", "空间折跃隧道");
+        // B15 配置界面：与 B9/B10 共用同一套面板外观后，这两条文案改成 lang，界面里不再硬编码中文
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.config.export_filter", "出口过滤");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.config.unset", "未设置");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.link.unmatched", "已设频率 %2$s，但对端未配对");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.link.cancel", "已取消选择");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.link.unbound", "[%1$s]面 %2$s 已解绑");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.link.done", "已绑定 [%1$s %2$s] → [%3$s %4$s]（箭头=物品流向）");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.link.gone", "选中的隧道已不存在");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.dir.north", "北");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.dir.east", "东");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.dir.south", "南");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.dir.west", "西");
+        // 上下两面不接传送带：单独一条提示，避免顶面被当成"未绑定"。
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.dir.up", "上");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.dir.down", "下");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.link.not_bindable",
+                "[%s]面接不了传送带，只有四个侧面能绑定");
+        add("block." + AvaritiaSingularityStressMod.MODID + ".warp_tunnel.link.no_belt",
+                "[%s]面没有传送带，这里没得绑");
         // [B11 雪藏] B11 无线流体传输器名称：整体雪藏。
         // add(ModBlocks.WIRELESS_FLUID_TRANSMITTER_SENDER.get(), "无线流体传输器(输出端)");
         // add(ModBlocks.WIRELESS_FLUID_TRANSMITTER_RECEIVER.get(), "无线流体传输器(接收端)");
@@ -98,6 +135,8 @@ public class ModLanguageProviderZhCn extends LanguageProvider {
         add(prefix + "wireless.status.sending", "传输中(输出端)");
         add(prefix + "wireless.status.receiving", "供电中(接收端)");
         add(prefix + "wireless.status.receive_idle", "等待输出端推送");
+        // B20：刚放置/刚改频率、还没跑过第一次无线 tick 时的过渡态
+        add(prefix + "wireless.status.pending", "检测中…");
         // [B11 雪藏] B11 流体桥接诊断文案：整体雪藏。
         // // B11 流体桥接诊断(键名 = WirelessFluidBridge.BridgeStatus 的小写名)
         // add(prefix + "wireless.fluid.status.unbound", "未绑定频率");
@@ -139,5 +178,31 @@ public class ModLanguageProviderZhCn extends LanguageProvider {
         add("gui.avaritia_singularity_stress.wireless.receive_limit", "接收上限");
         add("gui.avaritia_singularity_stress.wireless.priority", "优先级");
 
+        // ===== B20 无线配置界面：运行状态区 + 套用频率卡 =====
+        // 状态文案复用 wireless.status.*（与护目镜同一套，避免两处措辞漂移）
+        add("gui.avaritia_singularity_stress.wireless.status_line", "状态：%s");
+        add("gui.avaritia_singularity_stress.wireless.bridge_flow", "桥流量：%s su");
+        add("gui.avaritia_singularity_stress.wireless.net_line", "网络 产/耗/闲：%s/%s/%s");
+        add("gui.avaritia_singularity_stress.wireless.peers_ok", "同频道 1 台 · 范围 %s 格");
+        // B23：并流/分流合法化后，拓扑改为如实报数量
+        add("gui.avaritia_singularity_stress.wireless.peers_targets", "对端 %s 个接收端 · 范围 %s 格");
+        add("gui.avaritia_singularity_stress.wireless.peers_sources", "同频道 %s 个输出端 · 范围 %s 格");
+        add("gui.avaritia_singularity_stress.wireless.peers_none", "范围内没有同频道设备（%s 格）");
+        add("gui.avaritia_singularity_stress.wireless.peers_ambiguous", "同频道 %s 台：歧义，已停机");
+        add("gui.avaritia_singularity_stress.wireless.peers_pending", "同频道设备：检测中…");
+        add("gui.avaritia_singularity_stress.wireless.apply_card", "套用频率卡");
+        add("gui.avaritia_singularity_stress.wireless.apply_card.no_card", "主手没有频率卡");
+        add("gui.avaritia_singularity_stress.wireless.apply_card.unset", "频率卡没有设置频道");
+        add("gui.avaritia_singularity_stress.wireless.apply_card.done", "已套用频道 %s");
+        // B21 档位转速滚轮（贴面，创造马达同款）
+        add("gui.avaritia_singularity_stress.wireless.gear_speed", "档位转速");
+        // B22 输出端百分比滚轮
+        add("gui.avaritia_singularity_stress.wireless.send_ratio", "送出占比");
+        // B9 外部输出：开启后接收端把物品吐到漏斗口外（便于落到传送带上），关闭则直接插入朝向容器
+        add("gui.avaritia_singularity_stress.wireless.external_output", "外部输出");
+        add(prefix + "wireless.goggles.gear_speed", "档位转速:%1$s RPM");
+
+
     }
 }
+

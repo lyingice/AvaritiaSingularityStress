@@ -2,9 +2,12 @@ package committee.nova.avaritia_singularity_stress.content.wireless;
 
 import java.util.UUID;
 
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
+
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 本模组自定义的无线频率绑定契约。
@@ -33,6 +36,22 @@ public interface IFrequencyBindable {
 
     /** 写入频率；实现方负责 clamp 到 0~9999 并触发 setChanged/sendData。 */
     void setFrequency(int frequency);
+
+    /**
+     * 按面读频率（B15 空间折跃隧道用：它的四面各自独立配对）。
+     * <p>
+     * 默认实现退化为整机频率，所以 B9/B10/B11 这些「一台机器一个频率」的设备不受影响。
+     *
+     * @param face 目标面；null 表示不指定面（走整机）
+     */
+    default int getFrequency(@Nullable Direction face) {
+        return getFrequency();
+    }
+
+    /** 按面写频率；默认退化为整机写入。 */
+    default void setFrequency(@Nullable Direction face, int frequency) {
+        setFrequency(frequency);
+    }
 
     /** @return 频道可见性。 */
     ChannelVisibility getVisibility();

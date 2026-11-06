@@ -39,50 +39,24 @@ public class ModLootTableProvider {
 
         @Override
         protected void generate() {
-            dropSelf(ModBlocks.EXTREME_MECHANICAL_CRAFTER.get());
-            dropSelf(ModBlocks.EXTREME_SMITHING_CRAFTER.get());
-            dropSelf(ModBlocks.SINGULARITY_ROTATION_SPEED_CONTROLLER.get());
-            dropSelf(ModBlocks.SINGULARITY_STABILIZER.get());
-            dropSelf(ModBlocks.KINETIC_NEUTRON_COLLECTOR.get());
-            dropSelf(ModBlocks.KINETIC_NEUTRON_COLLECTOR_DENSE.get());
-            dropSelf(ModBlocks.KINETIC_NEUTRON_COLLECTOR_ELITE.get());
-            dropSelf(ModBlocks.KINETIC_NEUTRON_COLLECTOR_ULTIMATE.get());
-            dropSelf(ModBlocks.KINETIC_NEUTRON_COMPRESSOR.get());
-            dropSelf(ModBlocks.KINETIC_NEUTRON_COMPRESSOR_DENSE.get());
-            dropSelf(ModBlocks.KINETIC_NEUTRON_COMPRESSOR_ELITE.get());
-            dropSelf(ModBlocks.KINETIC_NEUTRON_COMPRESSOR_ULTIMATE.get());
-            // B9 无线物品传输漏斗
-            dropSelf(ModBlocks.WIRELESS_ITEM_FUNNEL.get());
-            // B10 无线应力传输器（输出端 / 接收端）
-            dropSelf(ModBlocks.WIRELESS_STRESS_BRIDGE_SENDER.get());
-            dropSelf(ModBlocks.WIRELESS_STRESS_BRIDGE_RECEIVER.get());
-            // [B11 雪藏] B11 无线流体传输器：整体雪藏。
-            // // B11 无线流体传输器（输出端 / 接收端）
-            // dropSelf(ModBlocks.WIRELESS_FLUID_TRANSMITTER_SENDER.get());
-            // dropSelf(ModBlocks.WIRELESS_FLUID_TRANSMITTER_RECEIVER.get());
+            // 全量 dropSelf：新增方块自动有掉落表，不再手抄清单。
+            // 手抄清单踩过两次：漏了包壳方块 -> "Created block loot tables for non-blocks"；
+            // 加回方块却没加进 generate -> "Missing loottable"。
+            for (Block block : ModBlocks.BLOCKS.getEntries().stream()
+                    .map(holder -> (Block) holder.get())
+                    .toList()) {
+                dropSelf(block);
+            }
         }
 
         @Override
         protected Iterable<Block> getKnownBlocks() {
-            return List.of(
-                    ModBlocks.EXTREME_MECHANICAL_CRAFTER.get(),
-                    ModBlocks.EXTREME_SMITHING_CRAFTER.get(),
-                    ModBlocks.SINGULARITY_ROTATION_SPEED_CONTROLLER.get(),
-                    ModBlocks.SINGULARITY_STABILIZER.get(),
-                    ModBlocks.KINETIC_NEUTRON_COLLECTOR.get(),
-                    ModBlocks.KINETIC_NEUTRON_COLLECTOR_DENSE.get(),
-                    ModBlocks.KINETIC_NEUTRON_COLLECTOR_ELITE.get(),
-                    ModBlocks.KINETIC_NEUTRON_COLLECTOR_ULTIMATE.get(),
-                    ModBlocks.KINETIC_NEUTRON_COMPRESSOR.get(),
-                    ModBlocks.KINETIC_NEUTRON_COMPRESSOR_DENSE.get(),
-                    ModBlocks.KINETIC_NEUTRON_COMPRESSOR_ELITE.get(),
-                    ModBlocks.KINETIC_NEUTRON_COMPRESSOR_ULTIMATE.get(),
-                    ModBlocks.WIRELESS_ITEM_FUNNEL.get(),
-                    ModBlocks.WIRELESS_STRESS_BRIDGE_SENDER.get(),
-                    ModBlocks.WIRELESS_STRESS_BRIDGE_RECEIVER.get()
-                    // [B11 雪藏] ModBlocks.WIRELESS_FLUID_TRANSMITTER_SENDER.get(),
-                    // [B11 雪藏] ModBlocks.WIRELESS_FLUID_TRANSMITTER_RECEIVER.get()
-            );
+            // 不再手抄方块清单：手抄的那份曾经漏掉全部包壳方块，导致 runData 直接抛
+            // "Created block loot tables for non-blocks"（BlockLootSubProvider.generate 校验）。
+            // 直接取 DeferredRegister 的全部条目，新加方块自动纳入。
+            return ModBlocks.BLOCKS.getEntries().stream()
+                    .map(holder -> (Block) holder.get())
+                    .toList();
         }
 
         // ===== 以下为常用写法备忘(直接在 generate() 里调用)=====

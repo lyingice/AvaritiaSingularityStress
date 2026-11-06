@@ -19,3 +19,8 @@
 # ============ 必须进版本库 ============
 # docs/ —— 只写给人读的正式文档（设计稿、测试指南、教程、开发约定），受版本控制。
 # 约定：人类内容写 docs/（进 git），AI 内容写 agent/（不进 git）。
+/dsh-create-mode/
+/dsh-pendulum-mcp/
+/artifacts/
+/pendulum/
+/docs/

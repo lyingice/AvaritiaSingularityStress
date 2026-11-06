@@ -2,6 +2,7 @@ package committee.nova.avaritia_singularity_stress.init.registry;
 
 import committee.nova.avaritia_singularity_stress.AvaritiaSingularityStressMod;
 import committee.nova.avaritia_singularity_stress.content.equipment.extendoGrip.NeutronExtendoGripItem;
+import committee.nova.avaritia_singularity_stress.content.kinetics.belt.warp_tunnel.WarpTunnelItem;
 import committee.nova.avaritia_singularity_stress.content.wireless.frequency_card.WirelessFrequencyCardItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
@@ -84,6 +85,34 @@ public class ModItems {
     public static final Supplier<Item> WIRELESS_STRESS_BRIDGE_RECEIVER = blockItem(
             "wireless_stress_bridge_receiver", ModBlocks.WIRELESS_STRESS_BRIDGE_RECEIVER);
 
+    /** B19 炽骨立方机壳（独立机壳方块）。 */
+    public static final Supplier<Item> BLAZE_CUBE_CASING = blockItem(
+            "blaze_cube_casing", ModBlocks.BLAZE_CUBE_CASING);
+    /** B19 炽骨立方机壳包壳轴。 */
+    public static final Supplier<Item> BLAZE_CUBE_ENCASED_SHAFT = blockItem(
+            "blaze_cube_encased_shaft", ModBlocks.BLAZE_CUBE_ENCASED_SHAFT);
+    public static final Supplier<Item> BLAZE_CUBE_ENCASED_COGWHEEL = blockItem(
+            "blaze_cube_encased_cogwheel", ModBlocks.BLAZE_CUBE_ENCASED_COGWHEEL);
+    public static final Supplier<Item> BLAZE_CUBE_ENCASED_LARGE_COGWHEEL = blockItem(
+            "blaze_cube_encased_large_cogwheel", ModBlocks.BLAZE_CUBE_ENCASED_LARGE_COGWHEEL);
+    /** B18 水晶矩阵机壳包壳轴。 */
+    public static final Supplier<Item> CRYSTAL_MATRIX_ENCASED_SHAFT = blockItem(
+            "crystal_matrix_encased_shaft", ModBlocks.CRYSTAL_MATRIX_ENCASED_SHAFT);
+
+    /** B18 水晶矩阵机壳包壳齿轮（小 / 大）。 */
+    public static final Supplier<Item> CRYSTAL_MATRIX_ENCASED_COGWHEEL = blockItem(
+            "crystal_matrix_encased_cogwheel", ModBlocks.CRYSTAL_MATRIX_ENCASED_COGWHEEL);
+    public static final Supplier<Item> CRYSTAL_MATRIX_ENCASED_LARGE_COGWHEEL = blockItem(
+            "crystal_matrix_encased_large_cogwheel", ModBlocks.CRYSTAL_MATRIX_ENCASED_LARGE_COGWHEEL);
+
+    /** B17 中子传动杆已删除：改用 B18 的水晶矩阵机壳封装，不再单独提供该物品。 */
+
+    /** B15 空间折跃隧道（自定义 BlockItem：放置时校验"下方必须是水平传送带"）。 */
+    public static final Supplier<Item> WARP_TUNNEL = ITEMS.register(
+            "warp_tunnel",
+            () -> new WarpTunnelItem(ModBlocks.WARP_TUNNEL.get(), new Item.Properties())
+    );
+
     // [B11 雪藏] B11 无线流体传输器物品：整体雪藏。
     // /** B11 无线流体传输器·输出端 / 接收端。 */
     // public static final Supplier<Item> WIRELESS_FLUID_TRANSMITTER_SENDER = blockItem(
@@ -100,3 +129,6 @@ public class ModItems {
         // 仅用于触发类加载，实际注册由 DeferredRegister 自动处理
     }
 }
+
+
+

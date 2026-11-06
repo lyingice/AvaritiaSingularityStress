@@ -1,5 +1,6 @@
 {
   "parent": "create:block/funnel/block_vertical",
+  "render_type": "minecraft:cutout",
   "textures": {
     "base": "avaritia_singularity_stress:block/machine/wireless/funnel_base",
     "direction": "avaritia_singularity_stress:block/machine/wireless/funnel_direction",

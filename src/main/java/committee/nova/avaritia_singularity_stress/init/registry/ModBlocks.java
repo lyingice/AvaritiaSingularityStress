@@ -3,6 +3,12 @@ package committee.nova.avaritia_singularity_stress.init.registry;
 import committee.nova.avaritia_singularity_stress.AvaritiaSingularityStressMod;
 import committee.nova.avaritia_singularity_stress.content.extreme_mechanical_crafter.ExtremeMechanicalCrafterBlock;
 import committee.nova.avaritia_singularity_stress.content.extreme_smithing_crafter.ExtremeSmithingCrafterBlock;
+import committee.nova.avaritia_singularity_stress.content.kinetics.belt.warp_tunnel.WarpTunnelBlock;
+import committee.nova.avaritia_singularity_stress.content.kinetics.link.BlazeCubeCasingBlock;
+import committee.nova.avaritia_singularity_stress.content.kinetics.link.BlazeCubeEncasedCogwheelBlock;
+import committee.nova.avaritia_singularity_stress.content.kinetics.link.BlazeCubeEncasedShaftBlock;
+import committee.nova.avaritia_singularity_stress.content.kinetics.link.CrystalMatrixEncasedCogwheelBlock;
+import committee.nova.avaritia_singularity_stress.content.kinetics.link.CrystalMatrixEncasedShaftBlock;
 import committee.nova.avaritia_singularity_stress.content.kinetic_neutron_collector.KineticNeutronCollectorBlock;
 import committee.nova.avaritia_singularity_stress.content.kinetic_neutron_compressor.KineticNeutronCompressorBlock;
 import committee.nova.avaritia_singularity_stress.content.singularity_rotation_speed_controller.SingularityRotationSpeedControllerBlock;
@@ -134,6 +140,71 @@ public class ModBlocks {
             () -> new WirelessStressBridgeBlock(wirelessSolidProperties(), false)
     );
 
+    /** B15 空间折跃隧道:单方块、单端口、一面两槽(折跃槽 / 物流槽)。 */
+    public static final Supplier<Block> WARP_TUNNEL = BLOCKS.register(
+            "warp_tunnel",
+            () -> new WarpTunnelBlock(tunnelProperties())
+    );
+
+    /**
+     * B18 水晶矩阵机壳包壳齿轮（小齿轮 / 大齿轮各一个注册名）。
+     * 属性照 Create 的 brass_encased_cogwheel。
+     */
+    public static final Supplier<Block> CRYSTAL_MATRIX_ENCASED_COGWHEEL = BLOCKS.register(
+            "crystal_matrix_encased_cogwheel",
+            () -> new CrystalMatrixEncasedCogwheelBlock(encasedKineticProperties(), false)
+    );
+    public static final Supplier<Block> CRYSTAL_MATRIX_ENCASED_LARGE_COGWHEEL = BLOCKS.register(
+            "crystal_matrix_encased_large_cogwheel",
+            () -> new CrystalMatrixEncasedCogwheelBlock(encasedKineticProperties(), true)
+    );
+
+    /** 包壳类方块共用属性：金属色、无遮挡、非实心（与 Create 的包壳齿轮一致）。 */
+    private static BlockBehaviour.Properties encasedKineticProperties() {
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+                .mapColor(MapColor.METAL)
+                .noOcclusion()
+                .forceSolidOff();
+    }
+
+    /** B19 炽骨立方机壳：独立机壳方块，纹理走本包 block/blaze_cube_casing。 */
+    public static final Supplier<Block> BLAZE_CUBE_CASING = BLOCKS.register(
+            "blaze_cube_casing",
+            () -> new BlazeCubeCasingBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK))
+    );
+    /** B19 炽骨立方机壳包壳轴（外壳 = 本模组的 blaze_cube_casing）。 */
+    public static final Supplier<Block> BLAZE_CUBE_ENCASED_SHAFT = BLOCKS.register(
+            "blaze_cube_encased_shaft",
+            () -> new BlazeCubeEncasedShaftBlock(encasedKineticProperties())
+    );
+    /** B19 炽骨立方机壳包壳齿轮（小）：与水晶矩阵同构，只把外壳换成 blaze_cube_casing。 */
+    public static final Supplier<Block> BLAZE_CUBE_ENCASED_COGWHEEL = BLOCKS.register(
+            "blaze_cube_encased_cogwheel",
+            () -> new BlazeCubeEncasedCogwheelBlock(encasedKineticProperties(), false)
+    );
+    /** B19 炽骨立方机壳包壳大齿轮。 */
+    public static final Supplier<Block> BLAZE_CUBE_ENCASED_LARGE_COGWHEEL = BLOCKS.register(
+            "blaze_cube_encased_large_cogwheel",
+            () -> new BlazeCubeEncasedCogwheelBlock(encasedKineticProperties(), true)
+    );
+    /**
+     * B18 水晶矩阵机壳包壳轴：用 AvaritiaIntegration 的 crystal_matrix_casing 封装传动杆。
+     * 属性照 Create 的 brass_encased_shaft。
+     */
+    public static final Supplier<Block> CRYSTAL_MATRIX_ENCASED_SHAFT = BLOCKS.register(
+            "crystal_matrix_encased_shaft",
+            () -> new CrystalMatrixEncasedShaftBlock(
+                    BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+                            .mapColor(MapColor.METAL)
+                            .noOcclusion()
+                            .forceSolidOff()
+            )
+    );
+
+    // [B17 中子传动杆已删除] 用户定稿：不再单独做中子传动杆，改用 B18 的「水晶矩阵机壳封装」。
+    // 恢复时需要：NeutronShaftBlock 类、NEUTRON_SHAFT 方块/物品/方块实体、neutron_shaft blockstate
+    // 与空模型、掉落表、语言条目，以及 ModVisualizers 里的视觉注册。
+
     // [B11 雪藏] B11 无线流体传输器：整体雪藏，注册取消（恢复见 fluid_transmitter 包头部说明）。
     // /** B11 无线流体传输器·输出端(Sender):output=true。 */
     // public static final Supplier<Block> WIRELESS_FLUID_TRANSMITTER_SENDER = BLOCKS.register(
@@ -159,7 +230,20 @@ public class ModBlocks {
                 .strength(4.0F, 8.0F);
     }
 
+    /**
+     * B15 隧道属性:隧道不是满方块（模型是罩在带子上的壳），必须 noOcclusion，
+     * 否则贴带子放置时会被判定为遮挡而剔除邻面。
+     */
+    private static BlockBehaviour.Properties tunnelProperties() {
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.ANDESITE)
+                .strength(3.0F, 6.0F)
+                .noOcclusion();
+    }
+
     public static void init() {
         // 仅用于触发类加载
     }
 }
+
+
+

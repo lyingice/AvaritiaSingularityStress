@@ -80,8 +80,9 @@ public class FrequencyCardScreen extends AbstractContainerScreen<FrequencyCardMe
         frequencyField.setResponder(this::onFrequencyTyped);
         addRenderableWidget(frequencyField);
 
-        // ---- 私有 / 公开 切换按钮 ----
-        modeButton = Button.builder(modeLabel(menu.getVisibility()), b -> {
+        // ---- 私有 / 公开 切换按钮（统一贴图按钮）----
+        modeButton = new SpriteButton(font, leftPos + MODE_BTN_X, topPos + MODE_BTN_Y, MODE_BTN_W, MODE_BTN_H,
+                modeLabel(menu.getVisibility()), b -> {
                     IFrequencyBindable.ChannelVisibility next =
                             menu.getVisibility() == IFrequencyBindable.ChannelVisibility.PRIVATE
                                     ? IFrequencyBindable.ChannelVisibility.PUBLIC
@@ -89,9 +90,7 @@ public class FrequencyCardScreen extends AbstractContainerScreen<FrequencyCardMe
                     ModPackets.sendToServer(new FrequencyCardPacket(
                             menu.getHand().ordinal(), FrequencyCardPacket.Action.SET_VISIBILITY,
                             next.ordinal()));
-                })
-                .bounds(leftPos + MODE_BTN_X, topPos + MODE_BTN_Y, MODE_BTN_W, MODE_BTN_H)
-                .build();
+                });
         addRenderableWidget(modeButton);
 
         // ---- 6 组预设按钮 ----

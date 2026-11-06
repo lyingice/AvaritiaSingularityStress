@@ -1,6 +1,7 @@
 package committee.nova.avaritia_singularity_stress.init.registry;
 
 import committee.nova.avaritia_singularity_stress.AvaritiaSingularityStressMod;
+import committee.nova.avaritia_singularity_stress.content.kinetics.belt.warp_tunnel.WarpTunnelConfigPacket;
 import committee.nova.avaritia_singularity_stress.content.wireless.WirelessConfigPacket;
 import committee.nova.avaritia_singularity_stress.content.wireless.frequency_card.FrequencyCardPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -18,6 +19,10 @@ public final class ModPackets {
         // B9 / B10 / B11 共用的方块配置包
         AvaritiaSingularityStressMod.addNetworkMessage(
                 WirelessConfigPacket.TYPE, WirelessConfigPacket.STREAM_CODEC, WirelessConfigPacket.HANDLER);
+        // B15 空间折跃隧道的配置包（改面频率 / 出口过滤）
+        AvaritiaSingularityStressMod.addNetworkMessage(
+                WarpTunnelConfigPacket.TYPE, WarpTunnelConfigPacket.STREAM_CODEC, WarpTunnelConfigPacket.HANDLER);
+
     }
 
     public static void sendToServer(CustomPacketPayload payload) {

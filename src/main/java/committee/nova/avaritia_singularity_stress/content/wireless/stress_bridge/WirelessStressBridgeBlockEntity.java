@@ -1,6 +1,7 @@
 package committee.nova.avaritia_singularity_stress.content.wireless.stress_bridge;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -11,17 +12,21 @@ import javax.annotation.Nullable;
 import com.simibubi.create.content.kinetics.KineticNetwork;
 import com.simibubi.create.content.kinetics.base.GeneratingKineticBlockEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
 import committee.nova.avaritia_singularity_stress.AvaritiaSingularityStressMod;
 import committee.nova.avaritia_singularity_stress.content.wireless.IFrequencyBindable;
 import committee.nova.avaritia_singularity_stress.content.wireless.IWirelessConfigHolder;
 import committee.nova.avaritia_singularity_stress.content.wireless.WirelessConfig;
+import committee.nova.avaritia_singularity_stress.content.wireless.WirelessConfigMenu;
 import committee.nova.avaritia_singularity_stress.content.wireless.WirelessDevice;
 import committee.nova.avaritia_singularity_stress.content.wireless.WirelessGuiKind;
 import committee.nova.avaritia_singularity_stress.content.wireless.WirelessKey;
 import committee.nova.avaritia_singularity_stress.content.wireless.WirelessNetwork;
 import committee.nova.avaritia_singularity_stress.content.wireless.WirelessService;
+import committee.nova.avaritia_singularity_stress.content.wireless.WirelessStatusView;
 import committee.nova.avaritia_singularity_stress.init.registry.ModBlockEntities;
+import committee.nova.avaritia_singularity_stress.init.registry.ModMenus;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -31,6 +36,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -74,6 +81,13 @@ public class WirelessStressBridgeBlockEntity extends GeneratingKineticBlockEntit
     /** |转速| 小于此值视为静止，避免归一化除零。 */
     private static final float MIN_SPEED = 1.0e-4F;
 
+    /** B23：分配算法里的"视为 0"阈值，避免浮点残渣导致无限补齐。 */
+    private static final float FLOAT_EPS = 1.0e-4F;
+
+    /** B21 档位转速的默认值与上限，取值与创造马达一致（{@code CreativeMotorBlockEntity.java:39-40}）。 */
+    private static final int DEFAULT_GEAR_SPEED = 16;
+    private static final int MAX_GEAR_SPEED = 256;
+
     /**
      * 接收端的看门狗超时（tick）。
      * <p>
@@ -92,10 +106,21 @@ public class WirelessStressBridgeBlockEntity extends GeneratingKineticBlockEntit
     // 护目镜调试字段：只进客户端同步包，不落盘（每 5 tick 现算的瞬时值）
     private static final String KEY_BRIDGE_STRESS = "BridgeSu";
     private static final String KEY_SOURCE_SPEED = "SourceSpeed";
+
+    /** B23：并流账本（每路来源的 SU），key 是来源坐标的 {@code asLong()} 字符串。 */
+    private static final String KEY_INFLOW = "Inflow";
     private static final String KEY_STATUS = "BridgeStatus";
     private static final String KEY_NET_CAPACITY = "NetCapacity";
     private static final String KEY_NET_STRESS = "NetStress";
     private static final String KEY_NET_IDLE = "NetIdle";
+
+    /**
+     * B20：同频道设备台数（界面状态区用）。
+     * <p>
+     * 必须单独同步：客户端没有频道表，算不出这个数
+     * （{@code WirelessService.java:77} 对客户端直接返回空列表）。
+     */
+    private static final String KEY_CANDIDATES = "PeerCandidates";
 
     /**
      * 护目镜里的"现在到底在干什么/为什么没在传"。
@@ -132,10 +157,13 @@ public class WirelessStressBridgeBlockEntity extends GeneratingKineticBlockEntit
 
     // ===================== 配置（GUI 两个数值框） =====================
 
-    /** 输出端 = 每次最多分给对端多少 SU（splitSuLimit）；接收端 = 自己最多接收多少 SU（drainSuLimit）。 */
+    /**
+     * 输出端 = 本次最多送出多少 SU（还要与 B22 的百分比滑块取小）；
+     * 接收端 = <b>所有来源合计</b>最多接收多少 SU（B23 并流时按"剩余额度"分配给各 sender）。
+     */
     private int primaryAmount;
 
-    /** 接收端 = 优先级（本方案一对一，暂不参与计算）。 */
+    /** 接收端 = 优先级。B23 的分流策略定为「均分+补齐」，本字段仍不参与计算，整体雪藏。 */
     private int secondaryAmount;
 
     /**
@@ -144,11 +172,21 @@ public class WirelessStressBridgeBlockEntity extends GeneratingKineticBlockEntit
      */
     private float bridgeStress;
 
-    /** Receiver 记下源网转速，作为自己网络的发电转速。 */
+    /** Receiver 记下最近一路来源的转速，仅供护目镜参考（B21 起本网转速由档位决定）。 */
     private float sourceSpeed;
 
-    /** 接收端最后一次收到推送的游戏刻，用于看门狗（见 {@link #RECEIVER_TIMEOUT_TICKS}）。 */
-    private long lastPushGameTime;
+    /**
+     * B23：每路来源的流入量（接收端专用）。key = 来源 sender 的坐标，value = 它这一路给的实际 SU。
+     * <p>
+     * <b>为什么必须换成 Map</b>：单值 {@code bridgeStress} 撑不住「多对一并流」——
+     * 两个 sender 会互相覆盖，最后只剩一个的值生效。
+     * 对外仍然只暴露 {@link #bridgeStress}（= 本 Map 的求和），
+     * 所以 {@code calculateAddedStressCapacity()} 与 KineticNetwork 的记账约定完全不用改。
+     */
+    private final Map<BlockPos, Float> inflow = new HashMap<>();
+
+    /** B23：每路来源的最后推送时刻；看门狗按来源逐个清理，不再一刀切。 */
+    private final Map<BlockPos, Long> inflowTime = new HashMap<>();
 
     // ===================== 护目镜调试数据（服务端每 5 tick 刷新，随 NBT 同步给客户端） =====================
 
@@ -159,6 +197,13 @@ public class WirelessStressBridgeBlockEntity extends GeneratingKineticBlockEntit
     private float debugCapacity;
     private float debugStress;
     private float debugIdle;
+
+    /**
+     * B20：同频道设备台数，服务端每 5 tick 算一次随同步包下发。
+     * <p>
+     * {@code -1} = 还没算过（刚放置/刚改频率），界面据此显示「检测中」而不是「0 台」。
+     */
+    private int debugCandidates = -1;
 
     public WirelessStressBridgeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -181,10 +226,51 @@ public class WirelessStressBridgeBlockEntity extends GeneratingKineticBlockEntit
 
     // ===================== 生命周期 =====================
 
+    /**
+     * B21：档位转速滚轮（只有接收端有，见 {@link #addBehaviours}）。
+     * <p>
+     * 用 Create 现成的 {@link com.simibubi.create.content.kinetics.motor.KineticScrollValueBehaviour}
+     * 而不是自绘 —— 玩家在世界里看到的、按住右键拖出来的，就是创造马达那一颗滚轮。
+     */
+    public WirelessStressBridgeGearBehaviour gearSpeed;
+
+    /** B22：输出端的「占用源网空闲百分比」滚轮（0~100）。 */
+    public WirelessStressBridgeSendRatioBehaviour sendRatio;
+
+    @Override
+    public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
+        super.addBehaviours(behaviours);
+        // 两端各挂一颗，语义不同、互不干扰：
+        //   输出端 = 愿意用掉源网空闲的百分之多少（B22）
+        //   接收端 = 本网跑多快的档位（B21）
+        if (isOutputSide()) {
+            sendRatio = new WirelessStressBridgeSendRatioBehaviour(
+                    Component.translatable("gui.avaritia_singularity_stress.wireless.send_ratio"),
+                    this, new WirelessStressBridgeValueBox());
+            sendRatio.between(0, 100);
+            sendRatio.value = 100;
+            behaviours.add(sendRatio);
+            return;
+        }
+        gearSpeed = new WirelessStressBridgeGearBehaviour(
+                Component.translatable("gui.avaritia_singularity_stress.wireless.gear_speed"),
+                this, new WirelessStressBridgeValueBox());
+        gearSpeed.between(-MAX_GEAR_SPEED, MAX_GEAR_SPEED);
+        gearSpeed.value = DEFAULT_GEAR_SPEED;
+        // 改档位要立刻让所在网络重新记账，否则本网容量对不上（见 getGeneratedSpeed / calculateAddedStressCapacity）
+        gearSpeed.withCallback(i -> updateGeneratedRotation());
+        behaviours.add(gearSpeed);
+    }
+
     @Override
     public void initialize() {
         super.initialize();
         WirelessNetwork.add(this);
+        // B21：照抄 CreativeMotorBlockEntity.initialize 的判断（CreativeMotorBlockEntity.java:61-65）——
+        // 网络恢复/首次加载时要把自己的转速与容量重新推给网络，否则本网会按旧账本算。
+        if (!isOutputSide() && (!hasSource() || getGeneratedSpeed() > getTheoreticalSpeed())) {
+            updateGeneratedRotation();
+        }
     }
 
     @Override
@@ -196,6 +282,24 @@ public class WirelessStressBridgeBlockEntity extends GeneratingKineticBlockEntit
     /** @return true = 输出端（Sender，扣源网）；false = 接收端（Receiver，给本网加容量）。 */
     public boolean isOutputSide() {
         return getBlockState().getValue(WirelessStressBridgeBlock.OUTPUT);
+    }
+
+    /**
+     * B21：打开配置面板。
+     * <p>
+     * <b>为什么抽成 BE 方法</b>：现在有两个入口 —— 方块的 {@code useWithoutItem}
+     * （点在非滚轮区域）与滚轮的 {@code onShortInteract}（点在滚轮区域，短按）。
+     * 两处各写一遍 {@code openMenu} 迟早会漂移（例如只改了一边的 title）。
+     */
+    public void openConfigMenu(Player player) {
+        if (level == null || level.isClientSide) {
+            return;
+        }
+        player.openMenu(new SimpleMenuProvider(
+                (id, inventory, p) -> new WirelessConfigMenu(
+                        ModMenus.WIRELESS_CONFIG.get(), id, inventory, this),
+                Component.translatable(getBlockState().getBlock().getDescriptionId())),
+                buffer -> buffer.writeBlockPos(getBlockPos()));
     }
 
     // ===================== 界面布局提示（客户端 GUI 读，见 WirelessGuiKind） =====================
@@ -211,10 +315,43 @@ public class WirelessStressBridgeBlockEntity extends GeneratingKineticBlockEntit
         return isOutputSide();
     }
 
+    /**
+     * B20：界面状态区的数据来源。
+     * <p>
+     * 这些字段原本只喂给护目镜（{@link #addToGoggleTooltip}），界面一个都没读到 ——
+     * 于是"改了频率还是不传"时，玩家开界面完全看不到原因。这里把它们一次性交出去。
+     * <p>
+     * {@code debugStatus == UNBOUND} 但已经有频率 = 还没跑过第一次无线 tick（刚放置 / 刚改频率），
+     * 这时报「未绑定频率」会误导（频率明明就摆在界面上），所以单独报 pending。
+     */
+    @Nullable
+    @Override
+    public WirelessStatusView statusView() {
+        String key = hasFrequency() && debugStatus == BridgeStatus.UNBOUND
+                ? WirelessStatusView.PENDING
+                : debugStatus.name().toLowerCase(Locale.ROOT);
+        return new WirelessStatusView(key, bridgeStress, debugCapacity, debugStress, debugIdle,
+                debugCandidates, WirelessConfig.stressBridgeRange());
+    }
+
     // ===================== 动能：源网 / 接收端网 =====================
 
     /**
-     * 接收端用源网转速作为本网发电转速；X ≤ 0 时返回 0（本网停转）。
+     * 接收端本网的「档位转速」（B21）。
+     * <p>
+     * <b>语义（已确认：档位，不是油门）</b>：滚轮设定的是<b>本网跑多快</b>，
+     * 而不是「传输多少」。所以跨桥的实际 SU 依然是 X（见 {@link #bridgeStress}），
+     * 改变的只是 X 被折算成「每 RPM 多少容量」的比例：
+     * <ul>
+     *   <li>容量（每 RPM）= X / |档位转速|，本网转速 = 档位转速；</li>
+     *   <li>两者相乘 = X，<b>实际容量守恒</b>，不会因为调档而凭空多出或少掉应力；</li>
+     *   <li>而本网每台设备的消耗 = 它的每RPM值 × |档位转速|，
+     *       所以档位越低，同一批设备吃掉的 SU 越少 —— 同一份 X 能带动更多设备，代价是转速慢。</li>
+     * </ul>
+     * 这就是「用转速分流」的落点：同一个 X 可以按玩家需要切成「高速小力矩」或「低速大力矩」。
+     * <p>
+     * <b>与改动前（跟随源网转速）的区别</b>：原来这里返回 {@link #sourceSpeed}，
+     * 玩家无法干预；现在 {@code sourceSpeed} 只作为护目镜上的参考值显示。
      * <p>
      * 输出端恒返回 0 —— 它是纯粹的应力消费者，不能成为源。
      */
@@ -223,7 +360,7 @@ public class WirelessStressBridgeBlockEntity extends GeneratingKineticBlockEntit
         if (isOutputSide() || bridgeStress <= 0F) {
             return 0F;
         }
-        return sourceSpeed;
+        return gearSpeed == null ? 0F : gearSpeed.getValue();
     }
 
     /**
@@ -297,7 +434,34 @@ public class WirelessStressBridgeBlockEntity extends GeneratingKineticBlockEntit
         }
         tickReceiverWatchdog();
         // 接收端：本网就是它供的那张网；桥流量 > 0 说明正在供电
-        updateDebug(receiverStatus(), liveNetwork());
+        // B23：报「同频道里有几个输出端」。原来报的是全部同频道设备数，
+        // 并流之后那个数字会把别的接收端也算进来，玩家看不出到底有几个源在喂自己。
+        updateDebug(receiverStatus(), liveNetwork(), peerSenderCount());
+    }
+
+    /** B23：同频道里的输出端数量（接收端用来看「有几个源在喂我」）。 */
+    private int peerSenderCount() {
+        int count = 0;
+        for (WirelessDevice device : WirelessService.candidates(this, WirelessConfig.stressBridgeRange())) {
+            if (device instanceof WirelessStressBridgeBlockEntity bridge && bridge.isOutputSide()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
+     * B20：同频道（含可见性/所有者过滤）且距离内的设备台数。
+     * <p>
+     * 输出端原来调 {@code WirelessService.findPeer}，它内部会调 {@code candidates} 再判
+     * {@code size() == 1}（{@code WirelessService.java:62-65}）。这里让 tickSender 直接拿列表、
+     * 自己判唯一性，**同一次遍历**既得到对端、又得到台数，不额外扫一遍频道表。
+     * <p>
+     * 注意：频道表与距离判定都只在服务端可用（{@code WirelessService.java:77}），
+     * 所以这个值必须靠 {@code sendData()} 同步给客户端界面看。
+     */
+    private int peerCount() {
+        return WirelessService.candidates(this, WirelessConfig.stressBridgeRange()).size();
     }
 
     private BridgeStatus receiverStatus() {
@@ -323,13 +487,16 @@ public class WirelessStressBridgeBlockEntity extends GeneratingKineticBlockEntit
     /**
      * 刷新护目镜数据；有变化才发包（每 5 tick 最多一次）。
      *
-     * @param network 用来显示产能/消耗/空闲的网络；null 表示读不到（保持上次的数值）
+     * @param status     当前状态
+     * @param network    用来显示产能/消耗/空闲的网络；null 表示读不到（保持上次的数值）
+     * @param candidates B20：同频道设备台数（界面用）；-1 表示本次不更新
      */
-    private void updateDebug(BridgeStatus status, @Nullable KineticNetwork network) {
+    private void updateDebug(BridgeStatus status, @Nullable KineticNetwork network, int candidates) {
         BridgeStatus oldStatus = debugStatus;
         float oldCapacity = debugCapacity;
         float oldStress = debugStress;
         float oldIdle = debugIdle;
+        int oldCandidates = debugCandidates;
 
         debugStatus = status;
         if (network != null) {
@@ -337,39 +504,111 @@ public class WirelessStressBridgeBlockEntity extends GeneratingKineticBlockEntit
             debugStress = network.calculateStress();
             debugIdle = Math.max(0F, debugCapacity - debugStress);
         }
+        if (candidates >= 0) {
+            debugCandidates = candidates;
+        }
 
         if (oldStatus != debugStatus || !Mth.equal(oldCapacity, debugCapacity)
-                || !Mth.equal(oldStress, debugStress) || !Mth.equal(oldIdle, debugIdle)) {
+                || !Mth.equal(oldStress, debugStress) || !Mth.equal(oldIdle, debugIdle)
+                || oldCandidates != debugCandidates) {
             sendData();
         }
     }
 
-    /** 接收端看门狗：太久没收到推送就当作桥已断开，清零并停转本站网络。 */
+    /**
+     * B23：接收端看门狗。按<b>每路来源</b>独立计时，超时就把那一路从并流里摘掉。
+     * <p>
+     * 改动前只有一个 {@code lastPushGameTime}，多源时会互相刷新计时器 ——
+     * 拆掉其中一个 sender，只要另一个还在推，残留的那份 X 就永远清不掉（凭空供电）。
+     */
     private void tickReceiverWatchdog() {
-        if (bridgeStress <= 0F) {
+        if (inflow.isEmpty()) {
             return;
         }
-        if (level.getGameTime() - lastPushGameTime <= RECEIVER_TIMEOUT_TICKS) {
+        long now = level.getGameTime();
+        boolean anyExpired = inflowTime.values().removeIf(t -> now - t > RECEIVER_TIMEOUT_TICKS);
+        if (!anyExpired) {
             return;
         }
-        receiveFromPeer(0F, 0F);
+        // 时刻表里没有的，就是已经超时的来源；把它们从流入表里一并摘掉
+        inflow.keySet().removeIf(pos -> !inflowTime.containsKey(pos));
+        recomputeInflow();
+    }
+
+    /** B23：把所有来源的流入量求和，写回 {@link #bridgeStress} 并推给本网。 */
+    private void recomputeInflow() {
+        float sum = sumInflow();
+        if (sum == bridgeStress) {
+            return;
+        }
+        bridgeStress = sum;
+        updateGeneratedRotation();
+        setChanged();
+        sendData();
+    }
+
+    private float sumInflow() {
+        float sum = 0F;
+        for (float value : inflow.values()) {
+            sum += value;
+        }
+        return sum;
     }
 
     /**
-     * Sender：算 X → 找唯一对端 → 直接调它的 receiveFromPeer。
+     * B23：除指定来源之外，当前从其它来源已收到的总量。
+     * <p>
+     * 给 sender 算「这个接收端还剩多少接收额度」用。并流时如果只看单路，
+     * 三个 sender 各自都以为对方的上限是全部额度，加起来就会突破玩家设的「接收上限」。
+     * 服务端是单线程、BE 又是同一个对象，所以先 tick 的 sender 写进 {@link #inflow} 后，
+     * 后 tick 的 sender 立刻就能看见 —— 不需要额外的全局协调。
+     *
+     * @param source 调用方 sender 自己的坐标（要排除掉，因为里面可能还留着它上一 tick 的旧值）
+     */
+    public float inflowTotalExcept(BlockPos source) {
+        float sum = 0F;
+        for (Map.Entry<BlockPos, Float> entry : inflow.entrySet()) {
+            if (!entry.getKey().equals(source)) {
+                sum += entry.getValue();
+            }
+        }
+        return sum;
+    }
+
+    /**
+     * Sender：算本次可送出的 X → 分给频道内全部接收端（均分+补齐）→ 各自 {@code receiveFromPeer}。
+     * <p>
+     * <b>B23 改了什么</b>：原来「候选≠1 就停机」（{@code WirelessService.java:62-65} 的一对一语义），
+     * 现在改成「频道内所有接收端都算对端」。于是同一个频道可以：
+     * <ul>
+     *   <li>N 个 sender → 1 个 receiver：接收端按来源累加（并流）；</li>
+     *   <li>1 个 sender → N 个 receiver：这里的分配算法负责切分（分流）。</li>
+     * </ul>
+     * 频道（频率 + 可见性 + owner）仍然是边界：{@code WirelessService.candidates} 已经按
+     * {@code WirelessKey} 过滤过，所以跨频道不会互相污染。
      */
     private void tickSender() {
         if (!hasFrequency()) {
             setBridgeStress(0F);
-            updateDebug(BridgeStatus.UNBOUND, null);
+            updateDebug(BridgeStatus.UNBOUND, null, 0);
             return;
         }
+        // 一次遍历同时做两件事：挑出接收端、给界面报台数
+        List<WirelessDevice> candidates = WirelessService.candidates(this, WirelessConfig.stressBridgeRange());
+        List<WirelessStressBridgeBlockEntity> receivers = new ArrayList<>();
+        for (WirelessDevice device : candidates) {
+            if (device instanceof WirelessStressBridgeBlockEntity bridge && !bridge.isOutputSide()) {
+                receivers.add(bridge);
+            }
+        }
+        int peerCount = receivers.size();
+
         // 设计定稿：getOrCreateNetwork() 可能为 null，必须先 hasNetwork()，拿到后仍要判空
         KineticNetwork network = liveNetwork();
         if (network == null) {
             // 没接轴 / 接错面：整台机器不在任何应力网络里，源网无从谈起
             setBridgeStress(0F);
-            updateDebug(BridgeStatus.NO_NETWORK, null);
+            updateDebug(BridgeStatus.NO_NETWORK, null, peerCount);
             return;
         }
 
@@ -383,35 +622,86 @@ public class WirelessStressBridgeBlockEntity extends GeneratingKineticBlockEntit
         float headroom = network.calculateCapacity() - (network.calculateStress() - ownStress);
         if (headroom <= 0F) {
             setBridgeStress(0F);
-            updateDebug(BridgeStatus.NO_HEADROOM, network);
+            updateDebug(BridgeStatus.NO_HEADROOM, network, peerCount);
             return;
         }
 
-        float x = Math.min(headroom, limitOf(primaryAmount));
+        // B22：两个来源取小 —— 百分比滑块决定"愿意用掉多少空闲"，GUI 数字框决定"绝对上限"
+        float ratio = sendRatio == null ? 1F : Mth.clamp(sendRatio.getValue(), 0, 100) / 100F;
+        float x = Math.min(headroom * ratio, limitOf(primaryAmount));
         if (x <= 0F) {
             setBridgeStress(0F);
-            updateDebug(BridgeStatus.NO_HEADROOM, network);
+            updateDebug(BridgeStatus.NO_HEADROOM, network, peerCount);
             return;
         }
 
-        WirelessDevice peer = WirelessService.findPeer(this, WirelessConfig.stressBridgeRange());
-        if (!(peer instanceof WirelessStressBridgeBlockEntity receiver) || receiver.isOutputSide()) {
+        if (receivers.isEmpty()) {
             setBridgeStress(0F);
-            updateDebug(BridgeStatus.NO_PEER, network);
+            updateDebug(BridgeStatus.NO_PEER, network, 0);
             return;
         }
 
-        // drainSuLimit = 接收端自己的接收上限
-        x = Math.min(x, limitOf(receiver.getPrimaryAmount()));
-        if (x <= 0F) {
-            setBridgeStress(0F);
-            updateDebug(BridgeStatus.NO_PEER, network);
-            return;
-        }
+        float delivered = distributeToReceivers(receivers, x);
+        // 全部被各端的「接收上限」挡回来时，实际送出是 0，状态要如实报 NO_PEER 而不是「传输中」
+        setBridgeStress(delivered);
+        updateDebug(delivered > 0F ? BridgeStatus.SENDING : BridgeStatus.NO_PEER, network, peerCount);
+    }
 
-        receiver.receiveFromPeer(x, getTheoreticalSpeed());
-        setBridgeStress(x);
-        updateDebug(BridgeStatus.SENDING, network);
+    /**
+     * B23 分流算法：<b>均分 + 补齐</b>（用户已确认的策略）。
+     * <p>
+     * 做法与"往几个不同容量的杯子里平倒水"一致：
+     * <ol>
+     *   <li>第一轮把所有还能接的接收端均分一份，每份不超过它自己的「接收上限」；</li>
+     *   <li>有人吃不下的份额会剩下来，第二轮再均分给仍有余量的人；</li>
+     *   <li>两轮后仍然剩的就留给自己（不浪费，也不外溢到别的频道）。</li>
+     * </ol>
+     * 两轮足够：均分后最多只有"部分人吃饱"一种情况需要补，补完要么分完、要么全都吃饱。
+     * <p>
+     * 关键：<b>每一路每个 tick 都要调用一次 {@code receiveFromPeer}</b>（哪怕是 0），
+     * 因为接收端靠这次调用刷新"这一路还活着"的心跳；漏掉就会被看门狗判成断开。
+     *
+     * @return 实际送出去的 SU 总量（≤ total）
+     */
+    private float distributeToReceivers(List<WirelessStressBridgeBlockEntity> receivers, float total) {
+        int n = receivers.size();
+        float[] caps = new float[n];
+        float[] got = new float[n];
+        for (int i = 0; i < n; i++) {
+            // 接收端自己的接收上限；0/负数 = 不限。
+            // B23：并流时还要扣掉「别的 sender 已经喂进去的量」，让上限约束的是总和而不是单路。
+            WirelessStressBridgeBlockEntity receiver = receivers.get(i);
+            float cap = limitOf(receiver.getPrimaryAmount());
+            if (cap != Float.MAX_VALUE) {
+                cap = Math.max(0F, cap - receiver.inflowTotalExcept(getBlockPos()));
+            }
+            caps[i] = cap;
+        }
+        float remaining = total;
+        for (int round = 0; round < 2 && remaining > FLOAT_EPS; round++) {
+            int hungry = 0;
+            for (int i = 0; i < n; i++) {
+                if (got[i] < caps[i] - FLOAT_EPS) {
+                    hungry++;
+                }
+            }
+            if (hungry == 0) {
+                break;
+            }
+            float share = remaining / hungry;
+            for (int i = 0; i < n; i++) {
+                if (got[i] >= caps[i] - FLOAT_EPS) {
+                    continue;
+                }
+                float give = Math.min(share, caps[i] - got[i]);
+                got[i] += give;
+                remaining -= give;
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            receivers.get(i).receiveFromPeer(getBlockPos(), got[i], getTheoreticalSpeed());
+        }
+        return Math.max(0F, total - remaining);
     }
 
     /**
@@ -439,27 +729,33 @@ public class WirelessStressBridgeBlockEntity extends GeneratingKineticBlockEntit
     }
 
     /**
-     * 接收端入口：记下 (X, 源网转速)，并用 {@code updateGeneratedRotation()} 把新容量/新转速推给自己那张网。
+     * B23：接收端入口（多源并流）。记下「这一路来源给了多少 SU」，再按求和推给本网。
      * <p>
-     * 设计定稿：不要自己调 {@code notifyStressCapacityChange} / {@code updateStressFor} /
+     * <b>为什么要带 {@code source}</b>：一对一时只有一路，单值就够；并流后必须按来源分别记账，
+     * 否则第二个 sender 会把第一个覆盖掉，而且看门狗也没法单独清理某一路。
+     * <p>
+     * 设计定稿仍然有效：不要自己调 {@code notifyStressCapacityChange} / {@code updateStressFor} /
      * {@code network.updateStress()} —— {@code updateGeneratedRotation()} 内部已经做了这些。
+     *
+     * @param source 来源 sender 的坐标（作为并流账本的 key）
+     * @param su     这一路本次给的实际 SU；0 表示该来源停止供能
+     * @param speed  该来源的源网转速（B21 起只用于护目镜显示）
      */
-    public void receiveFromPeer(float su, float speed) {
+    public void receiveFromPeer(BlockPos source, float su, float speed) {
         if (level == null || level.isClientSide || isOutputSide()) {
             return;
         }
-        // 心跳：即使值没变也要刷新，否则看门狗会把正常的桥判成断开
-        lastPushGameTime = level.getGameTime();
+        // 心跳：即使值没变也要刷新，否则看门狗会把正常的一路判成断开
+        inflowTime.put(source, level.getGameTime());
         float clamped = Math.max(0F, su);
-        if (bridgeStress == clamped && sourceSpeed == speed) {
+        Float previous = inflow.put(source, clamped);
+        sourceSpeed = speed;
+        boolean unchanged = previous != null && previous.floatValue() == clamped
+                && bridgeStress == sumInflow();
+        if (unchanged) {
             return;
         }
-        bridgeStress = clamped;
-        sourceSpeed = speed;
-        updateGeneratedRotation();
-        setChanged();
-        // 让客户端护目镜拿到新的桥流量/源网转速
-        sendData();
+        recomputeInflow();
     }
 
     /** Sender 记下本次扣掉的 X，并把新的每-RPM 值推给源网。 */
@@ -576,12 +872,21 @@ public class WirelessStressBridgeBlockEntity extends GeneratingKineticBlockEntit
         // 不会因此"重启后凭空长期供电"：接收端看门狗在 20 tick 内收不到推送就会清零。
         tag.putFloat(KEY_BRIDGE_STRESS, bridgeStress);
         tag.putFloat(KEY_SOURCE_SPEED, sourceSpeed);
+        // B23：并流账本也要落盘，理由同上 —— 容量来自 Σinflow，
+        // 只存总和而不存明细的话，重载后看门狗没法按来源清理（会整块清零或整块残留）。
+        CompoundTag inflowTag = new CompoundTag();
+        for (Map.Entry<BlockPos, Float> entry : inflow.entrySet()) {
+            inflowTag.putFloat(Long.toString(entry.getKey().asLong()), entry.getValue());
+        }
+        tag.put(KEY_INFLOW, inflowTag);
         // 其余只进客户端同步包：它们每 5 tick 就会被重算，落盘没有意义
         if (clientPacket) {
             tag.putInt(KEY_STATUS, debugStatus.ordinal());
             tag.putFloat(KEY_NET_CAPACITY, debugCapacity);
             tag.putFloat(KEY_NET_STRESS, debugStress);
             tag.putFloat(KEY_NET_IDLE, debugIdle);
+            // B20：候选台数只在服务端算得出来，必须随同步包下发
+            tag.putInt(KEY_CANDIDATES, debugCandidates);
         }
     }
 
@@ -595,11 +900,28 @@ public class WirelessStressBridgeBlockEntity extends GeneratingKineticBlockEntit
         // getGeneratedSpeed() 为 0，KineticNetwork.addSilently 的减法会对不上账）
         bridgeStress = tag.getFloat(KEY_BRIDGE_STRESS);
         sourceSpeed = tag.getFloat(KEY_SOURCE_SPEED);
+        // B23：并流明细（key = 来源坐标的 asLong 字符串）。时刻表不落盘 ——
+        // 重启后各路 sender 会在 RECEIVER_TIMEOUT_TICKS 内重新心跳，届时自动补齐。
+        inflow.clear();
+        inflowTime.clear();
+        CompoundTag inflowTag = tag.getCompound(KEY_INFLOW);
+        for (String key : inflowTag.getAllKeys()) {
+            try {
+                inflow.put(BlockPos.of(Long.parseLong(key)), inflowTag.getFloat(key));
+            } catch (NumberFormatException ignored) {
+                // 脏数据直接跳过，不让一个坏键把整个方块实体的加载搞崩
+            }
+        }
+        if (!inflow.isEmpty()) {
+            bridgeStress = sumInflow();
+        }
         if (clientPacket) {
             debugStatus = statusByIndex(tag.getInt(KEY_STATUS));
             debugCapacity = tag.getFloat(KEY_NET_CAPACITY);
             debugStress = tag.getFloat(KEY_NET_STRESS);
             debugIdle = tag.getFloat(KEY_NET_IDLE);
+            // 旧存档/旧包没有这个键：保持 -1（界面显示"检测中"），别误报 0 台
+            debugCandidates = tag.contains(KEY_CANDIDATES) ? tag.getInt(KEY_CANDIDATES) : -1;
         }
     }
 
@@ -638,7 +960,12 @@ public class WirelessStressBridgeBlockEntity extends GeneratingKineticBlockEntit
                     .forGoggles(tooltip, 1);
         } else {
             lang().translate("wireless.goggles.frequency", String.valueOf(getFrequency()),
-                            lang().translate(visibilityLangKey()))
+                            // 注意：这里必须用 Component.translatable（完整键），不能交给 lang().translate。
+                            // lang() 是 new LangBuilder(MODID)（见本文件末尾 lang()），translate 会自动前缀
+                            // "avaritia_singularity_stress."，而 visibilityLangKey() 本身就是完整键，
+                            // 结果会拼成 …avaritia_singularity_stress.gui.avaritia_singularity_stress.visibility.private
+                            // ——实机护目镜里显示成一长串原始键名，就是这个原因。
+                            Component.translatable(visibilityLangKey()))
                     .style(ChatFormatting.GRAY)
                     .forGoggles(tooltip, 1);
         }
@@ -647,9 +974,9 @@ public class WirelessStressBridgeBlockEntity extends GeneratingKineticBlockEntit
                 .style(statusColor())
                 .forGoggles(tooltip, 1);
 
-        // 唯一的接网面：轴/齿轮只能贴这一面，直接报出它朝哪边
+        // 唯一的接网面：轴/齿轮只能贴这一面，直接报出它朝哪边（= FACING，见方块类注释）
         lang().translate("wireless.goggles.io_face",
-                        getBlockState().getValue(WirelessStressBridgeBlock.FACING).getOpposite().getName())
+                        getBlockState().getValue(WirelessStressBridgeBlock.FACING).getName())
                 .style(ChatFormatting.DARK_GRAY)
                 .forGoggles(tooltip, 1);
 
@@ -676,14 +1003,24 @@ public class WirelessStressBridgeBlockEntity extends GeneratingKineticBlockEntit
                             LangNumberFormat.format(Math.abs(sourceSpeed)))
                     .style(ChatFormatting.DARK_GRAY)
                     .forGoggles(tooltip, 1);
+            // B21：档位转速（本网实际跑多快）。与上面那行「源网转速」并列，
+            // 因为两者现在可以不同 —— 源网转速只是参考，档位才是本网真值。
+            lang().translate("wireless.goggles.gear_speed",
+                            String.valueOf(gearSpeed == null ? 0 : Math.abs(gearSpeed.getValue())))
+                    .style(ChatFormatting.GRAY)
+                    .forGoggles(tooltip, 1);
             lang().translate("wireless.goggles.limit_receive", limitText(primaryAmount))
                     .style(ChatFormatting.DARK_GRAY)
                     .forGoggles(tooltip, 1);
-            if (secondaryAmount > 0) {
-                lang().translate("wireless.goggles.priority", String.valueOf(secondaryAmount))
-                        .style(ChatFormatting.DARK_GRAY)
-                        .forGoggles(tooltip, 1);
-            }
+            // [B20 雪藏] 优先级字段当前不参与任何计算（见 secondaryAmount 字段注释）。
+            // 在护目镜里显示一个"设了也不生效"的数字，比不显示更误导，故整体注释保留。
+            // 恢复优先级功能时，把下面这段原样放回即可（注意别再同时出现在界面里，
+            // 除非真的接进 tickSender 的分配逻辑）。
+            // if (secondaryAmount > 0) {
+            //     lang().translate("wireless.goggles.priority", String.valueOf(secondaryAmount))
+            //             .style(ChatFormatting.DARK_GRAY)
+            //             .forGoggles(tooltip, 1);
+            // }
         }
         return true;
     }
@@ -723,7 +1060,7 @@ public class WirelessStressBridgeBlockEntity extends GeneratingKineticBlockEntit
                 + (isOutputSide() ? "输出端 SENDER(output=true，扣源网)" : "接收端 RECEIVER(output=false，给本网加容量)")
                 + " state=" + getBlockState());
         out.add("接入面(唯一的输入输出面)="
-                + getBlockState().getValue(WirelessStressBridgeBlock.FACING).getOpposite()
+                + getBlockState().getValue(WirelessStressBridgeBlock.FACING)
                 + "  ← 只有这一面能接轴/齿轮；其余五面不连网");
         out.add("频率=" + (hasFrequency() ? String.valueOf(frequency) : "未绑定(-1)")
                 + " 可见性=" + visibility
@@ -734,9 +1071,15 @@ public class WirelessStressBridgeBlockEntity extends GeneratingKineticBlockEntit
                 + " secondary(优先级，本方案未用)=" + secondaryAmount + "   [0 或负数 = 不限]");
         out.add("跨桥量 bridgeStress(X)=" + bridgeStress
                 + " sourceSpeed=" + sourceSpeed
-                + " 看门狗 lastPushGameTime=" + lastPushGameTime
-                + (level == null ? "" : " age=" + (level.getGameTime() - lastPushGameTime)
-                        + " tick (> " + RECEIVER_TIMEOUT_TICKS + " 会清零)")
+                // B23：并流后看门狗是按来源计时的，这里把每路的状态都摊开
+                + " 并流来源=" + inflow.size() + " 路"
+                + (inflow.isEmpty() ? ""
+                        : " " + inflow.entrySet().stream()
+                                .map(e -> e.getKey() + "=" + e.getValue()
+                                        + "@" + (level == null ? "?" :
+                                                (level.getGameTime() - inflowTime.getOrDefault(e.getKey(), 0L)) + "t"))
+                                .toList())
+                + " (> " + RECEIVER_TIMEOUT_TICKS + " tick 无推送的那路会被摘掉)"
                 + " debugStatus=" + debugStatus.name());
         out.add("动能: hasNetwork=" + hasNetwork() + " networkId=" + network
                 + " speed=" + speed + " theoreticalSpeed=" + getTheoreticalSpeed()

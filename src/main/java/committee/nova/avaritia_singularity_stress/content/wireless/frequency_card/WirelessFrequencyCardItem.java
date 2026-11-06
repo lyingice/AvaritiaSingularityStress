@@ -18,6 +18,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -148,7 +149,10 @@ public class WirelessFrequencyCardItem extends Item {
             return InteractionResult.SUCCESS;
         }
 
-        if (!bindable.hasFrequency()) {
+        // 【实机修正 2026-11-05】原来判的是 bindable.hasFrequency()（**机器**有没有频率），
+        // 机器未绑定时直接走「未设置」分支返回 —— 卡上明明有频率却写不进去，
+        // 玩家看到的就是「机器是空的，频率卡就失效了」。这里要判的是**卡**有没有频率。
+        if (getFrequency(card) == IFrequencyBindable.NO_FREQUENCY) {
             player.displayClientMessage(
                     Component.translatable(
                                     "item.avaritia_singularity_stress.wireless_frequency_card.unset")
@@ -156,7 +160,7 @@ public class WirelessFrequencyCardItem extends Item {
                     true);
             return InteractionResult.SUCCESS;
         }
-        applyTo(bindable, card);
+        applyTo(bindable, card, context.getClickedFace());
         player.displayClientMessage(
                 Component.translatable(
                         "item.avaritia_singularity_stress.wireless_frequency_card.write",
@@ -165,8 +169,9 @@ public class WirelessFrequencyCardItem extends Item {
         return InteractionResult.SUCCESS;
     }
 
-    private static void applyTo(IFrequencyBindable bindable, ItemStack card) {
-        bindable.setFrequency(getFrequency(card));
+    private static void applyTo(IFrequencyBindable bindable, ItemStack card, Direction face) {
+        // 传 face：B15 隧道是「按面」的，右键哪一面就写哪一面；其它设备走 default 退化成整机
+        bindable.setFrequency(face, getFrequency(card));
         bindable.setVisibility(getVisibility(card));
         if (bindable instanceof BlockEntity be) {
             be.setChanged();

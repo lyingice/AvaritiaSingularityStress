@@ -27,12 +27,19 @@ import net.neoforged.neoforge.network.handling.IPayloadHandler;
  * @param visibility   可见性序号
  * @param amount1      第一个数量字段
  * @param amount2      第二个数量字段
+ * @param externalOutput B9 接收端是否改为向漏斗口外吐出物品（默认 false = 直接插入容器）
  */
-public record WirelessConfigPacket(BlockPos pos, int frequency, int visibility, int amount1, int amount2)
+public record WirelessConfigPacket(BlockPos pos, int frequency, int visibility, int amount1, int amount2,
+        boolean externalOutput)
         implements CustomPacketPayload {
 
-    /** 交互距离上限（格），与 Create 的 20 保持一致。 */
-    private static final double MAX_RANGE = 20.0D;
+    /**
+     * 交互距离上限（格），与 Create 的 20 保持一致。
+     * <p>
+     * B20：{@code WirelessConfigMenu.stillValid} 也用这个常量，两处必须同源 ——
+     * 否则会出现「界面还开着、玩家继续改值，却被服务端静默丢弃」。
+     */
+    static final double MAX_RANGE = 20.0D;
 
     public static final CustomPacketPayload.Type<WirelessConfigPacket> TYPE =
             new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(
@@ -45,6 +52,8 @@ public record WirelessConfigPacket(BlockPos pos, int frequency, int visibility, 
                     ByteBufCodecs.VAR_INT, WirelessConfigPacket::visibility,
                     ByteBufCodecs.VAR_INT, WirelessConfigPacket::amount1,
                     ByteBufCodecs.VAR_INT, WirelessConfigPacket::amount2,
+                    // B9 外部输出：只有无线漏斗会读这个位，其余设备忽略（默认实现空操作）
+                    ByteBufCodecs.BOOL, WirelessConfigPacket::externalOutput,
                     WirelessConfigPacket::new);
 
     public static final IPayloadHandler<WirelessConfigPacket> HANDLER = WirelessConfigPacket::handle;
@@ -82,6 +91,8 @@ public record WirelessConfigPacket(BlockPos pos, int frequency, int visibility, 
             holder.setVisibility(IFrequencyBindable.ChannelVisibility.byIndex(packet.visibility()));
             holder.setPrimaryAmount(packet.amount1());
             holder.setSecondaryAmount(packet.amount2());
+            // B9 外部输出：默认实现是空操作，所以 B10/B15 收到也不会被这条影响
+            holder.setExternalOutput(packet.externalOutput());
 
             // 把新值回灌给所有正在看这个 GUI 的玩家
             if (blockEntity instanceof com.simibubi.create.foundation.blockEntity.SyncedBlockEntity synced) {

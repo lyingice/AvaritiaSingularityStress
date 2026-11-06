@@ -3,6 +3,7 @@ package committee.nova.avaritia_singularity_stress.init.registry;
 import committee.nova.avaritia_singularity_stress.AvaritiaSingularityStressMod;
 import committee.nova.avaritia_singularity_stress.content.extreme_mechanical_crafter.ExtremeMechanicalCrafterBlockEntity;
 import committee.nova.avaritia_singularity_stress.content.extreme_smithing_crafter.ExtremeSmithingCrafterBlockEntity;
+import committee.nova.avaritia_singularity_stress.content.kinetics.belt.warp_tunnel.WarpTunnelBlockEntity;
 import committee.nova.avaritia_singularity_stress.content.kinetic_neutron_collector.KineticNeutronCollectorBlockEntity;
 import committee.nova.avaritia_singularity_stress.content.kinetic_neutron_compressor.KineticNeutronCompressorBlockEntity;
 import committee.nova.avaritia_singularity_stress.content.singularity_rotation_speed_controller.SingularityRotationSpeedControllerBlockEntity;
@@ -10,6 +11,8 @@ import committee.nova.avaritia_singularity_stress.content.singularity_stabilizer
 // [B11 雪藏] import committee.nova.avaritia_singularity_stress.content.wireless.fluid_transmitter.WirelessFluidTransmitterBlockEntity;
 import committee.nova.avaritia_singularity_stress.content.wireless.item_funnel.WirelessItemFunnelBlockEntity;
 import committee.nova.avaritia_singularity_stress.content.wireless.stress_bridge.WirelessStressBridgeBlockEntity;
+import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockEntity;
+import com.simibubi.create.content.kinetics.simpleRelays.SimpleKineticBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -96,6 +99,85 @@ public class ModBlockEntities {
                     () -> BlockEntityType.Builder.of(
                             WirelessItemFunnelBlockEntity::create,
                             ModBlocks.WIRELESS_ITEM_FUNNEL.get()
+                    ).build(null)
+            );
+
+    /** B15 空间折跃隧道:单注册名、单端口。 */
+    public static final Supplier<BlockEntityType<WarpTunnelBlockEntity>> WARP_TUNNEL =
+            BLOCK_ENTITIES.register(
+                    "warp_tunnel",
+                    () -> BlockEntityType.Builder.of(
+                            WarpTunnelBlockEntity::create,
+                            ModBlocks.WARP_TUNNEL.get()
+                    ).build(null)
+            );
+
+    // [B17 中子传动杆已删除] 原本这里注册 NEUTRON_SHAFT。用户改用 B18 的封装方案,
+    // 删掉整个方块与它的方块实体类型;恢复时照下面 CRYSTAL_ENCASED_SHAFT 的写法加回。
+
+    /** B18 水晶矩阵机壳包壳轴:同样复用 Create 的 BracketedKineticBlockEntity。 */
+    public static final Supplier<BlockEntityType<BracketedKineticBlockEntity>> CRYSTAL_ENCASED_SHAFT =
+            BLOCK_ENTITIES.register(
+                    "crystal_matrix_encased_shaft",
+                    () -> BlockEntityType.Builder.of(
+                            (pos, state) -> new BracketedKineticBlockEntity(
+                                    ModBlockEntities.CRYSTAL_ENCASED_SHAFT.get(), pos, state),
+                            ModBlocks.CRYSTAL_MATRIX_ENCASED_SHAFT.get()
+                    ).build(null)
+            );
+
+
+    /** B19 炽骨立方机壳包壳轴：复用 Create 的 BracketedKineticBlockEntity。 */
+    public static final Supplier<BlockEntityType<BracketedKineticBlockEntity>> BLAZE_CUBE_ENCASED_SHAFT =
+            BLOCK_ENTITIES.register(
+                    "blaze_cube_encased_shaft",
+                    () -> BlockEntityType.Builder.of(
+                            (pos, state) -> new BracketedKineticBlockEntity(
+                                    ModBlockEntities.BLAZE_CUBE_ENCASED_SHAFT.get(), pos, state),
+                            ModBlocks.BLAZE_CUBE_ENCASED_SHAFT.get()
+                    ).build(null)
+            );
+    /** B19 炽骨立方机壳包壳齿轮（小 / 大）：各用自己的类型（T07：不能沿用 Create 的类型）。 */
+    public static final Supplier<BlockEntityType<SimpleKineticBlockEntity>> BLAZE_ENCASED_COGWHEEL =
+            BLOCK_ENTITIES.register(
+                    "blaze_cube_encased_cogwheel",
+                    () -> BlockEntityType.Builder.of(
+                            (pos, state) -> new SimpleKineticBlockEntity(
+                                    ModBlockEntities.BLAZE_ENCASED_COGWHEEL.get(), pos, state),
+                            ModBlocks.BLAZE_CUBE_ENCASED_COGWHEEL.get()
+                    ).build(null)
+            );
+
+    public static final Supplier<BlockEntityType<SimpleKineticBlockEntity>> BLAZE_ENCASED_LARGE_COGWHEEL =
+            BLOCK_ENTITIES.register(
+                    "blaze_cube_encased_large_cogwheel",
+                    () -> BlockEntityType.Builder.of(
+                            (pos, state) -> new SimpleKineticBlockEntity(
+                                    ModBlockEntities.BLAZE_ENCASED_LARGE_COGWHEEL.get(), pos, state),
+                            ModBlocks.BLAZE_CUBE_ENCASED_LARGE_COGWHEEL.get()
+                    ).build(null)
+            );
+
+    /** B18 水晶矩阵机壳包壳齿轮（小 / 大）：必须各有一个自己的方块实体类型。
+     *  不能沿用 Create 的 ENCASED_COGWHEEL——那个类型只登记了 Create 自己的两个方块，
+     *  NeoForge 的 BlockEntity.validateBlockState 会判定"类型不承认该方块"并直接崩服。 */
+    public static final Supplier<BlockEntityType<SimpleKineticBlockEntity>> CRYSTAL_ENCASED_COGWHEEL =
+            BLOCK_ENTITIES.register(
+                    "crystal_matrix_encased_cogwheel",
+                    () -> BlockEntityType.Builder.of(
+                            (pos, state) -> new SimpleKineticBlockEntity(
+                                    ModBlockEntities.CRYSTAL_ENCASED_COGWHEEL.get(), pos, state),
+                            ModBlocks.CRYSTAL_MATRIX_ENCASED_COGWHEEL.get()
+                    ).build(null)
+            );
+
+    public static final Supplier<BlockEntityType<SimpleKineticBlockEntity>> CRYSTAL_ENCASED_LARGE_COGWHEEL =
+            BLOCK_ENTITIES.register(
+                    "crystal_matrix_encased_large_cogwheel",
+                    () -> BlockEntityType.Builder.of(
+                            (pos, state) -> new SimpleKineticBlockEntity(
+                                    ModBlockEntities.CRYSTAL_ENCASED_LARGE_COGWHEEL.get(), pos, state),
+                            ModBlocks.CRYSTAL_MATRIX_ENCASED_LARGE_COGWHEEL.get()
                     ).build(null)
             );
 

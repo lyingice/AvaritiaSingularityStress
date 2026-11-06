@@ -3,6 +3,7 @@ package committee.nova.avaritia_singularity_stress.init.registry;
 import committee.nova.avaritia_singularity_stress.AvaritiaSingularityStressMod;
 import committee.nova.avaritia_singularity_stress.content.kinetic_neutron_collector.KineticNeutronCollectorMenu;
 import committee.nova.avaritia_singularity_stress.content.kinetic_neutron_compressor.KineticNeutronCompressorMenu;
+import committee.nova.avaritia_singularity_stress.content.kinetics.belt.warp_tunnel.WarpTunnelConfigMenu;
 import committee.nova.avaritia_singularity_stress.content.wireless.WirelessConfigMenu;
 import committee.nova.avaritia_singularity_stress.content.wireless.frequency_card.FrequencyCardMenu;
 import net.minecraft.core.registries.Registries;
@@ -39,6 +40,17 @@ public class ModMenus {
                     () -> IMenuTypeExtension.create(
                             (id, inventory, buf) -> new WirelessConfigMenu(
                                     ModMenus.WIRELESS_CONFIG.get(), id, inventory, buf)));
+
+    /**
+     * B15 空间折跃隧道的配置界面（四面频率 + 出口过滤）。
+     * <p>
+     * 工厂签名必须是 {@code (int id, Inventory inv, RegistryFriendlyByteBuf buf)}，所以用 lambda 显式构造。
+     */
+    public static final Supplier<MenuType<WarpTunnelConfigMenu>> WARP_TUNNEL_CONFIG =
+            MENUS.register("warp_tunnel_config",
+                    () -> IMenuTypeExtension.create(
+                            (id, inventory, buf) -> new WarpTunnelConfigMenu(
+                                    ModMenus.WARP_TUNNEL_CONFIG.get(), id, inventory, buf)));
 
     public static void init() {
         // 仅用于触发类加载

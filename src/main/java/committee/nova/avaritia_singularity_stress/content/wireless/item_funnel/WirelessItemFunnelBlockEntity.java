@@ -1,10 +1,13 @@
 package committee.nova.avaritia_singularity_stress.content.wireless.item_funnel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
+import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.simibubi.create.content.logistics.funnel.AbstractFunnelBlock;
 import com.simibubi.create.content.logistics.funnel.FunnelBlock;
 import com.simibubi.create.content.logistics.funnel.FunnelFilterSlotPositioning;
@@ -28,6 +31,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
@@ -59,10 +64,20 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 public class WirelessItemFunnelBlockEntity extends SmartBlockEntity
         implements IFrequencyBindable, WirelessDevice, IWirelessConfigHolder {
 
-    /** 每次操作搬运的物品数：1 个 / 5 tick，与漏斗的原生节流手感一致。 */
-    private static final int ITEMS_PER_OPERATION = 1;
+    /**
+     * 每次操作搬运的物品数：一整组（64 个）/ 5 tick。
+     * <p>
+     * 原先是 1 个 / 5 tick（照抄黄铜漏斗的手感），实测太慢；改成整组后
+     * 抽取端一次从容器里取满一组、接收端一次往容器里灌满一组。
+     * 真正的上限仍由两端的容器/缓存各自把关（{@code extractItem} 与
+     * {@code insertItemStacked} 都会自己截断），这里只是一个"请求量"。
+     */
+    private static final int ITEMS_PER_OPERATION = 64;
 
     private static final String KEY_CACHE = "Cache";
+
+    /** 吐出后多少 tick 内不再吸收自己吐出的物品（防吐-吸死循环）。 */
+    private static final int EJECT_REACQUIRE_DELAY = 10;
 
     // ===================== 频率（方块 NBT，按维度分区） =====================
 
@@ -75,6 +90,18 @@ public class WirelessItemFunnelBlockEntity extends SmartBlockEntity
 
     /** 抽取端缓存：抽取端把物品搬进这里，接收端从这里取走注入。 */
     private ItemStack cache = ItemStack.EMPTY;
+
+    /** B9 接收端出口：默认直接插入朝向容器，开启后改为向漏斗口外吐出 ItemEntity。 */
+    private boolean externalOutput;
+
+    /**
+     * 最近一次"向世界吐出物品"的 gameTime。
+     * <p>
+     * 用途只有一个：<b>防吐-吸死循环</b>。朝上的漏斗开启外部输出时，吐出的物品会正好落在
+     * 自己开口上方，重力把它带回方块内，entityInside 又立刻吸收、再吐出……
+     * 这个窗口内的掉落物不再被自己吸收，让物品有机会离开。
+     */
+    private long lastEjectTime = Long.MIN_VALUE / 2;
 
     public WirelessItemFunnelBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -91,6 +118,104 @@ public class WirelessItemFunnelBlockEntity extends SmartBlockEntity
         // 刻意不加 onlyActiveWhen：Create 自己的漏斗把过滤槽限定在 BRASS_FUNNEL 上，
         // 我们换成自己的方块后那个判定会恒 false，过滤槽就永远点不开。
         behaviours.add(new FilteringBehaviour(this, new FunnelFilterSlotPositioning()));
+
+        // Create 漏斗的传送带入口依赖 DirectBeltInputBehaviour；世界掉落物由方块的 entityInside 入口处理。
+        behaviours.add(new DirectBeltInputBehaviour(this)
+                .onlyInsertWhen(this::supportsDirectBeltInput)
+                .setInsertionHandler(this::handleDirectBeltInput));
+    }
+
+    // ===================== 收集（带子/隧道 → 缓存） =====================
+
+    /**
+     * 从哪一面收：照抄 Create 的 {@code FunnelBlockEntity.supportsDirectBeltInput}
+     * （{@code FunnelBlockEntity.java:288-296}）——不抽取、未通电、<b>口朝上</b>时才收。
+     * 口朝上意味着带子在漏斗上方经过，物品落进漏斗；横向/朝下的漏斗有自己的推取语义。
+     */
+    private boolean supportsDirectBeltInput(Direction side) {
+        BlockState state = getBlockState();
+        if (state == null) {
+            return false;
+        }
+        if (state.getValue(FunnelBlock.EXTRACTING) || state.getValue(FunnelBlock.POWERED)) {
+            return false;
+        }
+        return AbstractFunnelBlock.getFunnelFacing(state) == Direction.UP;
+    }
+
+    /**
+     * 端口统一入口（掉落物 / 手持插入 / 传送带都走这里）：把物品收进本漏斗缓存。
+     * <p>
+     * <b>为什么进缓存而不是直接插容器</b>：这台机器是<b>无线端口</b>，
+     * 缓存就是它的传输缓冲——发送端（extracting=true）的缓存会被对端接收端取走，
+     * 接收端的缓存由 {@link #flushReceiverCache} 每 tick 往本地容器/世界排。
+     * 之前要求"必须先有容器才吸收"，导致玩家把物品丢在没有容器、纯无线发送的漏斗上时
+     * <b>完全不吸收</b>（实机：铁锭一直躺在漏斗上）。
+     * <p>
+     * 不收过滤槽约束（"掉进来就收"），容量仍受一个整堆限制；收不下就把剩余退还给调用方，
+     * 由它们决定留在世界里还是退回传送带——绝不静默扣物品。
+     *
+     * @return 没被收下的剩余部分（空 = 全部收下）
+     */
+    public ItemStack absorbExternal(ItemStack incoming, boolean simulate) {
+        if (incoming.isEmpty() || getBlockState().getValue(FunnelBlock.POWERED)) {
+            return incoming;
+        }
+        // 刚吐出的物品别立刻又吸回来（朝上的漏斗会形成吐-吸死循环）
+        if (level != null && level.getGameTime() - lastEjectTime < EJECT_REACQUIRE_DELAY) {
+            return incoming;
+        }
+        // 收货前确认"有地方可去"，否则吸进缓存就是黑洞：
+        //   ① 自己有本地去处（前方容器 / 外部输出）；或
+        //   ② 频道里有一台有去处、且还有缓存空间的漏斗能接走。
+        // 两者都不成立时把物品留在世界（可见、可捡），不静默吞掉。
+        BlockState state = getBlockState();
+        if (!hasLocalSink(state) && !hasSinkPeerWithRoom(incoming)) {
+            return incoming;
+        }
+        int room = cacheRoom(incoming);
+        int moved = Math.min(room, incoming.getCount());
+        if (moved <= 0) {
+            return incoming;
+        }
+        if (!simulate) {
+            if (cache.isEmpty()) {
+                cache = incoming.copyWithCount(moved);
+            } else {
+                cache.grow(moved);
+            }
+            setChanged();
+            sendData();
+        }
+        return incoming.copyWithCount(incoming.getCount() - moved);
+    }
+
+
+    /**
+     * 带子把物品推进来：同样走端口统一入口 {@link #absorbExternal}（FilteringBehaviour 仍然生效，
+     * 这是玩家显式配置的白名单，与"掉落物无条件吸收"是两件事）。
+     *
+     * @return <b>没有被收下的部分</b>（缓存满/过滤不匹配时完整退回给 Create 传送带）
+     */
+    private ItemStack handleDirectBeltInput(TransportedItemStack stack, Direction side, boolean simulate) {
+        ItemStack incoming = stack.stack;
+        FilteringBehaviour filter = getBehaviour(FilteringBehaviour.TYPE);
+        if (filter != null && !filter.test(incoming)) {
+            return incoming;
+        }
+        return absorbExternal(incoming, simulate);
+    }
+
+    /** 缓存还能装几个这个物品：只装一种，封顶该物品的最大堆叠（通常是 64）。 */
+    private int cacheRoom(ItemStack incoming) {
+        int cap = incoming.getMaxStackSize();
+        if (cache.isEmpty()) {
+            return cap;
+        }
+        if (!ItemStack.isSameItemSameComponents(cache, incoming)) {
+            return 0;
+        }
+        return Math.max(0, cap - cache.getCount());
     }
 
     // ===================== 生命周期（注册幂等 / 注销跟随 invalidate） =====================
@@ -186,25 +311,171 @@ public class WirelessItemFunnelBlockEntity extends SmartBlockEntity
         WirelessNetwork.move(this);
     }
 
+    @Override
+    public boolean isExternalOutput() {
+        return externalOutput;
+    }
+
+    @Override
+    public void setExternalOutput(boolean value) {
+        if (externalOutput == value) {
+            return;
+        }
+        externalOutput = value;
+        setChanged();
+        sendData();
+    }
+
     // ===================== 搬运 =====================
 
+    /**
+     * 每 5 tick 的搬运调度（由 {@code WirelessLifecycle} 驱动）。
+     * <p>
+     * <b>B25：改成"有去处自己消化，没去处推给有去处的同频漏斗"。</b>
+     * 旧模型要求一台必须当发送端（抽取端）、另一台当接收端才动；玩家把物品丢进一台
+     * 默认（接收端）漏斗时，它既没有本地容器、也不会往外送，物品就卡在缓存里出不去
+     * （实机：铁锭浮在漏斗上方反复弹跳）。现在去向只由"有没有本地去处"决定。
+     */
     private void transfer() {
         if (level == null || level.isClientSide) {
             return;
         }
         BlockState state = getBlockState();
-        // 红石锁定（C 方案）：通电即整机停，抽取与注入都不做
         if (state.getValue(FunnelBlock.POWERED)) {
             return;
         }
-        if (!hasFrequency()) {
+        // 抽取端：先把朝向容器里的货拉进缓存（它朝的容器是"源"，不是去处）
+        if (state.getValue(FunnelBlock.EXTRACTING) && hasFrequency()) {
+            extractIntoCache(state);
+        }
+        if (cache.isEmpty()) {
             return;
         }
-        if (state.getValue(FunnelBlock.EXTRACTING)) {
-            extractIntoCache(state);
-        } else {
-            injectFromPeer(state);
+        // 自己没有去处：优先把货交给有去处的同频漏斗，别自己吐出来
+        if (!hasLocalSink(state) && pushCacheToPeer()) {
+            return;
         }
+        drainLocally(state);
+    }
+
+    /**
+     * 本端有没有"本地去处"（能把这批货放下并离开无线网络的地方）。
+     * <p>
+     * 抽取端朝向的容器是<b>货源</b>不是去处——否则刚抽出来就塞回去，来回打转。
+     * 所以只有"非抽取端 + 前方有容器"或"勾选了外部输出"才算去处。
+     */
+    private boolean hasLocalSink(BlockState state) {
+        if (externalOutput) {
+            return AbstractFunnelBlock.getFunnelFacing(state) != null;
+        }
+        return !state.getValue(FunnelBlock.EXTRACTING) && facingInventory(state) != null;
+    }
+
+    /** 把缓存推给一台有本地去处的同频漏斗；推出去了返回 true。 */
+    private boolean pushCacheToPeer() {
+        for (WirelessItemFunnelBlockEntity peer : peers()) {
+            if (!peer.hasLocalSink(peer.getBlockState())) {
+                continue;
+            }
+            FilteringBehaviour peerFilter = peer.getBehaviour(FilteringBehaviour.TYPE);
+            if (peerFilter != null && !peerFilter.test(cache)) {
+                continue;
+            }
+            int room = peer.cacheRoom(cache);
+            if (room <= 0) {
+                continue;
+            }
+            int moved = Math.min(room, cache.getCount());
+            if (peer.cache.isEmpty()) {
+                peer.cache = cache.copyWithCount(moved);
+            } else {
+                peer.cache.grow(moved);
+            }
+            cache.shrink(moved);
+            if (cache.isEmpty()) {
+                cache = ItemStack.EMPTY;
+            }
+            setChanged();
+            sendData();
+            peer.setChanged();
+            peer.sendData();
+            return true;
+        }
+        return false;
+    }
+
+    /** 同频、范围内、仍然存活的其它漏斗（本机不在结果里）。 */
+    private List<WirelessItemFunnelBlockEntity> peers() {
+        List<WirelessItemFunnelBlockEntity> result = new ArrayList<>();
+        if (!hasFrequency()) {
+            return result;
+        }
+        for (WirelessDevice device : WirelessService.candidates(this, WirelessConfig.itemFunnelRange())) {
+            if (device instanceof WirelessItemFunnelBlockEntity funnel && funnel != this && funnel.isAlive()) {
+                result.add(funnel);
+            }
+        }
+        return result;
+    }
+
+    /** 把缓存投到本地：外部输出→吐到世界；否则→塞前方容器。塞不下的留在缓存里重试。 */
+    private void drainLocally(BlockState state) {
+        if (cache.isEmpty()) {
+            return;
+        }
+        if (externalOutput) {
+            Direction facing = AbstractFunnelBlock.getFunnelFacing(state);
+            if (facing == null) {
+                return;
+            }
+            Vec3 center = Vec3.atCenterOf(worldPosition)
+                    .add(Vec3.atLowerCornerOf(facing.getNormal()).scale(0.65));
+            ItemEntity entity = new ItemEntity(level, center.x, center.y, center.z, cache.copy());
+            entity.setDefaultPickUpDelay();
+            // 朝上的漏斗会把货吐在自己开口正上方，直接掉回去就变成"吐-吸"循环；
+            // 给一点向上初速让它落到旁边。
+            if (facing == Direction.UP) {
+                entity.setDeltaMovement(0.0D, 0.18D, 0.0D);
+            }
+            if (level.addFreshEntity(entity)) {
+                lastEjectTime = level.getGameTime();
+                cache = ItemStack.EMPTY;
+                setChanged();
+                sendData();
+            }
+            return;
+        }
+        IItemHandler target = facingInventory(state);
+        if (target == null) {
+            return;
+        }
+        ItemStack leftover = ItemHandlerHelper.insertItemStacked(target, cache.copy(), false);
+        if (leftover.getCount() != cache.getCount()) {
+            cache = leftover.isEmpty() ? ItemStack.EMPTY : leftover;
+            setChanged();
+            sendData();
+        }
+    }
+
+    /**
+     * 抽取前确认：频道里至少有一台漏斗能接下这件物品（有本地去处、过滤放行、缓存还有空间）。
+     * <p>
+     * 没有这样的对端就不扣源容器——否则货只会堆在发送端看不见的缓存里（T31）。
+     */
+    private boolean hasSinkPeerWithRoom(ItemStack stack) {
+        for (WirelessItemFunnelBlockEntity peer : peers()) {
+            if (!peer.hasLocalSink(peer.getBlockState())) {
+                continue;
+            }
+            FilteringBehaviour peerFilter = peer.getBehaviour(FilteringBehaviour.TYPE);
+            if (peerFilter != null && !peerFilter.test(stack)) {
+                continue;
+            }
+            if (peer.cacheRoom(stack) > 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** 抽取端：从朝向的容器抽 1 个（受过滤槽约束）放进自己的缓存。 */
@@ -229,6 +500,10 @@ public class WirelessItemFunnelBlockEntity extends SmartBlockEntity
             if (!cache.isEmpty() && !ItemStack.isSameItemSameComponents(cache, inSlot)) {
                 continue;
             }
+            // 没有可接下的对端时不先扣源箱子，否则货只会堆在看不见的缓存里（T31）
+            if (!hasSinkPeerWithRoom(inSlot)) {
+                return;
+            }
             ItemStack extracted = target.extractItem(slot, ITEMS_PER_OPERATION, false);
             if (extracted.isEmpty()) {
                 continue;
@@ -244,69 +519,34 @@ public class WirelessItemFunnelBlockEntity extends SmartBlockEntity
     }
 
     /**
-     * 接收端：找到唯一对端（抽取端），从它的缓存取 1 个注入自己朝向的容器。
+     * 取漏斗<b>背后</b>的容器能力（开口方向的反面）。
      * <p>
-     * 一对一由 {@link WirelessService#findPeer} 收口：0 个或 ≥2 个对端都返回 null，
-     * 宁可停机也不随机挑一个。
-     */
-    private void injectFromPeer(BlockState state) {
-        IItemHandler target = facingInventory(state);
-        if (target == null) {
-            return;
-        }
-        WirelessDevice peer = WirelessService.findPeer(this, WirelessConfig.itemFunnelRange());
-        if (!(peer instanceof WirelessItemFunnelBlockEntity sender)) {
-            return;
-        }
-        // 只有抽取端的缓存才是货源；两个都是接收端（或都是抽取端）时什么也不做
-        if (!sender.getBlockState().getValue(FunnelBlock.EXTRACTING)) {
-            return;
-        }
-        ItemStack available = sender.cache;
-        if (available.isEmpty()) {
-            return;
-        }
-        FilteringBehaviour filter = getBehaviour(FilteringBehaviour.TYPE);
-        if (filter != null && !filter.test(available)) {
-            return;
-        }
-
-        ItemStack toInsert = available.copyWithCount(ITEMS_PER_OPERATION);
-        // 先模拟，确认能塞进去再从缓存里扣，保证物品不丢
-        ItemStack simulated = ItemHandlerHelper.insertItemStacked(target, toInsert, true);
-        int accepted = toInsert.getCount() - simulated.getCount();
-        if (accepted <= 0) {
-            return;
-        }
-        ItemStack moved = sender.cache.split(accepted);
-        ItemStack leftover = ItemHandlerHelper.insertItemStacked(target, moved, false);
-        if (!leftover.isEmpty()) {
-            // 模拟与执行之间容器被别的东西改了；把塞不进的退回缓存，绝不凭空消失
-            if (sender.cache.isEmpty()) {
-                sender.cache = leftover;
-            } else {
-                sender.cache.grow(leftover.getCount());
-            }
-        }
-        sender.setChanged();
-        sender.sendData();
-        setChanged();
-    }
-
-    /**
-     * 取"朝向的容器"的能力。
+     * 推导（真实类型 {@code net.createmod.catnip.math.BlockFace}，javap 已核对）：
+     * {@code getConnectedPos() = pos.relative(face)}；Create 的
+     * {@code FunnelBlockEntity.addBehaviours} 把 provider 设为
+     * {@code new BlockFace(p, funnelFacing.getOpposite())}（{@code FunnelBlockEntity.java:255-259}），
+     * 能力基类再调 {@code getTarget().getOpposite()}（{@code CapManipulationBehaviourBase.java:134-147}），
+     * 净结果就是：<b>容器在 {@code pos.relative(facing.getOpposite())}，能力面为 {@code facing}</b>。
      * <p>
-     * 与 Create 的 {@code InvManipulationBehaviour} 同约定：目标容器在
-     * {@code worldPosition.relative(facing.getOpposite())}，而能力查询面是 {@code facing}。
+     * 这正是"漏斗开口朝外、容器装在背面"的直觉模型。之前一版错误地改成 {@code relative(facing)}，
+     * 结果贴着箱子放的漏斗查到了开口外侧的空气，抽取和插入全部落空。
      */
     @Nullable
     private IItemHandler facingInventory(BlockState state) {
         Direction facing = AbstractFunnelBlock.getFunnelFacing(state);
-        if (facing == null) {
+        if (facing == null || level == null) {
             return null;
         }
-        BlockPos target = worldPosition.relative(facing.getOpposite());
-        return level.getCapability(Capabilities.ItemHandler.BLOCK, target, facing);
+        // 先按 Create 的语义找"背后"的容器
+        BlockPos behind = worldPosition.relative(facing.getOpposite());
+        IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, behind, facing);
+        if (handler != null) {
+            return handler;
+        }
+        // 容错：玩家常把箱子直接压在朝上的漏斗上面（开口那一侧）。
+        // 背后没有容器时再找开口方向一次，免得"明显贴着箱子却不工作"。
+        BlockPos inFront = worldPosition.relative(facing);
+        return level.getCapability(Capabilities.ItemHandler.BLOCK, inFront, facing.getOpposite());
     }
 
     /**
@@ -322,15 +562,13 @@ public class WirelessItemFunnelBlockEntity extends SmartBlockEntity
         if (level == null || level.isClientSide || stack.isEmpty()) {
             return stack;
         }
-        IItemHandler target = facingInventory(getBlockState());
-        if (target == null) {
-            return stack;
-        }
         FilteringBehaviour filter = getBehaviour(FilteringBehaviour.TYPE);
         if (filter != null && !filter.test(stack)) {
             return stack;
         }
-        return ItemHandlerHelper.insertItemStacked(target, stack, false);
+        // 与掉落物入口共用同一条路径：先进端口缓存，再由 tick 决定是无线发送还是写本地容器。
+        // 这样"手持右键灌进纯无线漏斗"也能工作，不必一定要先贴一个容器。
+        return absorbExternal(stack, false);
     }
 
     // ===================== 持久化 =====================
@@ -342,6 +580,7 @@ public class WirelessItemFunnelBlockEntity extends SmartBlockEntity
         if (!cache.isEmpty()) {
             tag.put(KEY_CACHE, cache.save(registries));
         }
+        tag.putBoolean("ExternalOutput", externalOutput);
     }
 
     @Override
@@ -351,5 +590,6 @@ public class WirelessItemFunnelBlockEntity extends SmartBlockEntity
         cache = tag.contains(KEY_CACHE)
                 ? ItemStack.parseOptional(registries, tag.getCompound(KEY_CACHE))
                 : ItemStack.EMPTY;
+        externalOutput = tag.getBoolean("ExternalOutput");
     }
 }

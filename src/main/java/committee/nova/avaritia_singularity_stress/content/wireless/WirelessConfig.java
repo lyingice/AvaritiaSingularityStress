@@ -34,6 +34,26 @@ public final class WirelessConfig {
     //                 "Default: 16")
     //         .defineInRange("fluidTransmitterRange", 16.0D, 1.0D, 512.0D);
 
+    /** B15 空间折跃隧道的配对距离（格）。 */
+    private static final ModConfigSpec.DoubleValue WARP_TUNNEL_RANGE = BUILDER
+            .comment("B15 spatial fold tunnel: maximum pairing distance in blocks.",
+                    "Default: 128")
+            .defineInRange("warpTunnelRange", 128.0D, 1.0D, 4096.0D);
+
+    /**
+     * B15 是否允许跨维度配对（占位配置项）。
+     * <p>
+     * <b>当前实现仍是同维度</b>：{@code WirelessNetwork} 的频道表按维度分区
+     * （{@code IdentityHashMap<LevelAccessor, …>}），要真正跨维度必须先加一张全局索引表。
+     * 开启本项只会在日志里提示未生效，避免误以为已经跨维度。
+     */
+    private static final ModConfigSpec.BooleanValue WARP_TUNNEL_CROSS_DIMENSION = BUILDER
+            .comment("B15 spatial fold tunnel: allow pairing across dimensions.",
+                    "NOT IMPLEMENTED YET: the channel table is partitioned per dimension.",
+                    "Kept as a placeholder; enabling it currently has no effect.",
+                    "Default: false")
+            .define("warpTunnelCrossDimension", false);
+
     /** 频率卡 GUI 允许输入的上限；与 {@link IFrequencyBindable#MAX_FREQUENCY} 保持一致。 */
     private static final ModConfigSpec.IntValue MAX_FREQUENCY = BUILDER
             .comment("Highest channel frequency accepted by the wireless frequency card.",
@@ -63,6 +83,20 @@ public final class WirelessConfig {
     // public static double fluidTransmitterRange() {
     //     return d(FLUID_TRANSMITTER_RANGE, 16.0D);
     // }
+
+    /** B15 空间折跃隧道配对距离（格），默认 128。 */
+    public static double warpTunnelRange() {
+        return d(WARP_TUNNEL_RANGE, 128.0D);
+    }
+
+    /** B15 是否允许跨维度（当前未实现，见字段注释）。 */
+    public static boolean warpTunnelCrossDimension() {
+        try {
+            return WARP_TUNNEL_CROSS_DIMENSION.get();
+        } catch (IllegalStateException e) {
+            return false;
+        }
+    }
 
     /** 频率上限，默认 9999。 */
     public static int maxFrequency() {

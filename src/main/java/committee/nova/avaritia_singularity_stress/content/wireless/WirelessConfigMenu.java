@@ -96,9 +96,16 @@ public class WirelessConfigMenu extends AbstractContainerMenu {
         return ItemStack.EMPTY;
     }
 
+    /**
+     * B20：界面存活判定改成与写入校验同一条距离线。
+     * <p>
+     * 原来恒 {@code true}，于是玩家可以拿着界面走远、继续改值，而
+     * {@code WirelessConfigPacket.handle} 的 {@code canInteractWithBlock(pos, 20)} 会把这些包
+     * 全部丢掉 —— 表现就是"改了没反应，但界面还开着"。改成同源之后：
+     * 服务端每 tick 检查仍在此范围内才保留界面，超距自动关闭，玩家立刻知道发生了什么。
+     */
     @Override
     public boolean stillValid(Player player) {
-        // 距离与权限校验在 WirelessConfigPacket.handle 里做（写入时），这里不额外关界面
-        return true;
+        return player.canInteractWithBlock(targetPos, WirelessConfigPacket.MAX_RANGE);
     }
 }

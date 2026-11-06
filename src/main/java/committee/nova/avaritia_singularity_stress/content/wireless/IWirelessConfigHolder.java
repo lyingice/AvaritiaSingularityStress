@@ -3,6 +3,8 @@ package committee.nova.avaritia_singularity_stress.content.wireless;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
+import javax.annotation.Nullable;
+
 /**
  * 三种无线共用的配置读写契约。
  * <p>
@@ -52,6 +54,14 @@ public interface IWirelessConfigHolder {
     default void setSecondaryAmount(int value) {
     }
 
+    /** B9：接收端是否把货物作为世界物品吐出，而不是直接插入朝向容器。 */
+    default boolean isExternalOutput() {
+        return false;
+    }
+
+    default void setExternalOutput(boolean value) {
+    }
+
     // ===================== 菜单定位 =====================
 
     /** @return 本 BE 的坐标，供菜单在客户端查找自身。 */
@@ -73,6 +83,24 @@ public interface IWirelessConfigHolder {
      */
     default boolean guiOutputSide() {
         return false;
+    }
+
+    // ===================== 运行状态（B20 界面状态区用） =====================
+
+    /**
+     * B20：界面「运行状态区」要显示的内容。
+     * <p>
+     * <b>为什么从这里读、而不是新开一条网络包</b>：这些值本来就是
+     * {@code SyncedBlockEntity} NBT 同步的一部分（与 {@link #guiKind()} 同一套思路——
+     * 开界面时客户端 BE 已在场，首帧即真值）。新开一条包反而会引入「状态先空一下再跳出来」。
+     * <p>
+     * 默认返回 {@code null} = 该设备不画状态区（B9 漏斗 / B15 隧道保持原界面不变）。
+     *
+     * @return 状态快照；{@code null} 表示本设备没有状态区
+     */
+    @Nullable
+    default WirelessStatusView statusView() {
+        return null;
     }
 
     /**

@@ -30,7 +30,7 @@ public record ExtremeCrafterVisualSet(
             ModPartialModels.EXTREME_MECHANICAL_CRAFTER_ARROW,
             ModPartialModels.EXTREME_MECHANICAL_CRAFTER_BELT_FRAME,
             ModPartialModels.EXTREME_MECHANICAL_CRAFTER_BELT,
-            ModPartialModels.EXTREME_MECHANICAL_CRAFTER_COGWHEEL,
+            ModPartialModels.CRYSTAL_COGWHEEL_GEAR,
             ModSpriteShifts.EXTREME_MECHANICAL_CRAFTER_THINGIES
     );
 
@@ -46,7 +46,7 @@ public record ExtremeCrafterVisualSet(
             ModPartialModels.EXTREME_SMITHING_CRAFTER_ARROW,
             ModPartialModels.EXTREME_MECHANICAL_CRAFTER_BELT_FRAME,
             ModPartialModels.EXTREME_SMITHING_CRAFTER_BELT,
-            ModPartialModels.EXTREME_MECHANICAL_CRAFTER_COGWHEEL,
+            ModPartialModels.CRYSTAL_COGWHEEL_GEAR,
             ModSpriteShifts.EXTREME_SMITHING_CRAFTER_THINGIES
     );
 }

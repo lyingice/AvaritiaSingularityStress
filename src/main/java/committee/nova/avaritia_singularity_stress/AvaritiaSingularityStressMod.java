@@ -1,7 +1,14 @@
 package committee.nova.avaritia_singularity_stress;
 
 import committee.nova.avaritia_singularity_stress.content.extreme_mechanical_crafter.ExtremeMechanicalCrafterBlockEntity;
+import committee.nova.avaritia_singularity_stress.content.kinetics.link.BlazeCubeEncasedShaftBlock;
+import committee.nova.avaritia_singularity_stress.content.kinetics.link.BlazeCubeEncasedCogwheelBlock;
+import committee.nova.avaritia_singularity_stress.content.kinetics.link.CrystalMatrixEncasedCogwheelBlock;
+import committee.nova.avaritia_singularity_stress.content.kinetics.link.CrystalMatrixEncasedShaftBlock;
 import committee.nova.avaritia_singularity_stress.content.singularity.SingularityConfig;
+import com.simibubi.create.AllBlocks;
+import com.simibubi.create.content.decoration.encasing.EncasingRegistry;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import committee.nova.avaritia_singularity_stress.content.wireless.WirelessConfig;
 import committee.nova.avaritia_singularity_stress.content.wireless.WirelessLifecycle;
 import committee.nova.avaritia_singularity_stress.content.wireless.debug.WirelessDebugCommand;
@@ -58,8 +65,57 @@ public class AvaritiaSingularityStressMod {
         modEventBus.addListener(this::registerCapabilities);
         NeoForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::registerNetworking);
+        modEventBus.addListener(this::commonSetup);
         NeoForge.EVENT_BUS.register(new WirelessLifecycle());
         ModPackets.init();
+    }
+
+    /**
+     * B18 封装映射注册。
+     * <p>
+     * Create 的封装是"方块替换"：<b>可封装方块</b>（实现 {@code EncasableBlock}，如传动杆）收到右键时，
+     * {@code EncasableBlock.tryEncase} 去 {@code EncasingRegistry.getVariants(本方块)} 里找
+     * "外壳物品 == 手持物品"的 <b>encased 方块</b>（{@code EncasableBlock.java:27-39}），
+     * 找到就调它的 {@code handleEncasing} 原地替换（{@code EncasedShaftBlock.java:82-86}）。
+     * 所以新增一种封装只需要：一个 {@code EncasedShaftBlock} 子类 + 这里配对。
+     * <p>
+     * 时机必须晚于方块注册完成（{@code EncasingRegistry.addVariant} 的 javadoc 明确要求），
+     * 所以放 {@code FMLCommonSetupEvent} 的 enqueueWork 里。
+     */
+    private void commonSetup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            CrystalMatrixEncasedShaftBlock encased =
+                    (CrystalMatrixEncasedShaftBlock) ModBlocks.CRYSTAL_MATRIX_ENCASED_SHAFT.get();
+            // Create 原版传动杆（B17 中子传动杆已删除，不再单独登记）
+            EncasingRegistry.addVariant(AllBlocks.SHAFT.get(), encased);
+
+            // 齿轮：小齿轮 / 大齿轮各配一次
+            EncasingRegistry.addVariant(AllBlocks.COGWHEEL.get(),
+                    (CrystalMatrixEncasedCogwheelBlock) ModBlocks.CRYSTAL_MATRIX_ENCASED_COGWHEEL.get());
+            EncasingRegistry.addVariant(AllBlocks.LARGE_COGWHEEL.get(),
+                    (CrystalMatrixEncasedCogwheelBlock) ModBlocks.CRYSTAL_MATRIX_ENCASED_LARGE_COGWHEEL.get());
+
+            // B19 炽骨立方机壳：外壳 = 本模组的 blaze_cube_casing
+            EncasingRegistry.addVariant(AllBlocks.SHAFT.get(),
+                    (BlazeCubeEncasedShaftBlock) ModBlocks.BLAZE_CUBE_ENCASED_SHAFT.get());
+            EncasingRegistry.addVariant(AllBlocks.COGWHEEL.get(),
+                    (BlazeCubeEncasedCogwheelBlock) ModBlocks.BLAZE_CUBE_ENCASED_COGWHEEL.get());
+            EncasingRegistry.addVariant(AllBlocks.LARGE_COGWHEEL.get(),
+                    (BlazeCubeEncasedCogwheelBlock) ModBlocks.BLAZE_CUBE_ENCASED_LARGE_COGWHEEL.get());
+
+            // [TEMP 定位日志] 打印传动杆登记到的全部封壳候选 + 各自的外壳方块，
+            // 用来判断「手持机壳右键传动杆」为什么匹配不上。定位完删（搜 "[encasing-debug]"）
+            // 注意 getVariants 返回的是 List<Block>（EncasingRegistry.java:25），不是 BlockState
+            for (net.minecraft.world.level.block.Block variantBlock : EncasingRegistry.getVariants(AllBlocks.SHAFT.get())) {
+                String casingName = variantBlock
+                        instanceof com.simibubi.create.content.decoration.encasing.EncasedBlock eb
+                                ? String.valueOf(eb.getCasing())
+                                : "NOT_ENCASED";
+                LOGGER.info("[encasing-debug] shaft variant={} casing={}", variantBlock, casingName);
+            }
+            LOGGER.info("[encasing-debug] ourCasingBlock={} ourCasingItem={}",
+                    ModBlocks.BLAZE_CUBE_CASING.get(), ModItems.BLAZE_CUBE_CASING.get());
+        });
     }
     private void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(
