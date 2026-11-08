@@ -1,8 +1,10 @@
 package committee.nova.avaritia_singularity_stress.init.client.renderer;
 
+import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
-import committee.nova.avaritia_singularity_stress.content.singularity_stabilizer.SingularityStabilizerRenderer;
 import committee.nova.avaritia_singularity_stress.init.registry.ModBlockEntities;
+import committee.nova.avaritia_singularity_stress.init.registry.ModPartialModels;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
 public final class ModRenderers {
@@ -23,10 +25,13 @@ public final class ModRenderers {
                 ModBlockEntities.SINGULARITY_ROTATION_SPEED_CONTROLLER.get(),
                 SingularitySpeedControllerRenderer::new
         );
-        // B14 奇点稳定器:方块状态模型为空壳,旋转几何由 rotor partial 提供(flywheel 不可用时兜底)。
+        // B14 奇点稳定器：改用与包壳齿轮**同一条**兜底路径（PonderKineticFallbackRenderer）。
+        // 旧实现自写 getRotatedModel：先把 rotor 从 Y 摆到方块轴、再由父类绕方块轴自转，
+        // 顺序与已验证可行的 fallback 相反，axis≠Y 时会"躺着转"（Ponder 里实测）。
+        // 现在：先在模型自己的 Y 轴坐标系里自转，再用 PoseStack 摆到方块轴——与齿轮一致。
         event.registerBlockEntityRenderer(
                 ModBlockEntities.SINGULARITY_STABILIZER.get(),
-                SingularityStabilizerRenderer::new
+                context -> new PonderKineticFallbackRenderer<>(context, () -> ModPartialModels.SINGULARITY_STABILIZER)
         );
         // B15 空间折跃隧道:双槽图标 + 频道数字 + 状态文字。
         event.registerBlockEntityRenderer(
@@ -48,5 +53,28 @@ public final class ModRenderers {
                 ModBlockEntities.WIRELESS_STRESS_BRIDGE_RECEIVER.get(),
                 WirelessStressBridgeRenderer::new
         );
+        // B18/B19 包壳传动件：包壳方块只有外壳模型，轴心/齿盘本来是 Flywheel visual 现画的。
+        // Ponder 的假世界没有 VisualizationManager，visual 不参与，于是「封装后齿轮消失」。
+        // 这些兜底渲染器只在非 ClientLevel 环境生效（见 PonderKineticFallbackRenderer），
+        // 游戏内仍然交给 visual，不会画两遍。
+        event.registerBlockEntityRenderer(
+                ModBlockEntities.BLAZE_CUBE_ENCASED_SHAFT.get(),
+                context -> new PonderKineticFallbackRenderer<>(context, () -> AllPartialModels.SHAFT));
+        event.registerBlockEntityRenderer(
+                ModBlockEntities.BLAZE_ENCASED_COGWHEEL.get(),
+                context -> new PonderKineticFallbackRenderer<>(context, () -> ModPartialModels.BLAZE_COGWHEEL_GEAR));
+        event.registerBlockEntityRenderer(
+                ModBlockEntities.BLAZE_ENCASED_LARGE_COGWHEEL.get(),
+                context -> new PonderKineticFallbackRenderer<>(context, () -> ModPartialModels.BLAZE_LARGE_COGWHEEL_GEAR));
+
+        event.registerBlockEntityRenderer(
+                ModBlockEntities.CRYSTAL_ENCASED_SHAFT.get(),
+                context -> new PonderKineticFallbackRenderer<>(context, () -> AllPartialModels.SHAFT));
+        event.registerBlockEntityRenderer(
+                ModBlockEntities.CRYSTAL_ENCASED_COGWHEEL.get(),
+                context -> new PonderKineticFallbackRenderer<>(context, () -> ModPartialModels.CRYSTAL_COGWHEEL_GEAR));
+        event.registerBlockEntityRenderer(
+                ModBlockEntities.CRYSTAL_ENCASED_LARGE_COGWHEEL.get(),
+                context -> new PonderKineticFallbackRenderer<>(context, () -> ModPartialModels.CRYSTAL_LARGE_COGWHEEL_GEAR));
     }
 }

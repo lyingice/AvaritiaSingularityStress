@@ -1,2 +1,4 @@
-// 1.21.1	2026-09-11T11:17:16.6893383	Tags for minecraft:item mod id avaritia_singularity_stress
+// 1.21.1	2026-11-08T14:27:34.6660407	Tags for minecraft:item mod id avaritia_singularity_stress
+ee5c486e46f5f9792735245d84f80d87cc781249 data/avaritia_singularity_stress/tags/item/wireless_stress_bridges.json
+857c8bac40627f249df82bb48b18c29fa4c8912f data/create/tags/item/casing.json
 1daaa836eaecd0ae15c344ee2b47289ea68017d9 data/minecraft/tags/item/enchantable/durability.json

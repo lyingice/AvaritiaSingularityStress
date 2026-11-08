@@ -19,9 +19,10 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.server.MinecraftServer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 /**
  * B15 分流规则自检（专用服务端）。
@@ -43,10 +44,13 @@ public final class WarpSelfTest {
     /** 测试场地：spawn 附近的空中（已加载区块）。 */
     private static final BlockPos BASE_A = new BlockPos(0, 100, 0);
     private static final BlockPos BASE_B = new BlockPos(0, 100, 4);
+    /** 分流用例的第三台隧道：与 B 相邻，用来验证「同一条带子上的两台不互为对端」。 */
+    private static final BlockPos BASE_C = new BlockPos(0, 100, 5);
 
     private static final ItemStack IRON = new ItemStack(Items.IRON_INGOT);
     private static final ItemStack GOLD = new ItemStack(Items.GOLD_INGOT);
     private static final ItemStack DIRT = new ItemStack(Items.DIRT);
+    private static final ItemStack NETHERITE = new ItemStack(Items.NETHERITE_INGOT);
 
     private WarpSelfTest() {
     }
@@ -58,22 +62,39 @@ public final class WarpSelfTest {
      * 验证用的 {@code run-server-verify.init.gradle} 会注入这个属性。
      */
     private static final String ENABLE_PROPERTY = "avaritia.warp.selftest";
+    /** 只跑一次，且要等世界跑几 tick。 */
+    private static boolean finished;
 
+    /**
+     * <b>为什么不用 {@code ServerStartedEvent}</b>：那条事件在"世界还没 tick"时触发，
+     * 带子的 controller / 链还没建立（BeltBlockEntity.controller 此时是 {@code BlockPos.ZERO}），
+     * 「两台隧道是不是同一条带子」根本判不出来（自检里会假失败）。
+     * 改成等 20 tick，让 Create 的带子正常成型后再断言。
+     */
     @SubscribeEvent
-    public static void onServerStarted(ServerStartedEvent event) {
-        if (!Boolean.getBoolean(ENABLE_PROPERTY)) {
+    public static void onServerTick(ServerTickEvent.Post event) {
+        if (!Boolean.getBoolean(ENABLE_PROPERTY) || finished) {
             return;
         }
-        ServerLevel level = event.getServer().overworld();
+        if (event.getServer().getTickCount() < 20) {
+            return;
+        }
+        finished = true;
+        runAll(event.getServer());
+    }
+
+    private static void runAll(MinecraftServer server) {
+        ServerLevel level = server.overworld();
         List<String> result = new ArrayList<>();
         int pass = 0;
 
         try {
             WarpTunnelBlockEntity a = placeTunnel(level, BASE_A);
             WarpTunnelBlockEntity b = placeTunnel(level, BASE_B);
-            if (a == null || b == null) {
-                AvaritiaSingularityStressMod.LOGGER.error("[selftest] 摆方块失败：a={} b={}", a, b);
-                event.getServer().halt(false);
+            WarpTunnelBlockEntity c = placeTunnel(level, BASE_C);
+            if (a == null || b == null || c == null) {
+                AvaritiaSingularityStressMod.LOGGER.error("[selftest] 摆方块失败：a={} b={} c={}", a, b, c);
+                server.halt(false);
                 return;
             }
 
@@ -124,7 +145,59 @@ public final class WarpSelfTest {
             pass += runEndToEnd(level, result, "e2e 关闭出口过滤·金锭折跃", a, b, GOLD, true);
             a.setExportFilter(true);
 
-            int total = 13;
+            // ================= B15 分流：一个出向面 → 多台同频终面 =================
+            // 用户场景：1 号出向面同时喂 2 号（过滤铁锭）与 3 号（过滤下界合金锭），
+            // 1 号收到三种货时应当各走各的，金锭没人收则留在本地。
+            c.setFaceFrequency(Direction.WEST, a.getFaceFrequency(Direction.WEST));
+            a.setFilter(Direction.WEST, ItemStack.EMPTY);
+            b.setFilter(Direction.WEST, IRON.copy());
+            c.setFilter(Direction.WEST, NETHERITE.copy());
+            pass += check(result, "case6 分流·铁锭→2号", a, Direction.WEST, IRON, true);
+            pass += check(result, "case6 分流·下界合金→3号", a, Direction.WEST, NETHERITE, true);
+            pass += check(result, "case6 分流·金锭无人收", a, Direction.WEST, GOLD, false);
+            pass += runEndToEndSplit(level, result, "e2e 分流·下界合金必须进3号", a, c, b, NETHERITE);
+            pass += runEndToEndSplit(level, result, "e2e 分流·铁锭必须进2号", a, b, c, IRON);
+
+            // ---- case7：垂直于带子方向的绑定不得劫持沿带子流动的货 ----
+            // 用户实测的层次 bug：3 号隧道的出向面根本没绑频道，货却被别的面的绑定折跃走了。
+            // 这里把 A 的东/西面全部解绑，只在南面绑一条链路；沿带子（西→东）流动的货必须判本地。
+            a.setFaceFrequency(Direction.WEST, WarpTunnelBlockEntity.NO_FACE_FREQUENCY);
+            a.setFaceFrequency(Direction.SOUTH, WarpTunnelBlockEntity.NO_FACE_FREQUENCY);
+            c.setFaceFrequency(Direction.SOUTH, WarpTunnelBlockEntity.NO_FACE_FREQUENCY);
+            WarpTunnelBlockEntity.bind(a, Direction.SOUTH, c, Direction.SOUTH);
+            pass += check(result, "case7 垂直绑定不劫持·沿带子方向", a, Direction.WEST, IRON, false);
+
+            // ---- case8：本面过滤不匹配时不得折跃（实机日志逐字复刻）----
+            // 日志：item=crystal_matrix_ingot、outFilter=netherite_ingot、peerFilter=air、export=true → 却 WARP。
+            // 那是"对端过滤为空就跳过本面过滤"的中间版本；当前语义必须回落到本面过滤 → LOCAL。
+            a.setFaceFrequency(Direction.WEST, WarpTunnelBlockEntity.NO_FACE_FREQUENCY);
+            a.setFaceFrequency(Direction.SOUTH, WarpTunnelBlockEntity.NO_FACE_FREQUENCY);
+            a.setFaceFrequency(Direction.EAST, WarpTunnelBlockEntity.NO_FACE_FREQUENCY);
+            c.setFaceFrequency(Direction.EAST, WarpTunnelBlockEntity.NO_FACE_FREQUENCY);
+            c.setFaceFrequency(Direction.SOUTH, WarpTunnelBlockEntity.NO_FACE_FREQUENCY);
+            c.setFilter(Direction.EAST, ItemStack.EMPTY);
+            WarpTunnelBlockEntity.bind(a, Direction.EAST, c, Direction.EAST);
+            a.setFilter(Direction.EAST, NETHERITE.copy());
+            pass += check(result, "case8 本面过滤不匹配→不折跃", a, Direction.EAST, IRON, false);
+            pass += check(result, "case8 本面过滤匹配→折跃", a, Direction.EAST, NETHERITE, true);
+
+            // ---- case9：同一件货在同一条频率上不重复折跃（实机 X→Z→带子回流→X 的循环）----
+            // 实机：X 本面过滤下界合金、终面 Z 过滤水晶矩阵 → X 会把水晶矩阵锭送给 Z；
+            // Z 沿带子吐出后带子又送回 X，X 再送一次 → 无限循环。
+            // 现在第一次允许，带标记的同一件货必须判本地（无计时、不影响其它货）。
+            ItemStack crystal = new ItemStack(Items.DIAMOND);
+            c.setFilter(Direction.EAST, crystal.copy());
+            a.setFilter(Direction.EAST, NETHERITE.copy());
+            pass += check(result, "case9 终面过滤命中·首送", a, Direction.EAST, crystal, true);
+            ItemStack alreadyWarped = crystal.copy();
+            WarpTunnelBlockEntity.markWarped(alreadyWarped, a.getFaceFrequency(Direction.EAST));
+            pass += check(result, "case9 已折跃过·回流不再折跃", a, Direction.EAST, alreadyWarped, false);
+
+            // ---- case10：入口面未绑频率时不折跃（实机原话：货从西面进来，西面没设置任何频率）----
+            // A 只有东面绑 1；货从西面进，即使东面那台对端的过滤正好要它，也不能把"没绑的那面进来的货"送走。
+            pass += check(result, "case10 入口面未绑→不折跃", a, Direction.WEST, crystal, false);
+
+            int total = 24;
             AvaritiaSingularityStressMod.LOGGER.info("[selftest] RESULT {}/{}", pass, total);
             for (String line : result) {
                 AvaritiaSingularityStressMod.LOGGER.info("[selftest] {}", line);
@@ -133,7 +206,7 @@ public final class WarpSelfTest {
         } catch (Exception e) {
             AvaritiaSingularityStressMod.LOGGER.error("[selftest] 异常", e);
         } finally {
-            event.getServer().halt(false);
+            server.halt(false);
         }
     }
 
@@ -156,6 +229,7 @@ public final class WarpSelfTest {
         level.getEntitiesOfClass(ItemEntity.class, new net.minecraft.world.phys.AABB(
                 from.getBlockPos()).inflate(24)).forEach(ItemEntity::discard);
 
+        // 用例把频率绑在 WEST，v3 的判定看入口面，所以货也从 WEST 进
         from.setStackToDistribute(item.copy(), Direction.WEST);
         from.absorbIncoming();
         int queued = from.getQueuedCount();
@@ -174,6 +248,37 @@ public final class WarpSelfTest {
                 name, queued, queuedAfter, peerPending, status,
                 routedCorrectly ? "OK" : "WRONG"));
         return routedCorrectly ? 1 : 0;
+    }
+
+    /**
+     * 端到端（分流版）：货必须落到<b>指定的那一台</b>终面，另一台不能收到任何东西。
+     * <p>
+     * 这是 B15 分流的唯一硬证据：单看 {@code shouldWarp} 只能证明"愿意折跃"，
+     * 证明不了"折跃到了正确的那台"。
+     */
+    private static int runEndToEndSplit(ServerLevel level, List<String> out, String name,
+                                        WarpTunnelBlockEntity from, WarpTunnelBlockEntity mustGet,
+                                        WarpTunnelBlockEntity mustNotGet, ItemStack item) {
+        from.clearQueueForTest();
+        mustGet.clearQueueForTest();
+        mustNotGet.clearQueueForTest();
+        level.getEntitiesOfClass(ItemEntity.class,
+                new net.minecraft.world.phys.AABB(from.getBlockPos()).inflate(24)).forEach(ItemEntity::discard);
+
+        // 用例把频率绑在 WEST，v3 的判定看入口面，所以货也从 WEST 进
+        from.setStackToDistribute(item.copy(), Direction.WEST);
+        from.absorbIncoming();
+        int queued = from.getQueuedCount();
+        from.processHead();
+        int queuedAfter = from.getQueuedCount();
+        int got = mustGet.getPendingOutputCount();
+        int wrong = mustNotGet.getPendingOutputCount();
+
+        boolean ok = queued > 0 && queuedAfter == 0 && got > 0 && wrong == 0;
+        out.add(String.format(
+                "%s | queued=%d afterSend=%d 目标收=%d 另一台收=%d status=%s | 分流=%s",
+                name, queued, queuedAfter, got, wrong, from.getStatus(), ok ? "OK" : "WRONG"));
+        return ok ? 1 : 0;
     }
 
     /** 放一格 casing 带子 + 一台隧道，返回 BE（放不下返回 null）。 */

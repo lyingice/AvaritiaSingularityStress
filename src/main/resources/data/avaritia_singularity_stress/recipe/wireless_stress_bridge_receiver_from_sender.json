@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "avaritia_singularity_stress:wireless_stress_bridge_sender"
+    }
+  ],
+  "result": {
+    "id": "avaritia_singularity_stress:wireless_stress_bridge_receiver",
+    "count": 1
+  }
+}

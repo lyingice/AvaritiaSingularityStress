@@ -17,6 +17,24 @@ public class ModLanguageProvider extends LanguageProvider {
         add(ModBlocks.EXTREME_MECHANICAL_CRAFTER.get(), "Extreme Mechanical Crafter");
         add(ModBlocks.EXTREME_SMITHING_CRAFTER.get(), "Extreme Smithing Crafter");
         add(ModItems.NEUTRON_EXTENDO_GRIP.get(), "Neutron Extendo Grip");
+        // I2 深空延拓之手：描述走 Create 的 ItemDescription 体系（挂载见 init/client/ModTooltips）。
+        // 键固定为 <物品 descriptionId>.tooltip.*；conditionN / behaviourN 必须从 1 连续，
+        // 中间断一个号后面整段都不会被读（ItemDescription.fillBuilder 遇到缺键就 break）。
+        add("item." + AvaritiaSingularityStressMod.MODID + ".neutron_extendo_grip.tooltip.summary",
+                "Greatly _increases reach distance_ of the wielder, and boosts _Attack_ and _Mining_ speed. "
+                        + "Can be powered with _Air_ _Pressure_ from a _Backtank_");
+        add("item." + AvaritiaSingularityStressMod.MODID + ".neutron_extendo_grip.tooltip.condition1",
+                "When in Off-Hand");
+        add("item." + AvaritiaSingularityStressMod.MODID + ".neutron_extendo_grip.tooltip.behaviour1",
+                "Increases _reach distance_ of items used in the _Main-Hand_.");
+        add("item." + AvaritiaSingularityStressMod.MODID + ".neutron_extendo_grip.tooltip.condition2",
+                "With one in each hand");
+        add("item." + AvaritiaSingularityStressMod.MODID + ".neutron_extendo_grip.tooltip.behaviour2",
+                "_Reach distance_ increases even further.");
+        add("item." + AvaritiaSingularityStressMod.MODID + ".neutron_extendo_grip.tooltip.condition3",
+                "While wearing Backtank");
+        add("item." + AvaritiaSingularityStressMod.MODID + ".neutron_extendo_grip.tooltip.behaviour3",
+                "_No_ _Durability_ will be used. Instead, _Air_ _pressure_ is drained from the Tank");
         add("jei.extreme_crafter.tier.sculk", "Extreme Crafter (Sculk Tier)");
         add("jei.extreme_crafter.tier.nether", "Extreme Crafter (Nether Tier)");
         add("jei.extreme_crafter.tier.end", "Extreme Crafter (End Tier)");
@@ -196,6 +214,111 @@ public class ModLanguageProvider extends LanguageProvider {
         // B9 外部输出：开启后接收端把物品吐到漏斗口外（便于落到传送带上），关闭则直接插入朝向容器
         add("gui.avaritia_singularity_stress.wireless.external_output", "External Output");
         add(prefix + "wireless.goggles.gear_speed", "Gear speed: %1$s RPM");
+
+        // ===== Ponder scenes: all scenes of this mod live under the Avaritia tag =====
+        // key 规则：标题 <modid>.ponder.<sceneId>.header；台词 <modid>.ponder.<sceneId>.text_<N>
+        // 这里的英文与剧本里 .text("...") 的默认值保持一致，中文另见 ModLanguageProviderZhCn。
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.blaze_cube_casing.header", "Encasing Cogwheels");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.blaze_cube_casing.text_1",
+                "Blaze Cube Casing can be used to decorate cogwheels");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.crystal_matrix_casing.header", "Encasing Cogwheels");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.crystal_matrix_casing.text_1",
+                "Crystal Matrix Casing can be used to decorate cogwheels");
+
+        // B15 空间折跃隧道：剧本见 ponder/WarpTunnelPonderScene.java（6 句，顺序即 text_1..6）
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel.header", "Warping Items Between Belts");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel.text_1",
+                "Sits on a belt, like a tunnel");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel.text_2",
+                "One filter slot per side");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel.text_3",
+                "Put a second one on another belt");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel.text_4",
+                "Wrench one side, then a side on the other tunnel");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel.text_5",
+                "Comes out on the side you picked");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel.text_6",
+                "Powered: nothing goes through");
+
+        // B9 无线物品传输漏斗：剧本见 ponder/WirelessFunnelPonderScene.java（5 句）
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_item_funnel.header",
+                "Wireless Item Funnel");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_item_funnel.text_1",
+                "The wireless funnel works like a normal funnel");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_item_funnel.text_2",
+                "It needs a channel");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_item_funnel.text_3",
+                "The Wireless Frequency Card sets it directly");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_item_funnel.text_4",
+                "As long as a funnel on the same channel is collecting, this one picks items up even with no container behind");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_item_funnel.text_5",
+                "Without External Output it pulls from its container but never spits anything out");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_item_funnel.text_6",
+                "With External Output it drops items normally");
+
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.tag.avaritia", "Avaritia");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.tag.avaritia.description",
+                "Blocks and components added by this mod");
+
+        // ==== 以下对应思索者（Ponderer）2026-11-08 导出的剧本；导出文件里没有英文，这里按中文原意翻译 ====
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.extreme_mechanical_crafter.header",
+                "Extreme Mechanical Crafter");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.extreme_mechanical_crafter.text_1",
+                "An array of Extreme Mechanical Crafters can craft anything from Avaritia's crafting recipes");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.extreme_mechanical_crafter.text_2",
+                "Mechanically it works just like the Mechanical Crafter");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.extreme_smithing_crafter.header",
+                "Extreme Smithing Crafter");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.extreme_smithing_crafter.text_1",
+                "Used to craft Extreme Smithing recipes");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.singularity_rotation_speed_controller.header",
+                "Obtaining Singularity Stress");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.singularity_rotation_speed_controller.text_1",
+                "The Singularity Compressor turns surplus idle stress from upstream into Singularity Stress");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.singularity_rotation_speed_controller.text_2",
+                "The compressor adds extra loss, which the stabilizer can reduce");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.singularity_rotation_speed_controller.text_3",
+                "Singularity kinetic machines are boosted by Singularity Stress");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel_s_47ed8.header",
+                "Sorting with the warp");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel_s_47ed8.text_1",
+                "Both faces of the two tunnels now share one channel");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel_s_47ed8.text_2",
+                "When items enter through this face");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel_s_47ed8.text_3",
+                "They warp out of that face");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel_s_47ed8.text_4",
+                "With a filter on the warp face only matching items warp; everything else passes by");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel_scene_1.header",
+                "Space Warp Tunnel");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel_scene_1.text_1",
+                "The Space Warp Tunnel is a special kind of tunnel");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel_scene_1.text_2",
+                "Each of its four faces can hold its own channel");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel_scene_1.text_3",
+                "Set two faces to the same channel to link them");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel_scene_1.text_4",
+                "The Wireless Frequency Card sets a channel instantly");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_stress_bridge_receiver_s_12fbb.header",
+                "Gathering stress");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_stress_bridge_receiver_s_12fbb.text_1",
+                "Matching channels gather stress together");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_stress_bridge_receiver_s_1b2c1.header",
+                "Splitting stress");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_stress_bridge_receiver_s_1b2c1.text_1",
+                "Matching channels can also split stress");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_stress_bridge_receiver_scene_1.header",
+                "Wireless Stress Transmitter");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_stress_bridge_receiver_scene_1.text_1",
+                "Transmit stress wirelessly");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_stress_bridge_receiver_scene_1.text_2",
+                "The transmitter needs a channel");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_stress_bridge_receiver_scene_1.text_3",
+                "Two ways to set the channel");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.tag.ponderer_exported",
+                "Ponderer");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.tag.ponderer_exported.description",
+                "These scenes were made and exported with the Ponderer mod. Learn more: https://modrinth.com/mod/the-ponderer");
     }
 }
 

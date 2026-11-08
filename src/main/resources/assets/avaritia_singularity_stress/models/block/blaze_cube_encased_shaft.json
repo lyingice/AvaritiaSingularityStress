@@ -1,8 +1,8 @@
-﻿{
+{
   "parent": "create:block/encased_shaft/block",
   "textures": {
     "casing": "avaritia_singularity_stress:block/blaze_cube_casing",
-    "opening": "avaritia_singularity_stress:block/blaze_cube_casing"
+    "opening": "avaritia_singularity_stress:block/blaze_cube_gearbox"
   },
   "render_type": "minecraft:cutout"
 }

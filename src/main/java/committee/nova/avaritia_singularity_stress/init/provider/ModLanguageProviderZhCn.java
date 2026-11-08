@@ -18,6 +18,23 @@ public class ModLanguageProviderZhCn extends LanguageProvider {
         add(ModBlocks.EXTREME_MECHANICAL_CRAFTER.get(), "终焉动力合成器");
         add(ModBlocks.EXTREME_SMITHING_CRAFTER.get(), "终焉锻造器");
         add(ModItems.NEUTRON_EXTENDO_GRIP.get(), "深空延拓之手");
+        // I2 深空延拓之手：把 Create 伸缩机械手（item.create.extendo_grip.tooltip.*）的描述结构照搬过来，
+        // 内容按本物品的真实行为写：单手持 +6 格、双手各持一只 +10 格、附加攻击/挖掘加成、背罐半速耗气。
+        // 键固定为 <物品 descriptionId>.tooltip.*；conditionN / behaviourN 要从 1 连续，断号后面全不读。
+        add("item." + AvaritiaSingularityStressMod.MODID + ".neutron_extendo_grip.tooltip.summary",
+                "大幅度_增加_了使用者的_触及距离_，并提升_攻击_与_挖掘_能力。可以使用_背罐_供能。");
+        add("item." + AvaritiaSingularityStressMod.MODID + ".neutron_extendo_grip.tooltip.condition1",
+                "在副手时");
+        add("item." + AvaritiaSingularityStressMod.MODID + ".neutron_extendo_grip.tooltip.behaviour1",
+                "增加_主手_使用物品的_触及距离_。");
+        add("item." + AvaritiaSingularityStressMod.MODID + ".neutron_extendo_grip.tooltip.condition2",
+                "双手各持一只时");
+        add("item." + AvaritiaSingularityStressMod.MODID + ".neutron_extendo_grip.tooltip.behaviour2",
+                "_触及距离_提升得更远。");
+        add("item." + AvaritiaSingularityStressMod.MODID + ".neutron_extendo_grip.tooltip.condition3",
+                "装备背罐时");
+        add("item." + AvaritiaSingularityStressMod.MODID + ".neutron_extendo_grip.tooltip.behaviour3",
+                "使用罐中_气压_来_抵消_深空延拓之手_的_耐久_损耗。");
         add("jei.extreme_crafter.tier.sculk", "终焉合成器(幽匿工作台)");
         add("jei.extreme_crafter.tier.nether", "终焉合成器(下界工作台)");
         add("jei.extreme_crafter.tier.end", "终焉合成器(末地工作台)");
@@ -201,6 +218,111 @@ public class ModLanguageProviderZhCn extends LanguageProvider {
         // B9 外部输出：开启后接收端把物品吐到漏斗口外（便于落到传送带上），关闭则直接插入朝向容器
         add("gui.avaritia_singularity_stress.wireless.external_output", "外部输出");
         add(prefix + "wireless.goggles.gear_speed", "档位转速:%1$s RPM");
+
+        // ===== 思索（Ponder）场景：本模组全部场景归在「无尽贪婪」标签下 =====
+        // key 规则（写错界面上就显示原始 key）：
+        //   标题 <modid>.ponder.<剧本id>.header；台词 <modid>.ponder.<剧本id>.text_<N>（N 从 1 起，按 .text() 调用顺序）
+        //   标签 <modid>.ponder.tag.<标签id> 与 .description
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.blaze_cube_casing.header", "给齿轮装壳");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.blaze_cube_casing.text_1",
+                "炽骨立方机壳，可以用来装饰齿轮");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.crystal_matrix_casing.header", "给齿轮装壳");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.crystal_matrix_casing.text_1",
+                "水晶矩阵机壳，可以用来装饰齿轮");
+
+        // B15 空间折跃隧道：6 句，顺序必须与 WarpTunnelPonderScene 里 .text() 的调用顺序一致
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel.header", "跨带送货");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel.text_1",
+                "和普通隧道一样，盖在传送带上");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel.text_2",
+                "每个侧面一个过滤槽");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel.text_3",
+                "另一条带子上再放一台");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel.text_4",
+                "扳手点一面，再点另一台隧道的面");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel.text_5",
+                "从你选的那一面出来");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel.text_6",
+                "通电就停");
+
+        // B9 无线物品传输漏斗：文案按思索者导出的最新版（2026-11-08）
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_item_funnel.header", "无线物品传输漏斗");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_item_funnel.text_1",
+                "无线漏斗拥有正常漏斗的功能");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_item_funnel.text_2",
+                "无线漏斗需要设置频率");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_item_funnel.text_3",
+                "使用无线频率卡能直接输入频率");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_item_funnel.text_4",
+                "只要有同频在收集的漏斗,这种没有贴近容器的漏斗也能收集物品");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_item_funnel.text_5",
+                "未开启外部输出的情况下漏斗会直接抽取容器内的物品,但不会把物品吐出来");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_item_funnel.text_6",
+                "开启外部输出则会正常吐出物品");
+
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.tag.avaritia", "无尽贪婪");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.tag.avaritia.description",
+                "方块与组件");
+
+        // ==== 以下由思索者（Ponderer）导出，2026-11-08 并入 ====
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.extreme_mechanical_crafter.header",
+                "终焉动力合成器");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.extreme_mechanical_crafter.text_1",
+                "终焉动力合成器阵列可以合成无尽贪婪任何工作台配方的物品");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.extreme_mechanical_crafter.text_2",
+                "机制上与动力合成器基本无异");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.extreme_smithing_crafter.header",
+                "终焉锻造器");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.extreme_smithing_crafter.text_1",
+                "用于合成终焉锻造配方");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.singularity_rotation_speed_controller.header",
+                "获取奇点应力");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.singularity_rotation_speed_controller.text_1",
+                "奇点压缩器可以将上游的富余空闲应力转化为奇点应力");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.singularity_rotation_speed_controller.text_2",
+                "压缩器会产生额外的损耗通过抑制器可以改善");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.singularity_rotation_speed_controller.text_3",
+                "奇点动能机器能够通过奇点应力获得强化");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel_s_47ed8.header",
+                "使用折跃功能进行分流");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel_s_47ed8.text_1",
+                "现在两个隧道的两个面都是一个频率");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel_s_47ed8.text_2",
+                "当这一面进入物品时");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel_s_47ed8.text_3",
+                "物品会折跃到这一面出来");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel_s_47ed8.text_4",
+                "当折跃面有过滤项时,只会折跃其过滤物品,其他物品不受影响");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel_scene_1.header",
+                "空间折跃隧道");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel_scene_1.text_1",
+                "空间折跃隧道是一种特殊的隧道");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel_scene_1.text_2",
+                "四个面可以配置独立的频率");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel_scene_1.text_3",
+                "手动连接两个面使其频率相同并匹配");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.warp_tunnel_scene_1.text_4",
+                "无线频率卡能够快速输入频率");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_stress_bridge_receiver_s_12fbb.header",
+                "应力聚流");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_stress_bridge_receiver_s_12fbb.text_1",
+                "相同频率可以聚流应力");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_stress_bridge_receiver_s_1b2c1.header",
+                "应力分流");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_stress_bridge_receiver_s_1b2c1.text_1",
+                "相同频率也可以分流应力");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_stress_bridge_receiver_scene_1.header",
+                "无线应力传输器");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_stress_bridge_receiver_scene_1.text_1",
+                "无线传输应力");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_stress_bridge_receiver_scene_1.text_2",
+                "传输器需要设置频率");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.wireless_stress_bridge_receiver_scene_1.text_3",
+                "两种方式设置频率");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.tag.ponderer_exported",
+                "思索者...");
+        add(AvaritiaSingularityStressMod.MODID + ".ponder.tag.ponderer_exported.description",
+                "以上思索由模组思索者（Ponderer）制作并导出，了解更多：https://modrinth.com/mod/the-ponderer");
 
 
     }

@@ -38,6 +38,13 @@ public class ModTagProvider {
                             committee.nova.avaritia_singularity_stress.init.registry.ModBlocks.KINETIC_NEUTRON_COMPRESSOR_DENSE.get(),
                             committee.nova.avaritia_singularity_stress.init.registry.ModBlocks.KINETIC_NEUTRON_COMPRESSOR_ELITE.get(),
                             committee.nova.avaritia_singularity_stress.init.registry.ModBlocks.KINETIC_NEUTRON_COMPRESSOR_ULTIMATE.get());
+
+            // 无线应力桥：发送端与接收端同属一个方块标签（方便按组检索 / 后续配方按组取用）
+            tag(net.minecraft.tags.BlockTags.create(
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
+                            AvaritiaSingularityStressMod.MODID, "wireless_stress_bridges")))
+                    .add(committee.nova.avaritia_singularity_stress.init.registry.ModBlocks.WIRELESS_STRESS_BRIDGE_SENDER.get(),
+                            committee.nova.avaritia_singularity_stress.init.registry.ModBlocks.WIRELESS_STRESS_BRIDGE_RECEIVER.get());
         }
     }
 
@@ -54,6 +61,17 @@ public class ModTagProvider {
         protected void addTags(HolderLookup.Provider provider) {
             tag(ItemTags.DURABILITY_ENCHANTABLE)
                     .add(committee.nova.avaritia_singularity_stress.init.registry.ModItems.NEUTRON_EXTENDO_GRIP.get());
+
+            // 炽骨立方机壳：并入 Create 的机壳标签（Create 用 create:casing 判断"哪些物品算机壳"，
+            // 例如扳手封装、Ponder 与部分配方筛选都看它）。写成 create 命名空间即是对 Create 标签的叠加。
+            tag(ItemTags.create(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("create", "casing")))
+                    .add(committee.nova.avaritia_singularity_stress.init.registry.ModItems.BLAZE_CUBE_CASING.get());
+
+            // 无线应力桥：发送端与接收端同属一个物品标签，两者可互相转化（见 recipe/ 下两个无序合成）。
+            tag(ItemTags.create(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
+                            AvaritiaSingularityStressMod.MODID, "wireless_stress_bridges")))
+                    .add(committee.nova.avaritia_singularity_stress.init.registry.ModItems.WIRELESS_STRESS_BRIDGE_SENDER.get(),
+                            committee.nova.avaritia_singularity_stress.init.registry.ModItems.WIRELESS_STRESS_BRIDGE_RECEIVER.get());
         }
     }
 }

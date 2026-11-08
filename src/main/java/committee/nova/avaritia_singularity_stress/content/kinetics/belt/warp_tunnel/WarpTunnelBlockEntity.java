@@ -27,6 +27,9 @@ import committee.nova.avaritia_singularity_stress.init.registry.ModBlockEntities
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -92,6 +95,11 @@ public class WarpTunnelBlockEntity extends BrassTunnelBlockEntity
      * 未设置的面不在 Map 里（{@link #NO_FACE_FREQUENCY}）。
      */
     private final Map<Direction, Integer> faceFreqs = new EnumMap<>(Direction.class);
+    /**
+     * 每个出向面的轮询游标：同频多台终面都能收同一件货时，轮流从不同的终面开始试，
+     * 避免"永远只喂索引里的第一台"（否则并流时另一条线永远闲着）。
+     */
+    private final Map<Direction, Integer> peerCursor = new EnumMap<>(Direction.class);
     /**
      * 出口过滤（GUI 复选框，默认勾上）。
      * <p>
@@ -492,14 +500,28 @@ public class WarpTunnelBlockEntity extends BrassTunnelBlockEntity
      */
     @Nullable
     public FaceRef peerOf(Direction face) {
+        List<FaceRef> peers = peersOf(face);
+        return peers.isEmpty() ? null : peers.get(0);
+    }
+
+    /**
+     * 这一面的<b>全部</b>同频终面（排除自己、排除未加载）。
+     * <p>
+     * <b>B15 分流</b>：原来 {@link #peerOf} 只取第一个，同频第二个终面永远收不到货——
+     * 用户的场景是「1 号出向面同时喂 2 号（过滤铁锭）和 3 号（过滤下界合金锭）」，
+     * 结果下界合金锭因为第一个终面过滤不匹配，直接被判成「不折跃」留在本地。
+     * 现在按频率取全部候选，由 {@link #peerAccepts} 逐台判过滤。
+     */
+    List<FaceRef> peersOf(Direction face) {
         int freq = getFaceFrequency(face);
         if (freq == NO_FACE_FREQUENCY) {
-            return null;
+            return List.of();
         }
         List<FaceRef> list = FREQ_INDEX.get(freq);
-        if (list == null) {
-            return null;
+        if (list == null || list.isEmpty()) {
+            return List.of();
         }
+        List<FaceRef> result = new ArrayList<>(list.size());
         for (FaceRef ref : list) {
             if (ref.pos().equals(worldPosition) && ref.face() == face) {
                 continue;
@@ -507,9 +529,9 @@ public class WarpTunnelBlockEntity extends BrassTunnelBlockEntity
             if (level != null && !level.isLoaded(ref.pos())) {
                 continue;
             }
-            return ref;
+            result.add(ref);
         }
-        return null;
+        return result;
     }
 
     private void indexAdd(Direction face, int freq) {
@@ -618,16 +640,45 @@ public class WarpTunnelBlockEntity extends BrassTunnelBlockEntity
     /**
      * 能不能折跃（包内可见，供 {@code WarpSelfTest} 在专用服务端上直接断言）。
      */
-    boolean shouldWarp(ItemStack stack, Direction outFace) {
-        if (linkAllows(outFace, stack)) {
-            return true;
+    boolean shouldWarp(ItemStack stack, Direction entryFace) {
+        // 【层次修正 v3】折跃只由「入口面」决定 —— 也就是传送带把货塞进来的那一面（玩家口中的"出向面"）。
+        // 实机语义：X=(19,66,16) 的货从 west 进、west 未绑频率（只有 east 绑），那么它不该被折跃；
+        // 之前判的是 outFace（入口的对面），正好反过来，于是"没绑的那面进来的货"被绑着的那面送走了。
+        // 绑定的面同时仍然是对端在频道里能找到的端点（接收与释放用），两者不冲突。
+        return linkAllows(entryFace, stack);
+    }
+
+    // ================= 已折跃标记 =================
+    // 实机循环（X=(19,66,16) 过滤下界合金 → Z=(16,66,16) 过滤水晶矩阵）：
+    // X 按"终面过滤命中"把水晶矩阵锭送给 Z；Z 沿带子吐出后，带子又把货送回 X，X 再送一次……
+    // 过滤语义没错（Z 确实要水晶矩阵），错在"同一件货被同一条频率重复折跃"。
+    // 修法：折跃时给那份副本打上频率标记，入口看到同频率的标记就判本地。
+    // 与"时间窗口"的区别：无计时、不限制其它货、不影响吞吐，只约束这一件自身。
+    private static final String KEY_WARP_FREQ = "WarpFreq";
+
+    /** 这件货是不是已经在这条频率上折跃过（包内可见供自检断言）。 */
+    static boolean alreadyWarpedOn(ItemStack stack, int freq) {
+        if (freq == NO_FACE_FREQUENCY || stack.isEmpty()) {
+            return false;
         }
-        for (Direction face : FACES) {
-            if (face != outFace && linkAllows(face, stack)) {
-                return true;
-            }
+        CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        return tag.contains(KEY_WARP_FREQ) && tag.getInt(KEY_WARP_FREQ) == freq;
+    }
+
+    /** 给即将折跃出去的副本打标记（包内可见供自检断言）。 */
+    static void markWarped(ItemStack stack, int freq) {
+        if (freq == NO_FACE_FREQUENCY || stack.isEmpty()) {
+            return;
         }
-        return false;
+        CustomData.update(DataComponents.CUSTOM_DATA, stack, tag -> tag.putInt(KEY_WARP_FREQ, freq));
+    }
+
+    /** 清标记：物品进容器＝这趟旅程结束，下次还能正常折跃。 */
+    private static void clearWarpMark(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return;
+        }
+        CustomData.update(DataComponents.CUSTOM_DATA, stack, tag -> tag.remove(KEY_WARP_FREQ));
     }
 
     /**
@@ -642,17 +693,37 @@ public class WarpTunnelBlockEntity extends BrassTunnelBlockEntity
      * 例：本面过滤金锭、终面过滤铁锭 → 金锭本地、铁锭折跃。
      */
     boolean linkAllows(Direction face, ItemStack stack) {
-        FaceRef peer = peerOf(face);
-        if (peer == null) {
+        // 同一件货在同一条频率上只折跃一次，避免"送达 → 沿带子回流 → 再送"的无限循环。
+        // 注意：这不是时间窗口——没有计时、不影响别的货、不限制吞吐，只约束这一件自己。
+        if (alreadyWarpedOn(stack, getFaceFrequency(face))) {
             return false;
         }
-        ItemStack outFilter = getFilter(face);
+        // 有<b>任意一台</b>终面愿意收，就允许这件货入队/折跃（分流后不再要求唯一终面）
+        for (FaceRef peer : peersOf(face)) {
+            if (peerAccepts(face, peer, stack)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 单台终面是否收这件货 —— <b>整条链路上唯一的准入判定</b>。
+     * <p>
+     * {@link #linkAllows}（入队/准入）与 {@link #tryFace}（实际投递）都只调它，
+     * 避免出现"判定说能折跃、投递时又被过滤挡住"的两套标准。
+     */
+    private boolean peerAccepts(Direction face, FaceRef peer, ItemStack stack) {
         if (exportFilter) {
             ItemStack peerFilter = peerFilterOf(peer);
             if (!peerFilter.isEmpty()) {
+                // 终面设了过滤：以它为准（这是"分流"的依据）
                 return ItemStack.isSameItem(peerFilter, stack);
             }
         }
+        // 终面没设过滤（或关闭了出口过滤）→ 回落到本面过滤。
+        // 这条回落不能省：漏了它会让"本面过滤铁锭"的隧道把泥土也判成可折跃（自检 case4 抓到的回归）。
+        ItemStack outFilter = getFilter(face);
         return outFilter.isEmpty() || ItemStack.isSameItem(outFilter, stack);
     }
 
@@ -691,25 +762,33 @@ public class WarpTunnelBlockEntity extends BrassTunnelBlockEntity
         }
         Direction from = enteredFromOrDefault();
         Direction outFace = from.getOpposite();
-        boolean warp = shouldWarp(incoming, outFace);
-        // [TEMP 定位日志 v3] 判定输入全打出来。定位完删（搜 "[warp-debug]"）
+        // v3：判定看入口面（货从哪进来）；outFace 只用于"不折跃时往哪边投放"
+        boolean warp = shouldWarp(incoming, from);
+        // [TEMP 定位日志 v4] 已注释。以后再出问题，把这段的 /* */ 去掉即可（搜 "[warp-debug]"）。
+        // 它会打印：每台隧道四个面的频率与本面过滤、outFace 的全部对端及各自过滤、最终判定。
+        /*
         {
-            FaceRef dbgPeer = peerOf(outFace);
+            StringBuilder peers = new StringBuilder();
+            for (FaceRef p : peersOf(outFace)) {
+                ItemStack pf = peerFilterOf(p);
+                peers.append(p.pos()).append('/').append(p.face())
+                        .append("(filter=").append(pf.isEmpty() ? "air" : pf.getHoverName().getString()).append(") ");
+            }
             StringBuilder allFaces = new StringBuilder();
             for (Direction f : FACES) {
-                FaceRef pf = peerOf(f);
-                allFaces.append(f).append('=').append(getFaceFrequency(f))
-                        .append(pf == null ? "(no peer)" : "->" + pf.pos() + "/" + pf.face())
+                int freq = getFaceFrequency(f);
+                ItemStack own = getFilter(f);
+                allFaces.append(f).append('=').append(freq)
+                        .append(own.isEmpty() ? "" : "(own=" + own.getHoverName().getString() + ")")
                         .append(' ');
             }
             AvaritiaSingularityStressMod.LOGGER.info(
-                    "[warp-debug] DECIDE pos={} item={} from={} out={} freqs=[{}] peerAtOut={} peerFilter={} outFilter={} export={} -> {}",
+                    "[warp-debug] DECIDE pos={} item={} from={} out={} faces=[{}] peersAtOut=[{}] export={} -> {}",
                     worldPosition, incoming.getItem(), from, outFace, allFaces.toString().trim(),
-                    dbgPeer == null ? "NONE" : dbgPeer.pos() + "/" + dbgPeer.face(),
-                    dbgPeer == null ? "-" : String.valueOf(peerFilterOf(dbgPeer)),
-                    String.valueOf(getFilter(outFace)), exportFilter,
+                    peers.length() == 0 ? "NONE" : peers.toString().trim(), exportFilter,
                     warp ? "WARP" : "LOCAL");
         }
+        */
 
         if (!warp) {
             // ---------- 不折跃：直接本地投放，不进队列 ----------
@@ -780,31 +859,15 @@ public class WarpTunnelBlockEntity extends BrassTunnelBlockEntity
 
         // 队列里只有「判定为折跃」的物品（不折跃的在吸收阶段就本地投放了）
 
-        boolean anyOutgoing = false;
-        for (Direction face : FACES) {
-            if (peerOf(face) != null) {
-                anyOutgoing = true;
-                break;
-            }
-        }
+        // 【层次修正 v2】只投「出口面」＝入口的对面（与 shouldWarp 同一口径）。
+        // 不再回退到入口面：那会让"刚被送来的货又从入口面被送回去"，
+        // 两台互为对端时就是实机看到的两点闪烁。
+        // v3：与 shouldWarp 同一口径——只投「入口面」，也就是货进来那一面所绑的频道
+        Direction entryFace = entry.enteredFrom();
+        boolean anyOutgoing = !peersOf(entryFace).isEmpty();
 
-        // 1) 这件物品的入口面 —— 玩家最直觉的绑定位置（实机日志证据：链路就在入口面上）
-        if (tryFace(entry.enteredFrom(), head)) {
+        if (tryFace(entryFace, head)) {
             return;
-        }
-        // 2) 入口的对面（带子自然穿过的方向）
-        Direction outgoing = entry.enteredFrom().getOpposite();
-        if (tryFace(outgoing, head)) {
-            return;
-        }
-        // 3) 顺位补：其余出向面
-        for (Direction face : FACES) {
-            if (face == entry.enteredFrom() || face == outgoing) {
-                continue;
-            }
-            if (tryFace(face, head)) {
-                return;
-            }
         }
 
         if (!anyOutgoing) {
@@ -813,13 +876,27 @@ public class WarpTunnelBlockEntity extends BrassTunnelBlockEntity
         // 有绑定点但都不收/都堵：状态已由 trySend 写好，这里不再覆盖
     }
 
-    /** 试一个面：复用吸收阶段的面过滤 + 终面过滤判定，避免入队后又被本面过滤挡住。 */
+    /** 试一个面：在本面的全部同频终面里挑一台愿意收的投递。 */
     private boolean tryFace(Direction face, ItemStack head) {
-        FaceRef peer = peerOf(face);
-        if (peer == null || !linkAllows(face, head)) {
+        List<FaceRef> peers = peersOf(face);
+        if (peers.isEmpty()) {
             return false;
         }
-        return trySend(face, peer, head);
+        int size = peers.size();
+        int start = Math.floorMod(peerCursor.getOrDefault(face, 0), size);
+        for (int i = 0; i < size; i++) {
+            int index = (start + i) % size;
+            FaceRef peer = peers.get(index);
+            // 与 linkAllows 同一个判定：过滤不收的终面直接跳过，换下一台
+            if (!peerAccepts(face, peer, head)) {
+                continue;
+            }
+            if (trySend(face, peer, head)) {
+                peerCursor.put(face, (index + 1) % size);
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean trySend(Direction face, FaceRef peer, ItemStack head) {
@@ -840,7 +917,10 @@ public class WarpTunnelBlockEntity extends BrassTunnelBlockEntity
         // 好处：发送端只要把货交出去就算成功（不依赖对端带子方向/容器/有没有被挡），
         // 对端吐不出来也只是它自己的缓冲在等，不会连累发送端的入口。
         int amount = Math.min(BATCH, head.getCount());
-        if (!other.receiveFromPeer(peer.face(), head.copyWithCount(amount))) {
+        // 打标记要在交给对端之前：对端之后会一路带着它走（吐出→带子→可能再回到某台隧道）
+        ItemStack payload = head.copyWithCount(amount);
+        markWarped(payload, getFaceFrequency(face));
+        if (!other.receiveFromPeer(peer.face(), payload)) {
             return false;
         }
         // 对端收下了才算送出：扣发送端队列 + 播音效（原来这步在 releaseAt 的 finish 里，
@@ -888,12 +968,32 @@ public class WarpTunnelBlockEntity extends BrassTunnelBlockEntity
      * <p>
      * 投放失败<b>不丢物品、也不堵入口</b>：留着下次再试，状态标 {@code output_blocked}。
      */
+    /**
+     * 折跃货该往哪一面吐。
+     * <p>
+     * <b>实机症状</b>：收货那台按自己“配置面”吐，结果吐到了自己脚底那条带子上，
+     * 又被自己吸回来 → 物品卡在隧道口反复判定，永远出不去（截图里红圈就是它）。
+     * <p>
+     * 玩家语义：<b>货从隧道出来就该跟着带子走</b>。所以只要脚下有带子，就以带子的前进方向为准，
+     * 把货插到<b>下游那一段</b>，它自然被带走；没有带子时才回退到配置面。
+     */
+    private Direction releaseFace(Direction configured) {
+        BeltBlockEntity belt = BeltHelper.getSegmentBE(level, worldPosition.below());
+        if (belt != null) {
+            Direction movement = belt.getMovementFacing();
+            if (movement != null) {
+                return movement;
+            }
+        }
+        return configured;
+    }
+
     private void tickPendingOutput() {
         if (pendingOutput.isEmpty()) {
             return;
         }
         PendingOut out = pendingOutput.get(0);
-        int moved = placeAt(this, out.face(),
+        int moved = placeAt(this, releaseFace(out.face()),
                 out.stack().copyWithCount(Math.min(BATCH, out.stack().getCount())), true);
         if (moved <= 0) {
             setStatus("output_blocked");
@@ -978,7 +1078,10 @@ public class WarpTunnelBlockEntity extends BrassTunnelBlockEntity
         IItemHandler container = level.getCapability(Capabilities.ItemHandler.BLOCK,
                 target.getBlockPos().relative(face), face.getOpposite());
         if (container != null) {
-            int moved = insertInto(container, attempt);
+            // 进容器＝这趟折跃结束，清标记，否则这件货以后永远不能再参与本频道的折跃
+            ItemStack forContainer = attempt.copy();
+            clearWarpMark(forContainer);
+            int moved = insertInto(container, forContainer);
             if (moved > 0) {
                 return moved;
             }

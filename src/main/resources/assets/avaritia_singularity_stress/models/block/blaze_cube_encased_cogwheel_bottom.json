@@ -1,7 +1,7 @@
 {
     "textures": {
         "1": "avaritia_singularity_stress:block/blaze_cube_cogwheel_top",
-        "4": "avaritia_singularity_stress:block/blaze_cube_casing",
+        "4": "avaritia_singularity_stress:block/blaze_cube_gearbox",
         "casing": "avaritia_singularity_stress:block/blaze_cube_casing",
         "particle": "avaritia_singularity_stress:block/blaze_cube_casing",
         "side": "avaritia_singularity_stress:block/blaze_cube_encased_cogwheel_side"

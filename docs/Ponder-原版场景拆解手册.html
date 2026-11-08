@@ -1,0 +1,571 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ponder 原版场景拆解手册</title><style>
+:root{--bg:#0f1419;--panel:#161d26;--fg:#e6edf3;--muted:#9aa7b4;--line:#263241;--accent:#4ea1ff;--code-bg:#0b1016}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.78 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--fg)}
+.wrap{display:flex;max-width:1400px;margin:0 auto}
+nav{position:sticky;top:0;align-self:flex-start;height:100vh;overflow:auto;width:300px;flex:0 0 300px;padding:24px 16px;border-right:1px solid var(--line);background:var(--panel)}
+nav h4{margin:0 0 10px;font-size:13px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+nav a{display:block;color:var(--muted);text-decoration:none;padding:3px 0;font-size:13px;line-height:1.5}
+nav a:hover{color:var(--accent)}
+nav a.l3{padding-left:14px;font-size:12.5px}
+main{flex:1;min-width:0;padding:36px 48px 120px}
+h1{font-size:30px;border-bottom:2px solid var(--line);padding-bottom:12px}
+h2{margin-top:48px;font-size:23px;border-bottom:1px solid var(--line);padding-bottom:8px}
+h3{margin-top:32px;font-size:18px;color:#cfe3ff}
+h4{font-size:15px;color:#cfe3ff}
+p{margin:12px 0}
+a{color:var(--accent)}
+code{background:var(--code-bg);border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:13px;font-family:"Cascadia Code",Consolas,monospace}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:8px;padding:14px 16px;overflow:auto;margin:16px 0}
+pre.code code{background:none;border:none;padding:0;font-size:13px;line-height:1.6;display:block;white-space:pre}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:7px 11px;text-align:left;vertical-align:top}
+th{background:var(--panel);color:#cfe3ff;font-weight:600}
+tr:nth-child(even) td{background:#121a22}
+blockquote{margin:16px 0;padding:10px 16px;border-left:3px solid var(--accent);background:#121a22;color:var(--muted);border-radius:0 6px 6px 0}
+blockquote p{margin:6px 0}
+hr{border:none;border-top:1px solid var(--line);margin:32px 0}
+ul,ol{padding-left:24px}
+li{margin:4px 0}
+h1,h2,h3,h4{scroll-margin-top:20px}
+</style></head><body><div class="wrap"><nav><h4>目录</h4><a class="l1" href="#ponder-原版场景拆解手册">Ponder 原版场景拆解手册</a><a class="l2" href="#0-怎么用这份文档">0. 怎么用这份文档</a><a class="l2" href="#1-全量清单">1. 全量清单</a><a class="l2" href="#2-十二个套路">2. 十二个套路</a><a class="l3" href="#2-1-最小可用场景">2.1 最小可用场景</a><a class="l3" href="#2-2-结构浮现的三个方向">2.2 结构浮现的三个方向</a><a class="l3" href="#2-3-替换方块-装壳的标准写法">2.3 替换方块：装壳的标准写法</a><a class="l3" href="#2-4-改方块状态-不换方块">2.4 改方块状态（不换方块）</a><a class="l3" href="#2-5-文字-最关键的表现手段">2.5 文字：最关键的表现手段</a><a class="l3" href="#2-6-手势提示-让玩家知道该点哪">2.6 手势提示：让玩家知道该点哪</a><a class="l3" href="#2-7-高亮-轮廓-连线">2.7 高亮、轮廓、连线</a><a class="l3" href="#2-8-结构移动与旋转">2.8 结构移动与旋转</a><a class="l3" href="#2-9-掉落物与实体">2.9 掉落物与实体</a><a class="l3" href="#2-10-特效与声音">2.10 特效与声音</a><a class="l3" href="#2-11-镜头">2.11 镜头</a><a class="l3" href="#2-12-收尾">2.12 收尾</a><a class="l2" href="#3-重点族的逐个拆解">3. 重点族的逐个拆解</a><a class="l3" href="#3-1-shaft-3-个场景">3.1 shaft（3 个场景）</a><a class="l3" href="#3-2-cog-4-个场景">3.2 cog（4 个场景）</a><a class="l3" href="#3-3-mechanical_crafter-3-个场景">3.3 mechanical_crafter（3 个场景）</a><a class="l3" href="#3-4-funnels-tunnels-chute-物流三兄弟-11-个场景">3.4 funnels / tunnels / chute（物流三兄弟，11 个场景）</a><a class="l3" href="#3-5-fluid_pipe-3-个场景">3.5 fluid_pipe（3 个场景）</a><a class="l3" href="#3-6-high_logistics-16-个场景-最大的一族">3.6 high_logistics（16 个场景，最大的一族）</a><a class="l2" href="#附录-a-这份清单是怎么抽出来的">附录 A：这份清单是怎么抽出来的</a><a class="l2" href="#附录-b-本手册没验证的部分">附录 B：本手册没验证的部分</a></nav><main><h1 id="ponder-原版场景拆解手册">Ponder 原版场景拆解手册</h1>
+<blockquote><p>《Ponder 保姆级使用手册》的扩展卷。<br>主手册讲「怎么写」，这一份讲「机械动力原版是怎么写的」，并把每个动作换成本模组的方块演示一遍。<br>目标：你看完就能照着自己的机器开写，不用再对着 Create 的源码猜。</p></blockquote>
+<p>适用环境与主手册一致：Minecraft 1.21.1 / NeoForge 21.1.232 / Create 6.0.10-280 / Ponder 1.0.82。</p>
+<hr>
+<h2 id="0-怎么用这份文档">0. 怎么用这份文档</h2>
+<p>三个入口，按你现在的状态挑：</p>
+<table><thead><tr>
+<th>你现在的状态</th>
+<th>从这看</th>
+</tr></thead><tbody>
+<tr>
+<td>一个场景都还没写</td>
+<td>先回主手册第 1 章跑通，再回来</td>
+</tr>
+<tr>
+<td>会写骨架，但不知道该演什么</td>
+<td>第 2 章「十二个套路」，每个套路都有可抄代码</td>
+</tr>
+<tr>
+<td>想找某个原版机器的分镜</td>
+<td>第 1 章全量清单定位，再到第 3 章按族查</td>
+</tr>
+</tbody></table>
+<p><strong>关于「原版参考」的标注方式</strong>：本文出现的原版场景 id 都是从 <code>AllCreatePonderScenes</code> 的字节码里抽出来的真实注册项，不是猜的。但「这个场景具体演了哪几步」需要逐个反编译才能确认，所以文中凡是我没有逐帧核对的地方，会写成「同类参考」，不写成定论。</p>
+<hr>
+<h2 id="1-全量清单">1. 全量清单</h2>
+<p>Create 6.0.10 一共注册 <strong>129 个</strong> Ponder 场景（跨组件重复的算多次），去重后 <strong>118 个唯一 id</strong>，分属 <strong>68 个族</strong>。</p>
+<p>清单由字节码自动抽取，命令在附录 A。</p>
+<table><thead><tr>
+<th>族</th>
+<th>场景数</th>
+<th>场景 id</th>
+</tr></thead><tbody>
+<tr>
+<td><code>high_logistics</code></td>
+<td>16</td>
+<td><code>high_logistics/chain_conveyor</code><br><code>high_logistics/package_frogport</code><br><code>high_logistics/package_postbox</code><br><code>high_logistics/packager</code><br><code>high_logistics/packager_address</code><br><code>high_logistics/stock_link</code><br><code>high_logistics/stock_ticker</code><br><code>high_logistics/stock_ticker_address</code><br><code>high_logistics/redstone_requester</code><br><code>high_logistics/repackager</code><br><code>high_logistics/table_cloth</code><br><code>high_logistics/factory_gauge_restocker</code><br><code>high_logistics/factory_gauge_recipe</code><br><code>high_logistics/factory_gauge_crafting</code><br><code>high_logistics/factory_gauge_links</code></td>
+</tr>
+<tr>
+<td><code>funnels</code></td>
+<td>6</td>
+<td><code>funnels/brass</code><br><code>funnels/direction</code><br><code>funnels/compat</code><br><code>funnels/redstone</code><br><code>funnels/transposer</code></td>
+</tr>
+<tr>
+<td><code>cog</code></td>
+<td>4</td>
+<td><code>cog/speedup</code><br><code>cog/encasing</code></td>
+</tr>
+<tr>
+<td><code>shaft</code></td>
+<td>3</td>
+<td><code>shaft/relay</code><br><code>shaft/encasing</code></td>
+</tr>
+<tr>
+<td><code>mechanical_press</code></td>
+<td>3</td>
+<td><code>mechanical_press/pressing</code><br><code>mechanical_press/compacting</code></td>
+</tr>
+<tr>
+<td><code>weighted_ejector</code></td>
+<td>3</td>
+<td><code>weighted_ejector/eject</code><br><code>weighted_ejector/split</code><br><code>weighted_ejector/redstone</code></td>
+</tr>
+<tr>
+<td><code>mechanical_crafter</code></td>
+<td>3</td>
+<td><code>mechanical_crafter/setup</code><br><code>mechanical_crafter/connect</code><br><code>mechanical_crafter/covers</code></td>
+</tr>
+<tr>
+<td><code>tunnels</code></td>
+<td>3</td>
+<td><code>tunnels/andesite</code><br><code>tunnels/brass</code><br><code>tunnels/brass_modes</code></td>
+</tr>
+<tr>
+<td><code>gantry</code></td>
+<td>3</td>
+<td><code>gantry/redstone</code><br><code>gantry/direction</code><br><code>gantry/subgantry</code></td>
+</tr>
+<tr>
+<td><code>train_signal</code></td>
+<td>3</td>
+<td><code>train_signal/placement</code><br><code>train_signal/signaling</code><br><code>train_signal/redstone</code></td>
+</tr>
+<tr>
+<td><code>valve_handle</code></td>
+<td>2</td>
+<td><code>valve_handle</code></td>
+</tr>
+<tr>
+<td><code>chain_drive</code></td>
+<td>2</td>
+<td><code>chain_drive/relay</code><br><code>chain_drive/gearshift</code></td>
+</tr>
+<tr>
+<td><code>gauges</code></td>
+<td>2</td>
+<td><code>gauges/gauge</code></td>
+</tr>
+<tr>
+<td><code>mechanical_mixer</code></td>
+<td>2</td>
+<td><code>mechanical_mixer/mixing</code></td>
+</tr>
+<tr>
+<td><code>chute</code></td>
+<td>2</td>
+<td><code>chute/downward</code><br><code>chute/smart</code><br><code>chute/upward</code></td>
+</tr>
+<tr>
+<td><code>chassis</code></td>
+<td>2</td>
+<td><code>chassis/linear_group</code><br><code>chassis/radial</code><br><code>chassis/linear_attachment</code></td>
+</tr>
+<tr>
+<td><code>mechanical_piston</code></td>
+<td>2</td>
+<td><code>mechanical_piston/piston_pole</code><br><code>mechanical_piston/modes</code></td>
+</tr>
+<tr>
+<td><code>elevator_pulley</code></td>
+<td>2</td>
+<td><code>elevator_pulley/elevator</code><br><code>elevator_pulley/multi_rope</code></td>
+</tr>
+<tr>
+<td><code>sail</code></td>
+<td>2</td>
+<td><code>sail</code><br><code>sail_frame</code></td>
+</tr>
+<tr>
+<td><code>mechanical_roller</code></td>
+<td>2</td>
+<td><code>mechanical_roller/clear_and_pave</code><br><code>mechanical_roller/fill</code></td>
+</tr>
+<tr>
+<td><code>fluid_pipe</code></td>
+<td>2</td>
+<td><code>fluid_pipe/flow</code><br><code>fluid_pipe/encasing</code><br><code>fluid_pipe/interaction</code></td>
+</tr>
+<tr>
+<td><code>train_station</code></td>
+<td>2</td>
+<td><code>train_station/assembly</code><br><code>train_station/schedule</code></td>
+</tr>
+<tr>
+<td><code>display_link</code></td>
+<td>2</td>
+<td><code>display_link</code><br><code>display_link_redstone</code></td>
+</tr>
+<tr>
+<td>其余单场景族</td>
+<td>1</td>
+<td><code>gearbox</code> <code>clutch</code> <code>gearshift</code> <code>sequenced_gearshift</code> <code>fan/direction</code> <code>fan/processing</code> <code>creative_motor</code> <code>creative_motor_mojang</code> <code>water_wheel</code> <code>large_water_wheel</code> <code>hand_crank</code> <code>speed_controller</code> <code>millstone</code> <code>crushing_wheel</code> <code>basin</code> <code>empty_blaze_burner</code> <code>blaze_burner</code> <code>depot</code> <code>item_vault/storage</code> <code>super_glue</code> <code>sticker</code> <code>mechanical_arm/setup</code> <code>windmill_bearing/source</code> <code>cart_assembler/anchor</code> <code>cart_assembler/dual</code> <code>cart_assembler/modes</code> <code>cart_assembler/rails</code> <code>portable_interface/transfer</code> <code>redstone_contact</code> <code>mechanical_saw/processing</code> <code>mechanical_drill/breaker</code> <code>deployer/filter</code> <code>deployer/modes</code> <code>deployer/processing</code> <code>deployer/redstone</code> <code>deployer/contraption</code> <code>harvester</code> <code>plough</code> <code>contraption_controls</code> <code>smart_pipe</code> <code>fluid_tank/storage</code> <code>fluid_tank/sizes</code> <code>spout</code> <code>item_drain</code> <code>pulse_extender</code> <code>pulse_repeater</code> <code>powered_latch</code> <code>powered_toggle_latch</code> <code>analog_lever</code> <code>nixie_tube</code> <code>redstone_link</code> <code>rose_quartz_lamp</code> <code>pulse_timer</code> <code>smart_observer</code> <code>threshold_switch</code> <code>train_schedule</code> <code>train_controls</code> <code>train_observer</code> <code>display_board</code> <code>steam_whistle</code> <code>steam_engine</code> <code>chain_conveyor</code></td>
+</tr>
+</tbody></table>
+<p><strong>怎么读这张表</strong>：<code>某某/某某</code> 这种带斜杠的是 Create 的资源路径风格，注册时就是字符串；不带斜杠的是一级 id。你自己的场景用不用斜杠都行，<code>addStoryBoard</code> 的第二个参数是纯 path。</p>
+<hr>
+<h2 id="2-十二个套路">2. 十二个套路</h2>
+<p>下面每个套路都按同一个结构写：<strong>它解决什么问题 → 原版哪些场景在干这个 → 本模组可抄代码 → 容易踩的坑</strong>。</p>
+<p>代码里的 <code>ModBlocks</code> / <code>ModItems</code> 就是本模组的注册表，<code>CreateSceneBuilder</code> 是 Create 对 Ponder 的增强包装（<code>com.simibubi.create.foundation.ponder.CreateSceneBuilder</code>）。</p>
+<h3 id="2-1-最小可用场景">2.1 最小可用场景</h3>
+<p><strong>解决什么</strong>：把「一个方块 + 一句话」演出来。这是 90% 的思索场景的真身。</p>
+<p><strong>同类参考</strong>：<code>shaft/relay</code>、<code>clutch</code>、<code>gearbox</code>、<code>redstone_contact</code> 这类单方块说明基本都是这个骨架。</p>
+<pre class='code'><code>
+private static void minimal(SceneBuilder builder, SceneBuildingUtil util) {
+    CreateSceneBuilder scene = new CreateSceneBuilder(builder);
+
+    scene.title(&quot;demo_minimal&quot;, &quot;Demo&quot;);
+    scene.configureBasePlate(0, 0, 5);   // 底板 5x5，原点 (0,0)
+    scene.idle(5);
+
+    // 让底板先出现
+    scene.world().showSection(util.select().layer(0), Direction.UP);
+    scene.idle(10);
+
+    // 主体方块浮现
+    Selection body = util.select().position(2, 1, 2);
+    scene.world().showSection(body, Direction.DOWN);
+    scene.idle(10);
+
+    // 一句话，钉在方块上
+    scene.overlay().showText(60)
+            .text(&quot;A single block can already be worth explaining&quot;)
+            .attachKeyFrame()
+            .placeNearTarget()
+            .pointAt(util.vector().centerOf(2, 1, 2));
+    scene.idle(70);
+
+    scene.markAsFinished();
+}
+</code></pre>
+<p><strong>坑</strong>：</p>
+<ul>
+<li><code>configureBasePlate(0, 0, 5)</code> 的 5 是<strong>底板边长</strong>，不是坐标。底板的方块会铺在 y=-1，你的机器从 y=0 开始算。</li>
+<li><code>showSection</code> 只显示 **<code>.nbt</code> 里已经存在**的方块。结构里没有的方块，<code>showSection</code> 什么都不会发生——这是本仓库踩过的坑，见 §2.3。</li>
+</ul>
+<h3 id="2-2-结构浮现的三个方向">2.2 结构浮现的三个方向</h3>
+<p><strong>解决什么</strong>：同一个 <code>showSection</code>，靠 <code>Direction</code> 参数做出「从下往上长」「从上方落下」「从侧面滑入」三种观感。</p>
+<p><strong>同类参考</strong>：<code>cog/encasing</code>、<code>shaft/encasing</code>、<code>mechanical_crafter/setup</code>。</p>
+<pre class='code'><code>
+Selection machine = util.select().fromTo(1, 1, 2, 3, 3, 2);   // 立着的 3x3 墙
+
+scene.world().showSection(machine, Direction.DOWN);    // 从上方落下
+scene.idle(20);
+
+scene.world().hideSection(machine, Direction.UP);      // 向上收走
+scene.idle(20);
+
+scene.world().showSection(machine, Direction.SOUTH);   // 从北面滑入
+scene.idle(20);
+</code></pre>
+<p><strong>方向怎么选</strong>：</p>
+<table><thead><tr>
+<th>Direction</th>
+<th>观感</th>
+<th>适合</th>
+</tr></thead><tbody>
+<tr>
+<td><code>UP</code></td>
+<td>从下方长出来</td>
+<td>底板、地面上的机械</td>
+</tr>
+<tr>
+<td><code>DOWN</code></td>
+<td>从上方落下</td>
+<td>悬空的、刚装好的部件</td>
+</tr>
+<tr>
+<td><code>NORTH/SOUTH/EAST/WEST</code></td>
+<td>从侧面滑进来</td>
+<td>横向排列的流水线</td>
+</tr>
+<tr>
+<td><code>Direction.Axis</code> 版本</td>
+<td>沿轴抽动</td>
+<td>轴、活塞杆这类有明确轴向的</td>
+</tr>
+</tbody></table>
+<h3 id="2-3-替换方块-装壳的标准写法">2.3 替换方块：装壳的标准写法</h3>
+<p><strong>解决什么</strong>：把结构里预放的 A 方块换成 B 方块，并且<strong>保住转速</strong>。</p>
+<p><strong>同类参考</strong>：<code>shaft/encasing</code>、<code>cog/encasing</code>、<code>belt/encasing</code>、<code>fluid_pipe/encasing</code> —— 原版所有「装壳」类场景都是这个模式。本仓库的 <code>blaze_cube_casing</code> / <code>crystal_matrix_casing</code> 也是照它抄的。</p>
+<pre class='code'><code>
+BlockPos cogPos = util.grid().at(1, 1, 2);
+Selection line = util.select().fromTo(0, 1, 2, 4, 1, 2);
+
+// 1) 先让动力线转起来
+scene.world().setKineticSpeed(line, 32);
+scene.idle(10);
+
+// 2) 换上包壳方块
+BlockState encased = ModBlocks.BLAZE_CUBE_ENCASED_COGWHEEL.get()
+        .defaultBlockState()
+        .setValue(RotatedPillarKineticBlock.AXIS, Direction.Axis.X);
+scene.world().setBlocks(util.select().position(cogPos), encased, true);
+
+// 3) 必须重设转速——setBlocks 会把 BE 换成新的，转速丢了
+scene.world().setKineticSpeed(line, 32);
+scene.idle(20);
+</code></pre>
+<p><strong>三条硬规则</strong>（都有字节码证据，Create 自己的 <code>shaftsCanBeEncased</code> 就这么写）：</p>
+<ol>
+<li>**<code>setBlocks</code> 之后必须重新 <code>setKineticSpeed</code>**，否则新方块是静止的。</li>
+<li>动力线要连成 <strong>≥3 格一条线</strong>，孤立方块不会转。</li>
+<li>两个装壳点<strong>隔开一格</strong>，并排会视觉糊成一块。</li>
+</ol>
+<h3 id="2-4-改方块状态-不换方块">2.4 改方块状态（不换方块）</h3>
+<p><strong>解决什么</strong>：同一个方块换个朝向、换个档位，做「扳手拧一下」的效果。</p>
+<p><strong>同类参考</strong>：<code>gearbox</code>、<code>sequenced_gearshift</code>、<code>mechanical_piston/modes</code>、<code>tunnels/brass_modes</code>。</p>
+<pre class='code'><code>
+BlockPos pos = util.grid().at(2, 1, 2);
+
+scene.overlay().showControls(util.vector().topOf(pos), Pointing.DOWN, 40)
+        .rightClick()
+        .withItem(new ItemStack(AllItems.WRENCH.get()));
+scene.idle(7);
+
+scene.world().modifyBlock(pos, state -&gt; state
+        .setValue(ExtremeMechanicalCrafterBlock.HORIZONTAL_FACING, Direction.NORTH)
+        .setValue(ExtremeMechanicalCrafterBlock.POINTING, Pointing.LEFT), false);
+scene.idle(20);
+</code></pre>
+<p><strong>坑</strong>：<code>modifyBlock</code> 第三个参数是「是否重新渲染」，一般给 <code>false</code>；给 <code>true</code> 会强制重建，视觉上会闪。</p>
+<h3 id="2-5-文字-最关键的表现手段">2.5 文字：最关键的表现手段</h3>
+<p><strong>解决什么</strong>：一句话说清楚「这东西能干嘛」。Ponder 场景的节奏本质上是「一句台词 + 一段演示」。</p>
+<p><strong>同类参考</strong>：几乎所有场景都会用，<code>shaft/relay</code> 是教科书级的短小。</p>
+<pre class='code'><code>
+scene.overlay().showText(70)
+        .text(&quot;Blaze Cube Casing can be used to decorate cogwheels&quot;)
+        .attachKeyFrame()                 // 这一帧可被拖拽定位
+        .placeNearTarget()                // 贴着目标放，别飘在屏幕中间
+        .pointAt(util.vector().centerOf(2, 1, 2));   // 指向具体方块
+scene.idle(80);
+</code></pre>
+<p><strong>文案硬约束</strong>（本仓库踩过两轮才定的）：</p>
+<ul>
+<li>单条 ≤28 字，官方中位 18 字</li>
+<li>标题 ≤14 字，且是<strong>动作短语</strong>（「给齿轮装壳」），不是方块名</li>
+<li>没有感叹号、问号、破折号</li>
+<li>不写「机制/系统/功能/实现/核心」，不写「你可以/让我们」</li>
+<li>不替玩家下结论，不写空评价（非常/强大/轻松/完美）</li>
+</ul>
+<p><strong>台词公式</strong>：材料 + 可以用来 + 用途 + 目标。说了的必须演到，先演后讲。</p>
+<h3 id="2-6-手势提示-让玩家知道该点哪">2.6 手势提示：让玩家知道该点哪</h3>
+<p><strong>解决什么</strong>：演「玩家会怎么操作」，而不是用文字说「右键它」。</p>
+<p><strong>同类参考</strong>：<code>deployer/filter</code>、<code>mechanical_arm/setup</code>、<code>cart_assembler/modes</code>、<code>display_link</code>。</p>
+<pre class='code'><code>
+BlockPos pos = util.grid().at(2, 1, 2);
+
+// 右键
+scene.overlay().showControls(util.vector().topOf(pos), Pointing.DOWN, 40)
+        .rightClick()
+        .withItem(new ItemStack(AllItems.WRENCH.get()));
+scene.idle(7);
+
+// 左键 / 滚动 / 拖拽
+scene.overlay().showControls(util.vector().centerOf(pos), Pointing.LEFT, 30).leftClick();
+scene.idle(30);
+scene.overlay().showControls(util.vector().centerOf(pos), Pointing.RIGHT, 30).scroll();
+scene.idle(30);
+</code></pre>
+<p><strong>坑</strong>：<code>showControls</code> 的第二个参数是<strong>指针方向</strong>（<code>Pointing</code> 是 catnip 的枚举：UP/LEFT/DOWN/RIGHT），跟方块朝向的 <code>Pointing</code> 是同一个类，但语义完全不同——别混。</p>
+<h3 id="2-7-高亮-轮廓-连线">2.7 高亮、轮廓、连线</h3>
+<p><strong>解决什么</strong>：让观众的眼睛跟着你的手指走。Ponder 里没有「鼠标」，靠这些临时图形指路。</p>
+<p><strong>同类参考</strong>：<code>display_link</code>、<code>redstone_link</code>、<code>stock_link</code> 这类「两个东西连起来」的场景。</p>
+<pre class='code'><code>
+// 给整个选区画轮廓：第一个 Object 是&quot;谁在指着&quot;，随便给个新对象即可
+scene.overlay().showOutline(PonderPalette.GREEN, new Object(),
+        util.select().fromTo(1, 1, 2, 3, 1, 2), 60);
+scene.idle(70);
+
+// 两点连一条线
+scene.overlay().showLine(PonderPalette.RED,
+        util.vector().centerOf(0, 1, 2),
+        util.vector().centerOf(4, 1, 2), 40);
+scene.idle(50);
+
+// 跟着方块包围盒走的轮廓
+scene.overlay().chaseBoundingBoxOutline(PonderPalette.OUTPUT, new Object(),
+        new AABB(util.grid().at(2, 1, 2)), 40);
+scene.idle(50);
+
+// 轮廓 + 文字一步到位（省一次 idle）
+scene.overlay().showOutlineWithText(util.select().fromTo(1, 1, 2, 3, 1, 2), 60)
+        .text(&quot;Line up the shafts along one axis&quot;)
+        .pointAt(util.vector().centerOf(2, 1, 2));
+scene.idle(70);
+</code></pre>
+<p>**<code>PonderPalette</code> 常用色**：<code>WHITE</code>（中性）、<code>RED</code>（禁止/错误）、<code>GREEN</code>（成功）、<code>BLUE</code>（信息）、<code>INPUT</code> / <code>OUTPUT</code>（配对输入输出）。</p>
+<p><strong>坑</strong>：<code>showOutline</code> 的第二个参数是个「归属对象」，同一个对象连续用两次，后一次会顶掉前一次。要同时显示多个轮廓，就每次 <code>new Object()</code>。</p>
+<h3 id="2-8-结构移动与旋转">2.8 结构移动与旋转</h3>
+<p><strong>解决什么</strong>：演「装好之后整个机构动起来」「旋转 90 度换个方向」这类整体位移。</p>
+<p><strong>同类参考</strong>：<code>gantry/*</code>、<code>mechanical_piston/*</code>、<code>elevator_pulley/*</code>。</p>
+<pre class='code'><code>
+Selection arm = util.select().fromTo(1, 1, 1, 3, 3, 3);
+
+// 整体平移：位移向量 + 耗时 tick
+scene.world().moveSection(arm, util.vector().of(0, 2, 0), 20);
+scene.idle(30);
+
+// 整体旋转：绕 XYZ 的角度 + 耗时
+scene.world().rotateSection(arm, 0, 90, 0, 30);
+scene.idle(40);
+</code></pre>
+<p><strong>坑</strong>：<code>moveSection</code> 只动<strong>选区里的方块实体组</strong>，不会重建；所以移动完再改方块状态是安全的，反过来（先改再移）可能拿到旧选区。</p>
+<h3 id="2-9-掉落物与实体">2.9 掉落物与实体</h3>
+<p><strong>解决什么</strong>：演「东西掉下来」「产物被吐出来」。</p>
+<p><strong>同类参考</strong>：<code>depot</code>、<code>weighted_ejector/*</code>、<code>chute/*</code>。</p>
+<pre class='code'><code>
+// 掉一个物品
+scene.world().createItemEntity(
+        util.vector().topOf(2, 1, 2),
+        util.vector().of(0, 0.1, 0),
+        new ItemStack(Items.DIAMOND));
+scene.idle(30);
+</code></pre>
+<p><strong>坑</strong>：物品实体参与物理，放太高的地方会弹开；<code>topOf</code> 再往上 0.2 左右比较稳。</p>
+<h3 id="2-10-特效与声音">2.10 特效与声音</h3>
+<p><strong>解决什么</strong>：给「成功/失败/通上电」这类状态一个即时反馈。</p>
+<p><strong>同类参考</strong>：<code>redstone_contact</code>、<code>pulse_timer</code>、<code>threshold_switch</code>。</p>
+<pre class='code'><code>
+scene.effects().indicateSuccess(util.grid().at(2, 1, 2));
+scene.idle(20);
+
+scene.effects().indicateRedstone(util.grid().at(2, 1, 2));
+scene.idle(20);
+</code></pre>
+<h3 id="2-11-镜头">2.11 镜头</h3>
+<p><strong>解决什么</strong>：让观众看侧面、看背面、绕一圈。</p>
+<p><strong>同类参考</strong>：<code>crushing_wheel</code>、<code>windmill_bearing/source</code>、<code>mechanical_arm/setup</code>。</p>
+<pre class='code'><code>
+// 绕 Y 轴转视角（Create 的 CreateSceneBuilder 提供）
+scene.rotateCameraY(45);
+scene.idle(20);
+scene.rotateCameraY(-45);
+scene.idle(20);
+</code></pre>
+<p><strong>坑</strong>：镜头运动<strong>不产生 idle 时间</strong>，转完必须自己 <code>idle</code>，否则玩家看到的是一瞬间跳变。</p>
+<h3 id="2-12-收尾">2.12 收尾</h3>
+<pre class='code'><code>
+scene.markAsFinished();
+</code></pre>
+<p>没这句，场景最后会停在一个没有「结束」标记的状态，退出按钮行为会怪。</p>
+<hr>
+<h2 id="3-重点族的逐个拆解">3. 重点族的逐个拆解</h2>
+<p>这一章只挑<strong>结构最典型、复用率最高</strong>的族。其余族看第 1 章清单定位，套路都在第 2 章里。</p>
+<h3 id="3-1-shaft-3-个场景">3.1 <code>shaft</code>（3 个场景）</h3>
+<table><thead><tr>
+<th>id</th>
+<th>演什么</th>
+<th>本模组对照</th>
+</tr></thead><tbody>
+<tr>
+<td><code>shaft/relay</code></td>
+<td>单根传动杆接上动力开始转</td>
+<td>你任何一个动能方块的最小演示</td>
+</tr>
+<tr>
+<td><code>shaft/encasing</code></td>
+<td>传动杆包上机壳，外观变化但照样转</td>
+<td>**<code>blaze_cube_casing</code> / <code>crystal_matrix_casing</code> 就是照这个写的**</td>
+</tr>
+<tr>
+<td><code>cog/large</code></td>
+<td>大齿轮和小齿轮同台，直径不同</td>
+<td>同上，齿轮箱场景</td>
+</tr>
+</tbody></table>
+<p>**从 <code>shaft/encasing</code> 学到的东西**（字节码级，Create 自己的顺序）：</p>
+<ol>
+<li><code>setKineticSpeed</code> 先把线转起来</li>
+<li><code>setBlocks</code> 换成包壳方块</li>
+<li>**再 <code>setKineticSpeed</code> 一次**</li>
+<li>台词只讲「能用来装饰」，不讲原理</li>
+</ol>
+<h3 id="3-2-cog-4-个场景">3.2 <code>cog</code>（4 个场景）</h3>
+<table><thead><tr>
+<th>id</th>
+<th>演什么</th>
+<th>关键动作</th>
+</tr></thead><tbody>
+<tr>
+<td><code>cog/small</code></td>
+<td>小齿轮的转速换算（2:1）</td>
+<td>相邻齿轮反向、转速减半</td>
+</tr>
+<tr>
+<td><code>cog/large</code></td>
+<td>大齿轮的转速换算（4:1 面积）</td>
+<td>同上</td>
+</tr>
+<tr>
+<td><code>cog/speedup</code></td>
+<td>大带小加速</td>
+<td>大小齿轮咬合</td>
+</tr>
+<tr>
+<td><code>cog/encasing</code></td>
+<td>齿轮装壳</td>
+<td>同 <code>shaft/encasing</code></td>
+</tr>
+</tbody></table>
+<p><strong>给本模组的启示</strong>：大齿轮和小齿轮必须<strong>相邻咬合</strong>才有转速变化；隔一格只演示外观。</p>
+<h3 id="3-3-mechanical_crafter-3-个场景">3.3 <code>mechanical_crafter</code>（3 个场景）</h3>
+<table><thead><tr>
+<th>id</th>
+<th>演什么</th>
+</tr></thead><tbody>
+<tr>
+<td><code>mechanical_crafter/setup</code></td>
+<td>阵列搭起来，摆成 3x3</td>
+</tr>
+<tr>
+<td><code>mechanical_crafter/connect</code></td>
+<td>用扳手把几台连成一个控制组</td>
+</tr>
+<tr>
+<td><code>mechanical_crafter/covers</code></td>
+<td>给合成格加盖子（只留部分输入）</td>
+</tr>
+</tbody></table>
+<p><strong>这条正好是你导出的那场</strong>（<code>extreme_mechanical_crafter</code>）。原版 <code>connect</code> 的动作顺序是：选中一台 → 右键 → 依次右键其余 → 整组朝向统一。本模组那场演的是单台朝向调整，比原版浅一层。</p>
+<h3 id="3-4-funnels-tunnels-chute-物流三兄弟-11-个场景">3.4 <code>funnels</code> / <code>tunnels</code> / <code>chute</code>（物流三兄弟，11 个场景）</h3>
+<p>共同点：<strong>都是「输入端 → 传输 → 输出端」三点定位</strong>，区别只在方向和过滤。</p>
+<pre class='code'><code>
+// 物流场景的通用骨架
+Selection input  = util.select().position(0, 1, 2);
+Selection output = util.select().position(4, 1, 2);
+scene.world().showSection(input, Direction.DOWN);
+scene.idle(10);
+scene.overlay().showLine(PonderPalette.OUTPUT,
+        util.vector().centerOf(0, 1, 2), util.vector().centerOf(4, 1, 2), 40);
+scene.idle(50);
+scene.world().showSection(output, Direction.UP);
+scene.idle(20);
+</code></pre>
+<h3 id="3-5-fluid_pipe-3-个场景">3.5 <code>fluid_pipe</code>（3 个场景）</h3>
+<table><thead><tr>
+<th>id</th>
+<th>演什么</th>
+</tr></thead><tbody>
+<tr>
+<td><code>fluid_pipe/flow</code></td>
+<td>流体在管里流动的方向</td>
+</tr>
+<tr>
+<td><code>fluid_pipe/encasing</code></td>
+<td>给管子包壳</td>
+</tr>
+<tr>
+<td><code>fluid_pipe/interaction</code></td>
+<td>用扳手改管道连接方式</td>
+</tr>
+</tbody></table>
+<p><strong>包壳类再次出现同一个套路</strong>——<code>setBlocks</code> + 重设状态。这是 Create 里最高频的一个模式。</p>
+<h3 id="3-6-high_logistics-16-个场景-最大的一族">3.6 <code>high_logistics</code>（16 个场景，最大的一族）</h3>
+<p>这是 6.0 新增的「仓储物流」大包，占全部场景的 12%。它的共通结构是：</p>
+<ol>
+<li>先演一个<strong>单点</strong>（包、邮箱、股票链接）</li>
+<li>再演<strong>两点之间</strong>的连接（<code>stock_link</code>、<code>display_link</code>）</li>
+<li>最后演<strong>规则</strong>（requester 的数量、gauge 的配方）</li>
+</ol>
+<p><strong>给本模组的启示</strong>：如果你打算做物流类机制，照这个三段式走，别一上来就演网络。</p>
+<hr>
+<h2 id="附录-a-这份清单是怎么抽出来的">附录 A：这份清单是怎么抽出来的</h2>
+<pre class='code'><code>
+# 1) 数场景注册次数
+javap -c -p -cp create-slim.jar \
+  com.simibubi.create.infrastructure.ponder.AllCreatePonderScenes \
+  | grep -c addStoryBoard        # → 129
+
+# 2) 抽每个场景的 id（取每次 addStoryBoard 之前最近的 String 常量）
+javap -c -p -cp create-slim.jar \
+  com.simibubi.create.infrastructure.ponder.AllCreatePonderScenes \
+  | grep -oE &#x27;// String [a-zA-Z0-9_/]+&#x27;
+</code></pre>
+<p>结果落在 <code>artifacts/create-scenes.txt</code>，本文第 1 章的表就是从它生成的。</p>
+<h2 id="附录-b-本手册没验证的部分">附录 B：本手册没验证的部分</h2>
+<ul>
+<li><strong>每个场景具体演了哪几步</strong>：我只从 id 语义和 API 用法推断，没有逐个反编译逐帧核对。想看真身，用主手册第 11 章的反编译命令直接读 <code>*Scenes</code> 类。</li>
+<li><strong>原版场景的台词原文</strong>：没抽。想看官方怎么说话，用 <code>node dsh-ponder-mode/ponder-lang.mjs --extract</code> 导出 1053 条官方 ponder 文本。</li>
+<li>**<code>moveSection</code> / <code>rotateSection</code> 的精确签名**：本文按主手册 4.3 的写法给，未在本轮重新 javap 核对。</li>
+</ul></main></div></body></html>
