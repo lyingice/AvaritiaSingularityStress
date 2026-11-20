@@ -3,6 +3,7 @@ package committee.nova.avaritia_singularity_stress.init.client;
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.foundation.block.connected.CTSpriteShiftEntry;
 import com.simibubi.create.foundation.block.connected.ConnectedTextureBehaviour;
+import committee.nova.avaritia_singularity_stress.content.blaze_cube_crafter.BlazeCubeCrafterBlock;
 import committee.nova.avaritia_singularity_stress.content.extreme_mechanical_crafter.ExtremeCrafterHelper;
 import committee.nova.avaritia_singularity_stress.content.extreme_mechanical_crafter.ExtremeMechanicalCrafterBlock;
 import committee.nova.avaritia_singularity_stress.content.extreme_smithing_crafter.ExtremeSmithingCrafterBlock;
@@ -31,9 +32,9 @@ public class ExtremeCTBehaviour extends ConnectedTextureBehaviour.Base {
     @Override
     public boolean connectsTo(BlockState state, BlockState other, BlockAndTintGetter reader,
                               BlockPos pos, BlockPos otherPos, Direction face) {
-        // 两种终焉方块都属于同一家族,可互相连接(共用连接组语义)
-        if (!(state.getBlock() instanceof ExtremeMechanicalCrafterBlock)
-                || !(other.getBlock() instanceof ExtremeMechanicalCrafterBlock)) {
+        // B26:连接边界与逻辑层共用 canConnect——终焉动力合成器与锻造器互通,
+        // 炽骨立方合成器只与同类连接,跨系列不显示连接纹理。
+        if (!ExtremeCrafterHelper.canConnect(state, other)) {
             return false;
         }
         if (state.getValue(HorizontalKineticBlock.HORIZONTAL_FACING)
@@ -69,7 +70,8 @@ public class ExtremeCTBehaviour extends ConnectedTextureBehaviour.Base {
         if (!(state.getBlock() instanceof ExtremeMechanicalCrafterBlock)) {
             return null;
         }
-        // 按方块类型选择纹理组;判定规则两者完全一致
+        // 按方块类型选择纹理组;判定规则三者完全一致
+        boolean blazeCube = state.getBlock() instanceof BlazeCubeCrafterBlock;
         boolean smithing = state.getBlock() instanceof ExtremeSmithingCrafterBlock;
 
         Direction facing = state.getValue(HorizontalKineticBlock.HORIZONTAL_FACING);
@@ -77,13 +79,22 @@ public class ExtremeCTBehaviour extends ConnectedTextureBehaviour.Base {
         boolean isVertical = direction.getAxis().isVertical();
         boolean facingX = facing.getAxis() == Axis.X;
         if (isFront) {
-            // 正面朝向链路方向:连接后平移到晶体矩阵外壳(两种方块共用外壳纹理)
+            // 正面朝向链路方向:连接后平移到各自的外壳纹理
+            if (blazeCube) {
+                return ModSpriteShifts.BLAZE_CUBE_CRAFTER_FRONT;
+            }
             return ModSpriteShifts.EXTREME_CRAFTER_FRONT;
         }
         if (isVertical && !facingX) {
+            if (blazeCube) {
+                return ModSpriteShifts.BLAZE_CUBE_CRAFTER_OTHERSIDE;
+            }
             return smithing
                     ? ModSpriteShifts.EXTREME_SMITHING_CRAFTER_OTHERSIDE
                     : ModSpriteShifts.EXTREME_CRAFTER_OTHERSIDE;
+        }
+        if (blazeCube) {
+            return ModSpriteShifts.BLAZE_CUBE_CRAFTER_SIDE;
         }
         return smithing
                 ? ModSpriteShifts.EXTREME_SMITHING_CRAFTER_SIDE

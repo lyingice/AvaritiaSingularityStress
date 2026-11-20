@@ -65,7 +65,7 @@ public class ExtremeConnectedInputHandler {
             return false;
         }
         BlockState neighbour = world.getBlockState(pos.relative(direction));
-        if (!ExtremeCrafterHelper.isCrafter(neighbour)) {
+        if (!ExtremeCrafterHelper.canConnect(refState, neighbour)) {
             return false;
         }
         return refDirection == neighbour.getValue(HORIZONTAL_FACING);
@@ -75,7 +75,8 @@ public class ExtremeConnectedInputHandler {
         ExtremeMechanicalCrafterBlockEntity crafter1 = ExtremeCrafterHelper.getCrafter(world, pos);
         ExtremeMechanicalCrafterBlockEntity crafter2 = ExtremeCrafterHelper.getCrafter(world, pos2);
 
-        if (crafter1 == null || crafter2 == null) {
+        if (crafter1 == null || crafter2 == null
+                || !ExtremeCrafterHelper.canConnect(crafter1.getBlockState(), crafter2.getBlockState())) {
             return;
         }
 
@@ -126,7 +127,8 @@ public class ExtremeConnectedInputHandler {
         if (!crafter2.getInput().isController()) {
             crafter2 = ExtremeCrafterHelper.getCrafter(world, controllerPos2);
         }
-        if (crafter1 == null || crafter2 == null) {
+        if (crafter1 == null || crafter2 == null
+                || !ExtremeCrafterHelper.canConnect(crafter1.getBlockState(), crafter2.getBlockState())) {
             return;
         }
 
@@ -151,6 +153,9 @@ public class ExtremeConnectedInputHandler {
 
     public static void connectControllers(Level world, ExtremeMechanicalCrafterBlockEntity crafter1,
                                           ExtremeMechanicalCrafterBlockEntity crafter2) {
+        if (!ExtremeCrafterHelper.canConnect(crafter1.getBlockState(), crafter2.getBlockState())) {
+            return;
+        }
 
         crafter1.getInput().getData().forEach(offset -> {
             BlockPos connectedPos = crafter1.getBlockPos().offset(offset);
@@ -227,6 +232,11 @@ public class ExtremeConnectedInputHandler {
         public List<Inventory> getInventories(Level world, BlockPos pos) {
             if (!isController) {
                 BlockPos controllerPos = pos.offset(data.get(0));
+                // B26：重载/结构替换后也不能经旧 controller 偏移访问另一等级的库存。
+                if (!ExtremeCrafterHelper.canConnect(world.getBlockState(pos),
+                        world.getBlockState(controllerPos))) {
+                    return List.of();
+                }
                 ConnectedInput input = ExtremeCrafterHelper.getInput(world, controllerPos);
                 if (input == this || input == null || !input.isController) {
                     return List.of();
@@ -254,6 +264,7 @@ public class ExtremeConnectedInputHandler {
                     .sorted(invOrdering)
                     .map(l -> ExtremeCrafterHelper.getCrafter(world, pos.offset(l)))
                     .filter(Objects::nonNull)
+                    .filter(crafter -> ExtremeCrafterHelper.canConnect(blockState, crafter.getBlockState()))
                     .map(ExtremeMechanicalCrafterBlockEntity::getInventory)
                     .collect(Collectors.toList());
         }

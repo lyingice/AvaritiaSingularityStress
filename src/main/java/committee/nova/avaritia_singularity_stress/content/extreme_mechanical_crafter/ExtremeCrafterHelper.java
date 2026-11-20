@@ -1,5 +1,6 @@
 package committee.nova.avaritia_singularity_stress.content.extreme_mechanical_crafter;
 
+import committee.nova.avaritia_singularity_stress.content.blaze_cube_crafter.BlazeCubeCrafterBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -20,6 +21,16 @@ public final class ExtremeCrafterHelper {
     /** 该方块状态是否为终焉合成器。对应原版 {@code AllBlocks.MECHANICAL_CRAFTER.has(state)}。 */
     public static boolean isCrafter(BlockState state) {
         return state != null && state.getBlock() instanceof ExtremeMechanicalCrafterBlock;
+    }
+
+    /**
+     * B26：炽骨合成器独立组网，防止配方在终焉末端匹配时绕过低阶限制。
+     * 箭头链、共享库存、放置对齐与连接纹理共用此边界；终焉动力合成器与锻造器仍可互连。
+     */
+    public static boolean canConnect(BlockState first, BlockState second) {
+        return isCrafter(first) && isCrafter(second)
+                && (first.getBlock() instanceof BlazeCubeCrafterBlock)
+                == (second.getBlock() instanceof BlazeCubeCrafterBlock);
     }
 
     public static ExtremeMechanicalCrafterBlockEntity getCrafter(BlockAndTintGetter reader, BlockPos pos) {
@@ -43,6 +54,9 @@ public final class ExtremeCrafterHelper {
      * 对应原版 {@code CrafterHelper.areCraftersConnected}。
      */
     public static boolean areCraftersConnected(BlockAndTintGetter reader, BlockPos pos, BlockPos otherPos) {
+        if (!canConnect(reader.getBlockState(pos), reader.getBlockState(otherPos))) {
+            return false;
+        }
         ExtremeConnectedInputHandler.ConnectedInput input1 = getInput(reader, pos);
         ExtremeConnectedInputHandler.ConnectedInput input2 = getInput(reader, otherPos);
 

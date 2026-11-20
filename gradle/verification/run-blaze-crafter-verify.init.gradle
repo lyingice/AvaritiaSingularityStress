@@ -1,0 +1,18 @@
+// 仅用于"隔离验证"B26 炽骨立方合成器：把 runServer 的游戏目录指到干净目录，
+// 避免 run/mods 里的客户端专用模组在专用服务器预启动阶段崩溃。
+//
+// 注入 -Davaritia.blaze_cube_crafter.selftest=true：让 BlazeCubeCrafterSelfTest 在
+// 服务端启动后自动跑组网隔离 + 配方档位白名单自检（25 条断言）并 halt。
+// 不传这个属性时自检完全不执行，普通开服不受影响。
+//
+// 用法： ./gradlew runServer --offline --init-script gradle/verification/run-blaze-crafter-verify.init.gradle
+// 需先在 run/verification/blaze-crafter/mods 放好必需依赖（Re-Avaritia / 集成 / JEI 等）并同意 EULA。
+gradle.projectsEvaluated {
+    def task = rootProject.tasks.findByName('runServer')
+    if (task != null) {
+        task.gameDirectory = rootProject.file('run/verification/blaze-crafter')
+        // 防止 Windows 停服后 AWT 非守护线程吊住 JVM（与 terminal 脚本同）
+        task.jvmArgs('-Djava.awt.headless=true')
+        task.jvmArgs('-Davaritia.blaze_cube_crafter.selftest=true')
+    }
+}

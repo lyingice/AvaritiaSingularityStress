@@ -1,0 +1,13 @@
+{
+  "parent": "create:block/large_wheels",
+  "ambientocclusion": false,
+  "textures": {
+    "axis": "avaritia_singularity_stress:block/extreme_water_wheel/axis",
+    "gearbox": "avaritia_singularity_stress:block/extreme_water_wheel/gearbox",
+    "axis_top": "avaritia_singularity_stress:block/extreme_water_wheel/axis_top",
+    "metal": "avaritia_singularity_stress:block/extreme_water_wheel/waterwheel_metal",
+    "log": "avaritia_singularity_stress:block/extreme_water_wheel/oak_log",
+    "planks": "avaritia_singularity_stress:block/extreme_water_wheel/oak_planks",
+    "particle": "#planks"
+  }
+}

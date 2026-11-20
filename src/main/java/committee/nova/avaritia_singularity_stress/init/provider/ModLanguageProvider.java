@@ -16,6 +16,60 @@ public class ModLanguageProvider extends LanguageProvider {
         add("itemGroup." + AvaritiaSingularityStressMod.MODID, "Avaritia Singularity Stress");
         add(ModBlocks.EXTREME_MECHANICAL_CRAFTER.get(), "Extreme Mechanical Crafter");
         add(ModBlocks.EXTREME_SMITHING_CRAFTER.get(), "Extreme Smithing Crafter");
+        // B26 Blaze Cube Crafter (low-tier Extreme Mechanical Crafter)
+        add(ModBlocks.BLAZE_CUBE_CRAFTER.get(), "Blaze Cube Crafter");
+        // B27 Extreme Drill / B28 Extreme Water Wheel
+        add(ModBlocks.EXTREME_DRILL.get(), "Extreme Drill");
+        add(ModBlocks.EXTREME_WATER_WHEEL.get(), "Extreme Water Wheel");
+        // B30 Extreme Connector / B29 Extreme Kinetic Crafting Terminal
+        add(ModBlocks.EXTREME_CONNECTOR.get(), "Extreme Connector");
+        add(ModBlocks.EXTREME_CRAFTING_TERMINAL.get(), "Extreme Kinetic Crafting Terminal");
+        // ===== B29 终端 GUI：搜索、列表、9×9 预览、材料、指标、结果 =====
+        add("gui.avaritia_singularity_stress.crafting_terminal.search_hint", "Search name or ID");
+        add("gui.avaritia_singularity_stress.crafting_terminal.list_empty", "No matching recipes");
+        add("gui.avaritia_singularity_stress.crafting_terminal.no_selection", "No recipe selected");
+        add("gui.avaritia_singularity_stress.crafting_terminal.selected_missing",
+                "Selected recipe is no longer available (datapack changed?)");
+        add("gui.avaritia_singularity_stress.crafting_terminal.unsupported",
+                "This recipe cannot be auto-crafted by the terminal");
+        add("gui.avaritia_singularity_stress.crafting_terminal.materials", "Materials");
+        add("gui.avaritia_singularity_stress.crafting_terminal.materials.none", "No materials");
+        add("gui.avaritia_singularity_stress.crafting_terminal.materials.need", "Required: %s");
+        add("gui.avaritia_singularity_stress.crafting_terminal.materials.variants", "%s candidate types");
+        add("gui.avaritia_singularity_stress.crafting_terminal.materials.more", "+%s more");
+        add("gui.avaritia_singularity_stress.crafting_terminal.preview.empty", "Empty");
+        add("gui.avaritia_singularity_stress.crafting_terminal.preview.cell", "Slot %s, %s");
+        add("gui.avaritia_singularity_stress.crafting_terminal.preview.no_candidates", "No matching items");
+        add("gui.avaritia_singularity_stress.crafting_terminal.metric.crafters", "Crafters: %s");
+        add("gui.avaritia_singularity_stress.crafting_terminal.metric.stress", "Stress: %s");
+        add("gui.avaritia_singularity_stress.crafting_terminal.network.ready", "Network ready");
+        add("gui.avaritia_singularity_stress.crafting_terminal.network.missing", "No connector network");
+        add("gui.avaritia_singularity_stress.crafting_terminal.network.incomplete", "Chain incomplete: check facing");
+        add("gui.avaritia_singularity_stress.crafting_terminal.network.not_ready", "Network not ready");
+        add("gui.avaritia_singularity_stress.crafting_terminal.craft", "Craft");
+        add("gui.avaritia_singularity_stress.crafting_terminal.pin", "Pin");
+        add("gui.avaritia_singularity_stress.crafting_terminal.unpin", "Unpin");
+        add("gui.avaritia_singularity_stress.crafting_terminal.craft.pending", "Craft request sent...");
+        add("gui.avaritia_singularity_stress.crafting_terminal.craft.no_selection", "Select a recipe first");
+        add("gui.avaritia_singularity_stress.crafting_terminal.craft.stale",
+                "Selected recipe is no longer available");
+        add("gui.avaritia_singularity_stress.crafting_terminal.hint.select",
+                "Select a recipe, then press Craft");
+        add("gui.avaritia_singularity_stress.crafting_terminal.recipe_id", "Recipe: %s");
+        // 结果文案由 screen 按 "status." + CraftResult.name().toLowerCase(Locale.ROOT) 拼接。
+        add("gui.avaritia_singularity_stress.crafting_terminal.status.started", "Crafting started");
+        add("gui.avaritia_singularity_stress.crafting_terminal.status.invalid_recipe",
+                "Invalid or unsupported recipe");
+        add("gui.avaritia_singularity_stress.crafting_terminal.status.invalid_network",
+                "No valid crafter network");
+        add("gui.avaritia_singularity_stress.crafting_terminal.status.busy", "Crafter network is busy");
+        add("gui.avaritia_singularity_stress.crafting_terminal.status.no_power", "A crafter is not spinning");
+        add("gui.avaritia_singularity_stress.crafting_terminal.status.grid_mismatch",
+                "Crafter grid does not fit the recipe");
+        add("gui.avaritia_singularity_stress.crafting_terminal.status.missing_materials",
+                "Missing materials in adjacent storage");
+        add("gui.avaritia_singularity_stress.crafting_terminal.status.transfer_failed",
+                "Material transfer failed; rolled back");
         add(ModItems.NEUTRON_EXTENDO_GRIP.get(), "Neutron Extendo Grip");
         // I2 深空延拓之手：描述走 Create 的 ItemDescription 体系（挂载见 init/client/ModTooltips）。
         // 键固定为 <物品 descriptionId>.tooltip.*；conditionN / behaviourN 必须从 1 连续，

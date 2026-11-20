@@ -28,6 +28,11 @@ public class ModTagProvider {
             tag(net.minecraft.tags.BlockTags.MINEABLE_WITH_PICKAXE)
                     .add(committee.nova.avaritia_singularity_stress.init.registry.ModBlocks.EXTREME_MECHANICAL_CRAFTER.get(),
                             committee.nova.avaritia_singularity_stress.init.registry.ModBlocks.EXTREME_SMITHING_CRAFTER.get(),
+                            committee.nova.avaritia_singularity_stress.init.registry.ModBlocks.BLAZE_CUBE_CRAFTER.get(),
+                            committee.nova.avaritia_singularity_stress.init.registry.ModBlocks.EXTREME_DRILL.get(),
+                            committee.nova.avaritia_singularity_stress.init.registry.ModBlocks.EXTREME_WATER_WHEEL.get(),
+                            committee.nova.avaritia_singularity_stress.init.registry.ModBlocks.EXTREME_CONNECTOR.get(),
+                            committee.nova.avaritia_singularity_stress.init.registry.ModBlocks.EXTREME_CRAFTING_TERMINAL.get(),
                             committee.nova.avaritia_singularity_stress.init.registry.ModBlocks.SINGULARITY_ROTATION_SPEED_CONTROLLER.get(),
                             committee.nova.avaritia_singularity_stress.init.registry.ModBlocks.SINGULARITY_STABILIZER.get(),
                             committee.nova.avaritia_singularity_stress.init.registry.ModBlocks.KINETIC_NEUTRON_COLLECTOR.get(),

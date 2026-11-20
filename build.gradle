@@ -56,7 +56,8 @@ neoForge {
             programArgument file('src/main/resources').absolutePath
 
             programArgument '--existing'
-            programArgument file('../Avaritia-Integration/integrations/create/build/libs/AvaritiaIntegration-create-neoforge-1.21.1-1.0.1-release.jar').absolutePath
+            // 集成依赖改用本工作区 libs 内的 create jar（原 sibling 工作区已移除）
+            programArgument file('libs/AvaritiaIntegration-create-neoforge-1.21.1-1.0.1-release.jar').absolutePath
 
             programArgument '--existing-mod'
             programArgument 'create'

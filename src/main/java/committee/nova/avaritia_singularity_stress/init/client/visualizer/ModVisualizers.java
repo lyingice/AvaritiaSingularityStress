@@ -64,6 +64,27 @@ public final class ModVisualizers {
                 ModBlockEntities.EXTREME_SMITHING_CRAFTER.get(),
                 new Visualizer<>(ExtremeCrafterVisualSet.SMITHING)
         );
+        // B26 炽骨立方合成器:同一 Visual 实现,注入专属齿轮模型
+        VisualizerRegistry.setVisualizer(
+                ModBlockEntities.BLAZE_CUBE_CRAFTER.get(),
+                new Visualizer<>(ExtremeCrafterVisualSet.BLAZE_CUBE)
+        );
+        // B27 终焉钻头:朝向旋转视觉(专属 partial),skipVanillaRender=false 与 Create 钻头一致
+        VisualizerRegistry.setVisualizer(
+                ModBlockEntities.EXTREME_DRILL.get(),
+                new SimpleBlockEntityVisualizer<committee.nova.avaritia_singularity_stress.content.extreme_drill.ExtremeDrillBlockEntity>(
+                        com.simibubi.create.content.kinetics.base.OrientedRotatingVisual.of(ModPartialModels.EXTREME_DRILL_HEAD),
+                        be -> false
+                )
+        );
+        // B28 终焉水车:模组本地视觉(轮体固定贴图),skipVanillaRender=false
+        VisualizerRegistry.setVisualizer(
+                ModBlockEntities.EXTREME_WATER_WHEEL.get(),
+                new SimpleBlockEntityVisualizer<committee.nova.avaritia_singularity_stress.content.extreme_water_wheel.ExtremeWaterWheelBlockEntity>(
+                        (ctx, be, pt) -> new committee.nova.avaritia_singularity_stress.init.client.visual.ExtremeWaterWheelVisual(ctx, be, pt),
+                        be -> false
+                )
+        );
         // B15:门帘改成写进方块模型（见 models/block/warp_tunnel/*.json 的 curtain_* 元素），
         // 不再依赖 Flywheel 的 BeltTunnelVisual——那条路依赖 flaps 同步，实测没画出来。
         // B6:输出轴沿用 Create 转速控制器的旋转轴可视化;支架由 BER 绘制,故 skipVanillaRender=false。

@@ -36,6 +36,8 @@ public class ExtremeMechanicalCrafterJeiPlugin implements IModPlugin {
 
     private static final int MIN_TIER = 1;  // 幽冥(sculk)
     private static final int MAX_TIER = 4;  // 终焉(extreme)
+    // B26 炽骨立方合成器只开放前两档(幽谧/炽骨),不挂末地/终焉,也不挂任何锻造/动能分类
+    private static final int BLAZE_CUBE_MAX_TIER = 2;
 
     private static final String[] TIER_TITLE_KEYS = {
             "jei.extreme_crafter.tier.sculk",   // tier 1
@@ -127,13 +129,21 @@ public class ExtremeMechanicalCrafterJeiPlugin implements IModPlugin {
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         // ---------- (A) 自定义分级分类 ----------
-        for (CreateRecipeCategory<ITierCraftingRecipe> category : allCategories) {
+        for (int i = 0; i < allCategories.size(); i++) {
+            CreateRecipeCategory<ITierCraftingRecipe> category = allCategories.get(i);
+            int tier = MIN_TIER + i;
             registration.addRecipeCatalyst(
                     new ItemStack(ModBlocks.EXTREME_MECHANICAL_CRAFTER.get()),
                     category.getRecipeType());
             registration.addRecipeCatalyst(
                     new ItemStack(ModBlocks.EXTREME_SMITHING_CRAFTER.get()),
                     category.getRecipeType());
+            // B26 炽骨立方合成器:只开放前两档,不挂末地/终焉分类
+            if (tier <= BLAZE_CUBE_MAX_TIER) {
+                registration.addRecipeCatalyst(
+                        new ItemStack(ModBlocks.BLAZE_CUBE_CRAFTER.get()),
+                        category.getRecipeType());
+            }
         }
 
         // ---------- (B) 自定义锻造分类 ----------
@@ -155,12 +165,22 @@ public class ExtremeMechanicalCrafterJeiPlugin implements IModPlugin {
                 kineticSmithingCategory.getRecipeType());
 
         // ---------- (C) Avaritia 原版分级配方 ----------
-        for (String typeId : AVARITIA_TIER_RECIPE_TYPES) {
+        for (int i = 0; i < AVARITIA_TIER_RECIPE_TYPES.size(); i++) {
+            String typeId = AVARITIA_TIER_RECIPE_TYPES.get(i);
+            int tier = MIN_TIER + i;
             registration.getJeiHelpers()
                     .getRecipeType(ResourceLocation.fromNamespaceAndPath("avaritia", typeId))
-                    .ifPresent(type -> registration.addRecipeCatalyst(
-                            new ItemStack(ModBlocks.EXTREME_MECHANICAL_CRAFTER.get()),
-                            type));
+                    .ifPresent(type -> {
+                        registration.addRecipeCatalyst(
+                                new ItemStack(ModBlocks.EXTREME_MECHANICAL_CRAFTER.get()),
+                                type);
+                        // B26 炽骨立方合成器:只挂前两档原版分类(sculk/nether)
+                        if (tier <= BLAZE_CUBE_MAX_TIER) {
+                            registration.addRecipeCatalyst(
+                                    new ItemStack(ModBlocks.BLAZE_CUBE_CRAFTER.get()),
+                                    type);
+                        }
+                    });
         }
 
         // ---------- (D) Avaritia 原版锻造配方 ----------

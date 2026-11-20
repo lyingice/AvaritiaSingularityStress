@@ -60,6 +60,42 @@ public final class ModSpriteShifts {
                     texture("block/extreme_smithing_crafter/crafter_side"),
                     texture("block/extreme_smithing_crafter/crafter_side_connected"));
 
+    // ===== B26 炽骨立方合成器:贴图引用用户自制目录 blaze_cube_mechanical_crafter =====
+    // 皮带动画贴图
+    public static final SpriteShiftEntry BLAZE_CUBE_CRAFTER_THINGIES =
+            SpriteShifter.get(
+                    texture("block/blaze_cube_mechanical_crafter/crafter_thingies"),
+                    texture("block/blaze_cube_mechanical_crafter/crafter_thingies")
+            );
+
+    // 正面连接:与主体模型键5的外壳同源(blaze_cube_casing)
+    public static final CTSpriteShiftEntry BLAZE_CUBE_CRAFTER_FRONT =
+            CTSpriteShifter.getCT(
+                    AllCTTypes.OMNIDIRECTIONAL,
+                    texture("block/blaze_cube_mechanical_crafter/blaze_cube_casing"),
+                    texture("block/blaze_cube_mechanical_crafter/blaze_cube_casing_connected"));
+
+    // 竖直方向连接(侧壁)
+    public static final CTSpriteShiftEntry BLAZE_CUBE_CRAFTER_SIDE =
+            CTSpriteShifter.getCT(
+                    AllCTTypes.VERTICAL,
+                    texture("block/blaze_cube_mechanical_crafter/crafter_side"),
+                    texture("block/blaze_cube_mechanical_crafter/crafter_side_connected"));
+
+    // 水平方向连接(上下端面)
+    public static final CTSpriteShiftEntry BLAZE_CUBE_CRAFTER_OTHERSIDE =
+            CTSpriteShifter.getCT(
+                    AllCTTypes.HORIZONTAL,
+                    texture("block/blaze_cube_mechanical_crafter/crafter_side"),
+                    texture("block/blaze_cube_mechanical_crafter/crafter_side_connected"));
+
+    // ===== B30 终焉连接器:全向连接纹理(占位复制 Create andesite_casing) =====
+    public static final CTSpriteShiftEntry EXTREME_CONNECTOR =
+            CTSpriteShifter.getCT(
+                    AllCTTypes.OMNIDIRECTIONAL,
+                    texture("block/extreme_connector/connector"),
+                    texture("block/extreme_connector/connector_connected"));
+
     private ModSpriteShifts() {
     }
 

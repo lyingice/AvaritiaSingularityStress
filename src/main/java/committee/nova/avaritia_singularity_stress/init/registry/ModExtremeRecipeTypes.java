@@ -1,6 +1,7 @@
 package committee.nova.avaritia_singularity_stress.init.registry;
 
 import committee.nova.avaritia_singularity_stress.AvaritiaSingularityStressMod;
+import committee.nova.avaritia_singularity_stress.content.recipes.BlazeCubeCraftingRecipe;
 import committee.nova.avaritia_singularity_stress.content.recipes.ExtremeKineticCraftingRecipe;
 import committee.nova.avaritia_singularity_stress.content.recipes.ExtremeKineticSmithingRecipe;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -37,6 +38,15 @@ public class ModExtremeRecipeTypes {
     public static final Supplier<RecipeSerializer<ExtremeKineticCraftingRecipe>> EXTREME_KINETIC_CRAFTING_SERIALIZER =
             SERIALIZERS.register("extreme_kinetic_crafting",
                     ExtremeKineticCraftingRecipe.Serializer::new);
+
+    // ===== B31 炽骨立方专属:shaped 网格(炽骨合成器专属,终焉动力合成器兼容,工作台不可做) =====
+    public static final Supplier<RecipeType<BlazeCubeCraftingRecipe>> BLAZE_CUBE_CRAFTING_TYPE =
+            TYPES.register("blaze_cube_crafting",
+                    () -> RecipeType.simple(id("blaze_cube_crafting")));
+
+    public static final Supplier<RecipeSerializer<BlazeCubeCraftingRecipe>> BLAZE_CUBE_CRAFTING_SERIALIZER =
+            SERIALIZERS.register("blaze_cube_crafting",
+                    BlazeCubeCraftingRecipe.Serializer::new);
 
     // ===== 终焉动能锻造:模板 / 基座 / 3 添加物 =====
     public static final Supplier<RecipeType<ExtremeKineticSmithingRecipe>> EXTREME_KINETIC_SMITHING_TYPE =

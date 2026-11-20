@@ -86,10 +86,8 @@ public class ExtremeMechanicalCrafterBlock extends HorizontalKineticBlock
         BlockPos placedOnPos = context.getClickedPos().relative(face.getOpposite());
         BlockState blockState = context.getLevel().getBlockState(placedOnPos);
 
-        // 判断依据是「是否同属终焉合成器家族」而非严格同一方块:
-        // 因为终焉合成器与终焉锻造器可以互相连接,放在一起时应自动继承朝向,
-        // 否则十字布局(中心锻造器 + 四向合成器)无法自动对齐。
-        if ((!(blockState.getBlock() instanceof ExtremeMechanicalCrafterBlock))
+        // B26：只对齐可互连的机器，保留终焉合成器与锻造器的对齐，炽骨则独立成组。
+        if (!ExtremeCrafterHelper.canConnect(defaultBlockState(), blockState)
                 || (context.getPlayer() != null && context.getPlayer().isShiftKeyDown())) {
             BlockState stateForPlacement = super.getStateForPlacement(context);
             Direction direction = stateForPlacement.getValue(HORIZONTAL_FACING);
@@ -331,7 +329,7 @@ public class ExtremeMechanicalCrafterBlock extends HorizontalKineticBlock
         if (!world.isLoaded(targetPos)) {
             return false;
         }
-        if (!ExtremeCrafterHelper.isCrafter(targetState)) {
+        if (!ExtremeCrafterHelper.canConnect(crafterState, targetState)) {
             return false;
         }
         if (crafterState.getValue(HORIZONTAL_FACING) != targetState.getValue(HORIZONTAL_FACING)) {

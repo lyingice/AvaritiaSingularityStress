@@ -59,7 +59,7 @@ public final class WarpSelfTest {
      * 开关：只有显式传 {@code -Davaritia.warp.selftest=true} 时才跑。
      * <p>
      * <b>必须默认关闭</b>：它会 {@code halt} 服务器，若不加开关，任何人开服都会被立刻关掉。
-     * 验证用的 {@code run-server-verify.init.gradle} 会注入这个属性。
+     * 验证用的 {@code gradle/verification/run-server-verify.init.gradle} 会注入这个属性。
      */
     private static final String ENABLE_PROPERTY = "avaritia.warp.selftest";
     /** 只跑一次，且要等世界跑几 tick。 */

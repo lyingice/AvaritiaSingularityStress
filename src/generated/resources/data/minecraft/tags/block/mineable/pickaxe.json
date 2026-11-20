@@ -2,6 +2,11 @@
   "values": [
     "avaritia_singularity_stress:extreme_mechanical_crafter",
     "avaritia_singularity_stress:extreme_smithing_crafter",
+    "avaritia_singularity_stress:blaze_cube_crafter",
+    "avaritia_singularity_stress:extreme_drill",
+    "avaritia_singularity_stress:extreme_water_wheel",
+    "avaritia_singularity_stress:extreme_connector",
+    "avaritia_singularity_stress:extreme_crafting_terminal",
     "avaritia_singularity_stress:singularity_rotation_speed_controller",
     "avaritia_singularity_stress:singularity_stabilizer",
     "avaritia_singularity_stress:kinetic_neutron_collector",

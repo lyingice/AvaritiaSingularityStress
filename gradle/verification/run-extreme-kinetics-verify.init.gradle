@@ -1,0 +1,15 @@
+// 仅用于"隔离验证"B27 终焉钻头 / B28 终焉水车：把 runServer 的游戏目录指到干净目录。
+// 注入 -Davaritia.extreme_kinetics.selftest=true：让 ExtremeKineticsSelfTest 在开服后
+// 自动跑钻头时运/近瞬挖 + 水车容量×转速自检（17 条断言）并 halt。不传属性时完全不执行。
+//
+// 用法： ./gradlew runServer --offline --init-script gradle/verification/run-extreme-kinetics-verify.init.gradle
+// 需先在 run/verification/extreme-kinetics/mods 放好必需依赖并同意 EULA。
+gradle.projectsEvaluated {
+    def task = rootProject.tasks.findByName('runServer')
+    if (task != null) {
+        task.gameDirectory = rootProject.file('run/verification/extreme-kinetics')
+        // 防止 Windows 停服后 AWT 非守护线程吊住 JVM（与 terminal 脚本同）
+        task.jvmArgs('-Djava.awt.headless=true')
+        task.jvmArgs('-Davaritia.extreme_kinetics.selftest=true')
+    }
+}

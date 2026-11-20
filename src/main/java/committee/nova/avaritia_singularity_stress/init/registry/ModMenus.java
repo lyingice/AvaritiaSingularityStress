@@ -1,6 +1,7 @@
 package committee.nova.avaritia_singularity_stress.init.registry;
 
 import committee.nova.avaritia_singularity_stress.AvaritiaSingularityStressMod;
+import committee.nova.avaritia_singularity_stress.content.extreme_crafting_terminal.ExtremeCraftingTerminalMenu;
 import committee.nova.avaritia_singularity_stress.content.kinetic_neutron_collector.KineticNeutronCollectorMenu;
 import committee.nova.avaritia_singularity_stress.content.kinetic_neutron_compressor.KineticNeutronCompressorMenu;
 import committee.nova.avaritia_singularity_stress.content.kinetics.belt.warp_tunnel.WarpTunnelConfigMenu;
@@ -51,6 +52,13 @@ public class ModMenus {
                     () -> IMenuTypeExtension.create(
                             (id, inventory, buf) -> new WarpTunnelConfigMenu(
                                     ModMenus.WARP_TUNNEL_CONFIG.get(), id, inventory, buf)));
+
+    /** B29 终焉动能合成终端界面（pos-only，客户端构造器需 MenuType，故 lambda 显式构造）。 */
+    public static final Supplier<MenuType<ExtremeCraftingTerminalMenu>> EXTREME_CRAFTING_TERMINAL =
+            MENUS.register("extreme_crafting_terminal",
+                    () -> IMenuTypeExtension.create(
+                            (id, inventory, buf) -> new ExtremeCraftingTerminalMenu(
+                                    ModMenus.EXTREME_CRAFTING_TERMINAL.get(), id, inventory, buf)));
 
     public static void init() {
         // 仅用于触发类加载

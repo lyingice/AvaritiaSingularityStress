@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "avaritia_singularity_stress:block/extreme_crafting_terminal/terminal"
+  }
+}

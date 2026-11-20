@@ -69,6 +69,32 @@ public class ModPartialModels {
             block("extreme_smithing_crafter/arrow");
     public static final PartialModel EXTREME_SMITHING_CRAFTER_BELT =
             block("extreme_smithing_crafter/belt_animated");
+
+    // ============ B26 炽骨立方合成器 PartialModel ============
+    // 五个部件全部用 blaze_cube_crafter 专属纹理,可独立替换;
+    // cogwheel 是手写的 Blockbench 几何(复制 crystal_matrix/cogwheel_shaftless),不走 datagen。
+    public static final PartialModel BLAZE_CUBE_CRAFTER_LID =
+            block("blaze_cube_crafter/lid");
+    public static final PartialModel BLAZE_CUBE_CRAFTER_ARROW =
+            block("blaze_cube_crafter/arrow");
+    public static final PartialModel BLAZE_CUBE_CRAFTER_BELT_FRAME =
+            block("blaze_cube_crafter/belt");
+    public static final PartialModel BLAZE_CUBE_CRAFTER_BELT =
+            block("blaze_cube_crafter/belt_animated");
+    public static final PartialModel BLAZE_CUBE_CRAFTER_COGWHEEL =
+            block("blaze_cube_crafter/cogwheel");
+
+    // ============ B27 终焉钻头 PartialModel ============
+    // 旋转钻头几何复制自 Create mechanical_drill/head，贴图换成本模组 extreme_drill/ 占位图。
+    public static final PartialModel EXTREME_DRILL_HEAD =
+            block("extreme_drill/head");
+
+    // ============ B28 终焉水车 PartialModel ============
+    // 轮体完全模组本地化:OBJ 几何复制自 Create water_wheel,贴图固定指向 extreme_water_wheel/。
+    // 由 ExtremeWaterWheelRenderer/Visual 直接使用,不做材质重映射。
+    public static final PartialModel EXTREME_WATER_WHEEL =
+            block("extreme_water_wheel/wheel");
+
     // ============ B14 奇点稳定器 PartialModel ============
     // 旋转几何独立成 rotor 模型;blockstate 模型是空壳,chunk 网格不画任何东西
     public static final PartialModel SINGULARITY_STABILIZER =

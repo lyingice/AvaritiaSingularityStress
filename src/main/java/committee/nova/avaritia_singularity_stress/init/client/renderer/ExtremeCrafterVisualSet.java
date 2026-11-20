@@ -49,4 +49,19 @@ public record ExtremeCrafterVisualSet(
             ModPartialModels.CRYSTAL_COGWHEEL_GEAR,
             ModSpriteShifts.EXTREME_SMITHING_CRAFTER_THINGIES
     );
+
+    /**
+     * B26 炽骨立方合成器。
+     * <p>
+     * 五个部件全部用 blaze_cube_crafter 专属模型/贴图(含独立齿轮),
+     * 不复用终焉系列的任何专有纹理,方便用户单独替换美术。
+     */
+    public static final ExtremeCrafterVisualSet BLAZE_CUBE = new ExtremeCrafterVisualSet(
+            ModPartialModels.BLAZE_CUBE_CRAFTER_LID,
+            ModPartialModels.BLAZE_CUBE_CRAFTER_ARROW,
+            ModPartialModels.BLAZE_CUBE_CRAFTER_BELT_FRAME,
+            ModPartialModels.BLAZE_CUBE_CRAFTER_BELT,
+            ModPartialModels.BLAZE_CUBE_CRAFTER_COGWHEEL,
+            ModSpriteShifts.BLAZE_CUBE_CRAFTER_THINGIES
+    );
 }

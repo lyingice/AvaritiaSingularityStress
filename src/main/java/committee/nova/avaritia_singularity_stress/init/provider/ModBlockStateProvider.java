@@ -47,6 +47,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 ModBlocks.EXTREME_MECHANICAL_CRAFTER.get());
         generateCrafter("extreme_smithing_crafter",
                 ModBlocks.EXTREME_SMITHING_CRAFTER.get());
+        generateBlazeCubeCrafter();
+        generateExtremeDrill();
+        generateExtremeWaterWheel();
         generateSingularitySpeedController();
         //generateSingularityStabilizer();已弃用
         generateKineticNeutronMachines();
@@ -162,6 +165,87 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 "block/mechanical_crafter/belt_animated", name);
 
         generateBlockState(block, body);
+    }
+
+    /**
+     * B26 炽骨立方合成器:主体 + 动态部件 + 皮带框 + blockstate。
+     * <p>
+     * 贴图引用用户自制目录 {@code blaze_cube_mechanical_crafter}(模型输出仍在 blaze_cube_crafter/):
+     * #3=crafter_thingies #4=crafter_side #5=blaze_cube_casing #7=blaze_cube_gearbox #8=crafter_inside。
+     * 齿轮 partial 是手写 Blockbench 模型(blaze_cube_crafter/cogwheel.json),仍用 blaze_cube_crafter/crafter_cogwheel,
+     * 因用户目录未提供齿轮贴图。
+     */
+    private void generateBlazeCubeCrafter() {
+        String name = "blaze_cube_crafter";
+        String tex = "blaze_cube_mechanical_crafter";
+        Block block = ModBlocks.BLAZE_CUBE_CRAFTER.get();
+        ResourceLocation casing = modLoc("block/" + tex + "/blaze_cube_casing");
+
+        ModelFile body = models()
+                .withExistingParent(
+                        "block/" + name + "/block",
+                        ResourceLocation.fromNamespaceAndPath(
+                                CREATE_NAMESPACE, "block/mechanical_crafter/block")
+                )
+                .texture("3", modLoc("block/" + tex + "/crafter_thingies"))
+                .texture("4", modLoc("block/" + tex + "/crafter_side"))
+                .texture("5", casing)
+                .texture("7", modLoc("block/" + tex + "/blaze_cube_gearbox"))
+                .texture("8", modLoc("block/" + tex + "/crafter_inside"))
+                .texture("particle", casing)
+                .renderType(ResourceLocation.fromNamespaceAndPath("minecraft", "cutout_mipped"));
+
+        generateThingiesPartial("block/" + name + "/lid", "block/mechanical_crafter/lid", tex);
+        generateThingiesPartial("block/" + name + "/arrow", "block/mechanical_crafter/arrow", tex);
+        generateThingiesPartial("block/" + name + "/belt_animated",
+                "block/mechanical_crafter/belt_animated", tex);
+
+        // 皮带框:键5用炽骨专属外壳
+        models()
+                .withExistingParent(
+                        "block/" + name + "/belt",
+                        ResourceLocation.fromNamespaceAndPath(
+                                CREATE_NAMESPACE, "block/mechanical_crafter/belt")
+                )
+                .texture("5", casing)
+                .renderType(ResourceLocation.fromNamespaceAndPath("minecraft", "cutout"));
+
+        generateBlockState(block, body);
+    }
+
+    /**
+     * B27 终焉钻头 blockstate:主体模型是手写的模组本地模型(复制 Create 几何 + 本地贴图),
+     * 这里只生成 12 个 facing×waterlogged 变体,朝向旋转与 Create 钻头一致。
+     */
+    private void generateExtremeDrill() {
+        ModelFile model = new ModelFile.UncheckedModelFile(modLoc("block/extreme_drill/block"));
+        getVariantBuilder(ModBlocks.EXTREME_DRILL.get())
+                .forAllStates(state -> directionalConfigured(model,
+                        state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING)));
+    }
+
+    /** B28 终焉水车 blockstate:6 个 facing 变体,外壳模型为模组本地手写模型。 */
+    private void generateExtremeWaterWheel() {
+        ModelFile model = new ModelFile.UncheckedModelFile(modLoc("block/extreme_water_wheel/block"));
+        getVariantBuilder(ModBlocks.EXTREME_WATER_WHEEL.get())
+                .forAllStates(state -> directionalConfigured(model,
+                        state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING)));
+    }
+
+    /** Create 六向动能方块朝向旋转(与 create:blockstates/mechanical_drill.json、water_wheel.json 一致)。 */
+    private static ConfiguredModel[] directionalConfigured(ModelFile model, Direction facing) {
+        int x = switch (facing) {
+            case DOWN -> 180;
+            case UP -> 0;
+            default -> 90;
+        };
+        int y = switch (facing) {
+            case SOUTH -> 180;
+            case EAST -> 90;
+            case WEST -> 270;
+            default -> 0;
+        };
+        return new ConfiguredModel[]{new ConfiguredModel(model, x, y, false)};
     }
 
     /**

@@ -4,7 +4,6 @@
 /build/
 /build/classes/java/main/
 /run/
-/run-server-verify/
 /libs/
 /.zcode/
 
@@ -15,6 +14,8 @@
 # agent/ 是 AI 自己用的上下文/踩坑/决策/交接，属于本机工作区状态，
 # 可能含临时路径、调试日志、未定稿的猜测 —— 一律不提交。
 /agent/
+# 根目录的 AI 编排指引同属 AI 内容，不进版本库。
+/AGENT.md
 # ============ 必须进版本库 ============
 # docs/ —— 只写给人读的正式文档（设计稿、测试指南、教程、开发约定），受版本控制。
 # 约定：人类内容写 docs/（进 git），AI 内容写 agent/（不进 git）。

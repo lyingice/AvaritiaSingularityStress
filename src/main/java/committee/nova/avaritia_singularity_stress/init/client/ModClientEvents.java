@@ -102,11 +102,20 @@ public final class ModClientEvents {
                 ResourceLocation.fromNamespaceAndPath(
                         AvaritiaSingularityStressMod.MODID, "extreme_mechanical_crafter"),
                 ResourceLocation.fromNamespaceAndPath(
-                        AvaritiaSingularityStressMod.MODID, "extreme_smithing_crafter"));
+                        AvaritiaSingularityStressMod.MODID, "extreme_smithing_crafter"),
+                // B26 炽骨立方合成器:按注册 ID 包装,排除 inventory 变体(见下方判断)
+                ResourceLocation.fromNamespaceAndPath(
+                        AvaritiaSingularityStressMod.MODID, "blaze_cube_crafter"));
         EncasedCTBehaviour blazeCasingCT = new EncasedCTBehaviour(encasedCasingShift());
         Set<ResourceLocation> blazeCasingIds = Set.of(
                 ResourceLocation.fromNamespaceAndPath(
                         AvaritiaSingularityStressMod.MODID, "blaze_cube_casing"));
+
+        // B30 终焉连接器:全向 CT,连接器↔连接器/终端相连
+        ExtremeConnectorCTBehaviour connectorCT = new ExtremeConnectorCTBehaviour();
+        Set<ResourceLocation> connectorIds = Set.of(
+                ResourceLocation.fromNamespaceAndPath(
+                        AvaritiaSingularityStressMod.MODID, "extreme_connector"));
 
         // B19 炽骨包壳齿轮的连接纹理：壳侧面用 side/_side_connected，机壳本体用 casing/_connected。
         // Create 原版是靠 CreateRegistrate.connectedTextures(...) 注册的；本工程不用 registrate，
@@ -137,6 +146,11 @@ public final class ModClientEvents {
                     && !ModelResourceLocation.INVENTORY_VARIANT.equals(location.getVariant())) {
                 wrapped[0]++;
                 return new CTModel(model, blazeCasingCT);
+            }
+            if (connectorIds.contains(location.id())
+                    && !ModelResourceLocation.INVENTORY_VARIANT.equals(location.getVariant())) {
+                wrapped[0]++;
+                return new CTModel(model, connectorCT);
             }
             return model;
         });
@@ -200,7 +214,9 @@ public final class ModClientEvents {
         event.register(ModMenus.WIRELESS_CONFIG.get(), WirelessConfigScreen::new);
         event.register(ModMenus.WARP_TUNNEL_CONFIG.get(),
                 committee.nova.avaritia_singularity_stress.init.client.screen.WarpTunnelConfigScreen::new);
-
+        // B29 终焉动能合成终端
+        event.register(ModMenus.EXTREME_CRAFTING_TERMINAL.get(),
+                committee.nova.avaritia_singularity_stress.init.client.screen.ExtremeCraftingTerminalScreen::new);
     }
 
     @SubscribeEvent

@@ -1,0 +1,17 @@
+{
+  "parent": "create:block/large_wheels",
+  "loader": "neoforge:obj",
+  "flip_v": true,
+  "model": "avaritia_singularity_stress:models/block/extreme_water_wheel/water_wheel.obj",
+  "ambientocclusion": false,
+  "textures": {
+    "axis": "avaritia_singularity_stress:block/extreme_water_wheel/axis",
+    "gearbox": "avaritia_singularity_stress:block/extreme_water_wheel/gearbox",
+    "axis_top": "avaritia_singularity_stress:block/extreme_water_wheel/axis_top",
+    "metal": "avaritia_singularity_stress:block/extreme_water_wheel/waterwheel_metal",
+    "log": "avaritia_singularity_stress:block/extreme_water_wheel/oak_log",
+    "planks": "avaritia_singularity_stress:block/extreme_water_wheel/oak_planks",
+    "particle": "#planks"
+  },
+  "render_type": "minecraft:cutout"
+}

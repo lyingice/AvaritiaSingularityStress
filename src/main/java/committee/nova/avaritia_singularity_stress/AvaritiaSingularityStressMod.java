@@ -1,5 +1,6 @@
 package committee.nova.avaritia_singularity_stress;
 
+import committee.nova.avaritia_singularity_stress.content.extreme_drill.ExtremeDrillConfig;
 import committee.nova.avaritia_singularity_stress.content.extreme_mechanical_crafter.ExtremeMechanicalCrafterBlockEntity;
 import committee.nova.avaritia_singularity_stress.content.kinetics.link.BlazeCubeEncasedShaftBlock;
 import committee.nova.avaritia_singularity_stress.content.kinetics.link.BlazeCubeEncasedCogwheelBlock;
@@ -53,6 +54,9 @@ public class AvaritiaSingularityStressMod {
 
     public AvaritiaSingularityStressMod(IEventBus modEventBus, ModContainer modContainer) {
         modContainer.registerConfig(ModConfig.Type.SERVER, SingularityConfig.SPEC);
+        // 独立文件名：同 modid 第二个 SERVER config 不能共用 -server.toml（ConfigTracker 冲突）
+        modContainer.registerConfig(ModConfig.Type.SERVER, ExtremeDrillConfig.SPEC,
+                "avaritia_singularity_stress-drill-server.toml");
         modContainer.registerConfig(ModConfig.Type.COMMON, WirelessConfig.SPEC);
         ModItems.ITEMS.register(modEventBus);
         ModBlocks.BLOCKS.register(modEventBus);
@@ -127,6 +131,12 @@ public class AvaritiaSingularityStressMod {
         event.registerBlockEntity(
                 Capabilities.ItemHandler.BLOCK,
                 ModBlockEntities.EXTREME_SMITHING_CRAFTER.get(),
+                (blockEntity, side) -> ((ExtremeMechanicalCrafterBlockEntity) blockEntity).exposeItemHandler()
+        );
+        // B26 炽骨立方合成器:同样暴露整组的组合库存
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                ModBlockEntities.BLAZE_CUBE_CRAFTER.get(),
                 (blockEntity, side) -> ((ExtremeMechanicalCrafterBlockEntity) blockEntity).exposeItemHandler()
         );
         // 动能机器:暴露各自的产出/输入槽,便于漏斗等自动化交互

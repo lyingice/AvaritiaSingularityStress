@@ -1,6 +1,11 @@
 package committee.nova.avaritia_singularity_stress.init.registry;
 
 import committee.nova.avaritia_singularity_stress.AvaritiaSingularityStressMod;
+import committee.nova.avaritia_singularity_stress.content.blaze_cube_crafter.BlazeCubeCrafterBlockEntity;
+import committee.nova.avaritia_singularity_stress.content.extreme_connector.ExtremeConnectorBlockEntity;
+import committee.nova.avaritia_singularity_stress.content.extreme_crafting_terminal.ExtremeCraftingTerminalBlockEntity;
+import committee.nova.avaritia_singularity_stress.content.extreme_drill.ExtremeDrillBlockEntity;
+import committee.nova.avaritia_singularity_stress.content.extreme_water_wheel.ExtremeWaterWheelBlockEntity;
 import committee.nova.avaritia_singularity_stress.content.extreme_mechanical_crafter.ExtremeMechanicalCrafterBlockEntity;
 import committee.nova.avaritia_singularity_stress.content.extreme_smithing_crafter.ExtremeSmithingCrafterBlockEntity;
 import committee.nova.avaritia_singularity_stress.content.kinetics.belt.warp_tunnel.WarpTunnelBlockEntity;
@@ -38,6 +43,56 @@ public class ModBlockEntities {
                     () -> BlockEntityType.Builder.of(
                             ExtremeSmithingCrafterBlockEntity::create,
                             ModBlocks.EXTREME_SMITHING_CRAFTER.get()
+                    ).build(null)
+            );
+
+    /** B26 炽骨立方合成器:独立实体类型,保留自己的库存与动画。 */
+    public static final Supplier<BlockEntityType<BlazeCubeCrafterBlockEntity>> BLAZE_CUBE_CRAFTER =
+            BLOCK_ENTITIES.register(
+                    "blaze_cube_crafter",
+                    () -> BlockEntityType.Builder.of(
+                            BlazeCubeCrafterBlockEntity::create,
+                            ModBlocks.BLAZE_CUBE_CRAFTER.get()
+                    ).build(null)
+            );
+
+    /** B27 终焉钻头。 */
+    public static final Supplier<BlockEntityType<ExtremeDrillBlockEntity>> EXTREME_DRILL =
+            BLOCK_ENTITIES.register(
+                    "extreme_drill",
+                    () -> BlockEntityType.Builder.of(
+                            ExtremeDrillBlockEntity::create,
+                            ModBlocks.EXTREME_DRILL.get()
+                    ).build(null)
+            );
+
+    /** B28 终焉水车。 */
+    public static final Supplier<BlockEntityType<ExtremeWaterWheelBlockEntity>> EXTREME_WATER_WHEEL =
+            BLOCK_ENTITIES.register(
+                    "extreme_water_wheel",
+                    () -> BlockEntityType.Builder.of(
+                            ExtremeWaterWheelBlockEntity::create,
+                            ModBlocks.EXTREME_WATER_WHEEL.get()
+                    ).build(null)
+            );
+
+    /** B30 终焉连接器（被动网络节点）。 */
+    public static final Supplier<BlockEntityType<ExtremeConnectorBlockEntity>> EXTREME_CONNECTOR =
+            BLOCK_ENTITIES.register(
+                    "extreme_connector",
+                    () -> BlockEntityType.Builder.of(
+                            ExtremeConnectorBlockEntity::create,
+                            ModBlocks.EXTREME_CONNECTOR.get()
+                    ).build(null)
+            );
+
+    /** B29 终焉动能合成终端。 */
+    public static final Supplier<BlockEntityType<ExtremeCraftingTerminalBlockEntity>> EXTREME_CRAFTING_TERMINAL =
+            BLOCK_ENTITIES.register(
+                    "extreme_crafting_terminal",
+                    () -> BlockEntityType.Builder.of(
+                            ExtremeCraftingTerminalBlockEntity::create,
+                            ModBlocks.EXTREME_CRAFTING_TERMINAL.get()
                     ).build(null)
             );
     public static final Supplier<BlockEntityType<SingularityRotationSpeedControllerBlockEntity>> SINGULARITY_ROTATION_SPEED_CONTROLLER =

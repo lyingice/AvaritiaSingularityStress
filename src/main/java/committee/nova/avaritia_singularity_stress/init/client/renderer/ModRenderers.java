@@ -21,6 +21,21 @@ public final class ModRenderers {
                 ModBlockEntities.EXTREME_SMITHING_CRAFTER.get(),
                 context -> new ExtremeCrafterRenderer<>(context, ExtremeCrafterVisualSet.SMITHING)
         );
+        // B26 炽骨立方合成器:复用同一渲染器,注入专属资源集合
+        event.registerBlockEntityRenderer(
+                ModBlockEntities.BLAZE_CUBE_CRAFTER.get(),
+                context -> new ExtremeCrafterRenderer<>(context, ExtremeCrafterVisualSet.BLAZE_CUBE)
+        );
+        // B27 终焉钻头:模组本地渲染器(专属钻头 partial)
+        event.registerBlockEntityRenderer(
+                ModBlockEntities.EXTREME_DRILL.get(),
+                ExtremeDrillRenderer::new
+        );
+        // B28 终焉水车:模组本地渲染器(轮体固定贴图,无材质重映射)
+        event.registerBlockEntityRenderer(
+                ModBlockEntities.EXTREME_WATER_WHEEL.get(),
+                ExtremeWaterWheelRenderer::new
+        );
         event.registerBlockEntityRenderer(
                 ModBlockEntities.SINGULARITY_ROTATION_SPEED_CONTROLLER.get(),
                 SingularitySpeedControllerRenderer::new

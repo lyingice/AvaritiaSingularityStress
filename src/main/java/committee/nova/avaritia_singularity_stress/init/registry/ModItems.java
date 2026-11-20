@@ -32,6 +32,39 @@ public class ModItems {
             )
     );
 
+    /** B26 炽骨立方合成器。 */
+    public static final Supplier<Item> BLAZE_CUBE_CRAFTER = ITEMS.register(
+            "blaze_cube_crafter",
+            () -> new BlockItem(
+                    ModBlocks.BLAZE_CUBE_CRAFTER.get(),
+                    new Item.Properties()
+            )
+    );
+
+    /** B27 终焉钻头。 */
+    public static final Supplier<Item> EXTREME_DRILL = ITEMS.register(
+            "extreme_drill",
+            () -> new BlockItem(ModBlocks.EXTREME_DRILL.get(), new Item.Properties())
+    );
+
+    /** B28 终焉水车。 */
+    public static final Supplier<Item> EXTREME_WATER_WHEEL = ITEMS.register(
+            "extreme_water_wheel",
+            () -> new BlockItem(ModBlocks.EXTREME_WATER_WHEEL.get(), new Item.Properties())
+    );
+
+    /** B30 终焉连接器。 */
+    public static final Supplier<Item> EXTREME_CONNECTOR = ITEMS.register(
+            "extreme_connector",
+            () -> new BlockItem(ModBlocks.EXTREME_CONNECTOR.get(), new Item.Properties())
+    );
+
+    /** B29 终焉动能合成终端。 */
+    public static final Supplier<Item> EXTREME_CRAFTING_TERMINAL = ITEMS.register(
+            "extreme_crafting_terminal",
+            () -> new BlockItem(ModBlocks.EXTREME_CRAFTING_TERMINAL.get(), new Item.Properties())
+    );
+
     public static final Supplier<Item> NEUTRON_EXTENDO_GRIP = ITEMS.register(
             "neutron_extendo_grip",
             () -> new NeutronExtendoGripItem(new Item.Properties()

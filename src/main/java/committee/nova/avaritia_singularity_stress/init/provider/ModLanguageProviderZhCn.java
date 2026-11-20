@@ -17,6 +17,59 @@ public class ModLanguageProviderZhCn extends LanguageProvider {
         add("itemGroup." + AvaritiaSingularityStressMod.MODID, "奇点应力");
         add(ModBlocks.EXTREME_MECHANICAL_CRAFTER.get(), "终焉动力合成器");
         add(ModBlocks.EXTREME_SMITHING_CRAFTER.get(), "终焉锻造器");
+        // B26 炽骨立方合成器（低配版终焉合成器）
+        add(ModBlocks.BLAZE_CUBE_CRAFTER.get(), "炽骨立方合成器");
+        // B27 终焉钻头 / B28 终焉水车
+        add(ModBlocks.EXTREME_DRILL.get(), "终焉钻头");
+        add(ModBlocks.EXTREME_WATER_WHEEL.get(), "终焉水车");
+        // B30 终焉连接器 / B29 终焉动能合成终端
+        add(ModBlocks.EXTREME_CONNECTOR.get(), "终焉连接器");
+        add(ModBlocks.EXTREME_CRAFTING_TERMINAL.get(), "终焉动能合成终端");
+        // ===== B29 终端 GUI：搜索、列表、9×9 预览、材料、指标、结果 =====
+        add("gui.avaritia_singularity_stress.crafting_terminal.search_hint", "搜索名称或 ID");
+        add("gui.avaritia_singularity_stress.crafting_terminal.list_empty", "没有匹配的配方");
+        add("gui.avaritia_singularity_stress.crafting_terminal.no_selection", "未选择配方");
+        add("gui.avaritia_singularity_stress.crafting_terminal.selected_missing",
+                "选中的配方已不存在（数据包已变更？）");
+        add("gui.avaritia_singularity_stress.crafting_terminal.unsupported",
+                "该配方无法由终端自动合成");
+        add("gui.avaritia_singularity_stress.crafting_terminal.materials", "材料需求");
+        add("gui.avaritia_singularity_stress.crafting_terminal.materials.none", "无需材料");
+        add("gui.avaritia_singularity_stress.crafting_terminal.materials.need", "需要：%s");
+        add("gui.avaritia_singularity_stress.crafting_terminal.materials.variants", "%s 种候选");
+        add("gui.avaritia_singularity_stress.crafting_terminal.materials.more", "还有 %s 种");
+        add("gui.avaritia_singularity_stress.crafting_terminal.preview.empty", "空");
+        add("gui.avaritia_singularity_stress.crafting_terminal.preview.cell", "格 %s, %s");
+        add("gui.avaritia_singularity_stress.crafting_terminal.preview.no_candidates", "没有匹配物品");
+        add("gui.avaritia_singularity_stress.crafting_terminal.metric.crafters", "合成器：%s");
+        add("gui.avaritia_singularity_stress.crafting_terminal.metric.stress", "应力：%s");
+        add("gui.avaritia_singularity_stress.crafting_terminal.network.ready", "网络就绪");
+        add("gui.avaritia_singularity_stress.crafting_terminal.network.missing", "无连接器网络");
+        add("gui.avaritia_singularity_stress.crafting_terminal.network.incomplete", "链不完整：查朝向与箭头");
+        add("gui.avaritia_singularity_stress.crafting_terminal.network.not_ready", "网络暂未就绪");
+        add("gui.avaritia_singularity_stress.crafting_terminal.craft", "自动合成");
+        add("gui.avaritia_singularity_stress.crafting_terminal.pin", "钉住");
+        add("gui.avaritia_singularity_stress.crafting_terminal.unpin", "取消");
+        add("gui.avaritia_singularity_stress.crafting_terminal.craft.pending", "合成请求已发送…");
+        add("gui.avaritia_singularity_stress.crafting_terminal.craft.no_selection", "请先选择配方");
+        add("gui.avaritia_singularity_stress.crafting_terminal.craft.stale", "选中的配方已不存在");
+        add("gui.avaritia_singularity_stress.crafting_terminal.hint.select",
+                "选择配方后点击自动合成");
+        add("gui.avaritia_singularity_stress.crafting_terminal.recipe_id", "配方：%s");
+        // 结果文案由 screen 按 "status." + CraftResult.name().toLowerCase(Locale.ROOT) 拼接。
+        add("gui.avaritia_singularity_stress.crafting_terminal.status.started", "已开始自动合成");
+        add("gui.avaritia_singularity_stress.crafting_terminal.status.invalid_recipe",
+                "配方无效或不受支持");
+        add("gui.avaritia_singularity_stress.crafting_terminal.status.invalid_network",
+                "没有有效的合成器网络");
+        add("gui.avaritia_singularity_stress.crafting_terminal.status.busy", "合成器网络正忙");
+        add("gui.avaritia_singularity_stress.crafting_terminal.status.no_power", "有合成器未转动");
+        add("gui.avaritia_singularity_stress.crafting_terminal.status.grid_mismatch",
+                "合成器网格放不下该配方");
+        add("gui.avaritia_singularity_stress.crafting_terminal.status.missing_materials",
+                "相邻仓库缺少材料");
+        add("gui.avaritia_singularity_stress.crafting_terminal.status.transfer_failed",
+                "材料转移失败，已回滚");
         add(ModItems.NEUTRON_EXTENDO_GRIP.get(), "深空延拓之手");
         // I2 深空延拓之手：把 Create 伸缩机械手（item.create.extendo_grip.tooltip.*）的描述结构照搬过来，
         // 内容按本物品的真实行为写：单手持 +6 格、双手各持一只 +10 格、附加攻击/挖掘加成、背罐半速耗气。

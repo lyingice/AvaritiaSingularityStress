@@ -1,6 +1,11 @@
 package committee.nova.avaritia_singularity_stress.init.registry;
 
 import committee.nova.avaritia_singularity_stress.AvaritiaSingularityStressMod;
+import committee.nova.avaritia_singularity_stress.content.blaze_cube_crafter.BlazeCubeCrafterBlock;
+import committee.nova.avaritia_singularity_stress.content.extreme_connector.ExtremeConnectorBlock;
+import committee.nova.avaritia_singularity_stress.content.extreme_crafting_terminal.ExtremeCraftingTerminalBlock;
+import committee.nova.avaritia_singularity_stress.content.extreme_drill.ExtremeDrillBlock;
+import committee.nova.avaritia_singularity_stress.content.extreme_water_wheel.ExtremeWaterWheelBlock;
 import committee.nova.avaritia_singularity_stress.content.extreme_mechanical_crafter.ExtremeMechanicalCrafterBlock;
 import committee.nova.avaritia_singularity_stress.content.extreme_smithing_crafter.ExtremeSmithingCrafterBlock;
 import committee.nova.avaritia_singularity_stress.content.kinetics.belt.warp_tunnel.WarpTunnelBlock;
@@ -43,6 +48,56 @@ public class ModBlocks {
     public static final Supplier<Block> EXTREME_SMITHING_CRAFTER = BLOCKS.register(
             "extreme_smithing_crafter",
             () -> new ExtremeSmithingCrafterBlock(
+                    BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+                            .strength(5.0F, 6.0F)
+                            .noOcclusion()
+            )
+    );
+
+    /** B26 炽骨立方合成器:终焉动力合成器的低配版,只开放幽谧/炽骨两档工作台配方,独立组网。 */
+    public static final Supplier<Block> BLAZE_CUBE_CRAFTER = BLOCKS.register(
+            "blaze_cube_crafter",
+            () -> new BlazeCubeCrafterBlock(
+                    BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+                            .strength(5.0F, 6.0F)
+                            .noOcclusion()
+            )
+    );
+
+    /** B27 终焉钻头:256SU/RPM 耗能,近瞬挖,时运随转速 1~16 级。 */
+    public static final Supplier<Block> EXTREME_DRILL = BLOCKS.register(
+            "extreme_drill",
+            () -> new ExtremeDrillBlock(
+                    BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+                            .strength(5.0F, 6.0F)
+                            .noOcclusion()
+            )
+    );
+
+    /** B28 终焉水车:恒 256RPM 发电,基础容量同水车,有流体翻倍。 */
+    public static final Supplier<Block> EXTREME_WATER_WHEEL = BLOCKS.register(
+            "extreme_water_wheel",
+            () -> new ExtremeWaterWheelBlock(
+                    BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+                            .strength(5.0F, 6.0F)
+                            .noOcclusion()
+            )
+    );
+
+    /** B30 终焉连接器:CT 方块,贴合成器背面组网,供终端统一管理。 */
+    public static final Supplier<Block> EXTREME_CONNECTOR = BLOCKS.register(
+            "extreme_connector",
+            () -> new ExtremeConnectorBlock(
+                    BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+                            .strength(5.0F, 6.0F)
+                            .noOcclusion()
+            )
+    );
+
+    /** B29 终焉动能合成终端:选配方自动从相邻仓库调集材料投入合成器网络。 */
+    public static final Supplier<Block> EXTREME_CRAFTING_TERMINAL = BLOCKS.register(
+            "extreme_crafting_terminal",
+            () -> new ExtremeCraftingTerminalBlock(
                     BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
                             .strength(5.0F, 6.0F)
                             .noOcclusion()

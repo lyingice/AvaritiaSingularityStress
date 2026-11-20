@@ -26,6 +26,14 @@ public class ModCreativeTabs {
                         // 本模组的终焉合成器家族
                         output.accept(ModItems.EXTREME_MECHANICAL_CRAFTER.get());
                         output.accept(ModItems.EXTREME_SMITHING_CRAFTER.get());
+                        // B26 炽骨立方合成器（低配版终焉合成器）
+                        output.accept(ModItems.BLAZE_CUBE_CRAFTER.get());
+                        // B27 终焉钻头 / B28 终焉水车
+                        output.accept(ModItems.EXTREME_DRILL.get());
+                        output.accept(ModItems.EXTREME_WATER_WHEEL.get());
+                        // B30 终焉连接器 / B29 终焉动能合成终端
+                        output.accept(ModItems.EXTREME_CONNECTOR.get());
+                        output.accept(ModItems.EXTREME_CRAFTING_TERMINAL.get());
                         output.accept(ModItems.NEUTRON_EXTENDO_GRIP.get());
                         output.accept(ModItems.SINGULARITY_ROTATION_SPEED_CONTROLLER.get());
                         output.accept(ModItems.SINGULARITY_STABILIZER.get());

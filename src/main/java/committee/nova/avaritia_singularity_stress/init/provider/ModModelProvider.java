@@ -20,6 +20,9 @@ public class ModModelProvider extends ItemModelProvider {
     protected void registerModels() {
         generateCrafterItem("extreme_mechanical_crafter");
         generateCrafterItem("extreme_smithing_crafter");
+        generateBlazeCubeCrafterItem();
+        // B27 终焉钻头物品模型为手写复制(models/item/extreme_drill.json,本地贴图),不在此生成。
+        // B28 终焉水车物品模型为手写 OBJ(models/item/extreme_water_wheel.json,固定本地贴图),不在此生成。
         withExistingParent("neutron_extendo_grip", modLoc("item/neutron_extendo_grip/item"));
         // B6 奇点转速控制器:覆盖 Create 物品展示模型的全部纹理槽位,
         // 与方块模型共用 textures/block/singularity_rotation_speed_controller/ 下的贴图。
@@ -121,6 +124,27 @@ public class ModModelProvider extends ItemModelProvider {
                                 "block/create/crystal_matrix_casing"
                         )
                 );
+    }
+
+    /**
+     * B26 炽骨立方合成器物品模型:几何继承 Create 机械合成器物品形态,
+     * 全部纹理槽指向 blaze_cube_crafter 专属占位贴图(#9 为齿轮)。
+     */
+    private void generateBlazeCubeCrafterItem() {
+        String name = "blaze_cube_crafter";
+        String tex = "blaze_cube_mechanical_crafter";
+        withExistingParent(
+                name,
+                ResourceLocation.fromNamespaceAndPath("create", "block/mechanical_crafter/item")
+        )
+                .texture("3", modLoc("block/" + tex + "/crafter_thingies"))
+                .texture("4", modLoc("block/" + tex + "/crafter_side"))
+                .texture("5", modLoc("block/" + tex + "/blaze_cube_casing"))
+                .texture("7", modLoc("block/" + tex + "/blaze_cube_gearbox"))
+                .texture("8", modLoc("block/" + tex + "/crafter_inside"))
+                // 齿轮:用炽骨立方齿轮贴图 blaze_cube_cogwheel(与包壳齿轮同源)
+                .texture("9", modLoc("block/blaze_cube_cogwheel"))
+                .texture("particle", modLoc("block/" + tex + "/blaze_cube_casing"));
     }
 }
 

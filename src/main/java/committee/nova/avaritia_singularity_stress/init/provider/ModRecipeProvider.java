@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import committee.nova.avaritia_singularity_stress.AvaritiaSingularityStressMod;
+import committee.nova.avaritia_singularity_stress.content.recipes.BlazeCubeCraftingRecipe;
 import committee.nova.avaritia_singularity_stress.content.recipes.ExtremeKineticCraftingRecipe;
 import committee.nova.avaritia_singularity_stress.content.recipes.ExtremeKineticSmithingRecipe;
 import net.minecraft.core.HolderLookup;
@@ -81,6 +82,16 @@ public class ModRecipeProvider extends RecipeProvider {
 
     public static ExtremeKineticSmithingRecipeBuilder extremeKineticSmithing(ItemLike result) {
         return new ExtremeKineticSmithingRecipeBuilder(result);
+    }
+
+    // ===== B31 炽骨立方专属 builder =====
+
+    public static BlazeCubeCraftingRecipeBuilder blazeCubeCrafting(ItemLike result, int count) {
+        return new BlazeCubeCraftingRecipeBuilder(result, count);
+    }
+
+    public static BlazeCubeCraftingRecipeBuilder blazeCubeCrafting(ItemLike result) {
+        return blazeCubeCrafting(result, 1);
     }
 
     // ===== 终焉动能合成 =====
@@ -231,6 +242,98 @@ public class ModRecipeProvider extends RecipeProvider {
             ExtremeKineticSmithingRecipe recipe = new ExtremeKineticSmithingRecipe(
                     template, base, additions, new ItemStack(result));
             output.accept(id, recipe, null);
+        }
+    }
+
+    // ===== B31 炽骨立方专属 =====
+
+    /** 与 ExtremeKineticCraftingRecipeBuilder 同构，产物类型为 blaze_cube_crafting。 */
+    public static class BlazeCubeCraftingRecipeBuilder {
+        private final Item result;
+        private final int count;
+        private final List<String> pattern = Lists.newArrayList();
+        private final Map<Character, Ingredient> key = Maps.newLinkedHashMap();
+        private boolean acceptMirrored = true;
+
+        private BlazeCubeCraftingRecipeBuilder(ItemLike result, int count) {
+            this.result = result.asItem();
+            this.count = count;
+        }
+
+        public BlazeCubeCraftingRecipeBuilder key(char symbol, TagKey<Item> tag) {
+            return key(symbol, Ingredient.of(tag));
+        }
+
+        public BlazeCubeCraftingRecipeBuilder key(char symbol, ItemLike item) {
+            return key(symbol, Ingredient.of(item));
+        }
+
+        public BlazeCubeCraftingRecipeBuilder key(char symbol, Ingredient ingredient) {
+            if (this.key.containsKey(symbol)) {
+                throw new IllegalArgumentException("Symbol '" + symbol + "' is already defined!");
+            }
+            if (symbol == ' ') {
+                throw new IllegalArgumentException("Symbol ' ' (whitespace) is reserved");
+            }
+            this.key.put(symbol, ingredient);
+            return this;
+        }
+
+        public BlazeCubeCraftingRecipeBuilder patternLine(String line) {
+            if (!this.pattern.isEmpty() && line.length() != this.pattern.getFirst().length()) {
+                throw new IllegalArgumentException("Pattern must be the same width on every line!");
+            }
+            this.pattern.add(line);
+            return this;
+        }
+
+        /** 禁止水平镜像匹配(默认允许)。 */
+        public BlazeCubeCraftingRecipeBuilder disallowMirrored() {
+            this.acceptMirrored = false;
+            return this;
+        }
+
+        public void build(RecipeOutput output) {
+            build(output, ResourceLocation.fromNamespaceAndPath(
+                    AvaritiaSingularityStressMod.MODID, resultId()));
+        }
+
+        public void build(RecipeOutput output, ResourceLocation id) {
+            validate(id);
+            BlazeCubeCraftingRecipe recipe = new BlazeCubeCraftingRecipe(
+                    "",
+                    CraftingBookCategory.MISC,
+                    ShapedRecipePattern.of(key, pattern),
+                    new ItemStack(result, count),
+                    true,
+                    acceptMirrored);
+            output.accept(id, recipe, null);
+        }
+
+        private String resultId() {
+            return net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(this.result).getPath();
+        }
+
+        private void validate(ResourceLocation recipeId) {
+            if (pattern.isEmpty()) {
+                throw new IllegalStateException("No pattern is defined for recipe " + recipeId + "!");
+            }
+            Set<Character> unused = Sets.newHashSet(key.keySet());
+            unused.remove(' ');
+            for (String line : pattern) {
+                for (int i = 0; i < line.length(); ++i) {
+                    char c = line.charAt(i);
+                    if (!key.containsKey(c) && c != ' ') {
+                        throw new IllegalStateException(
+                                "Pattern in recipe " + recipeId + " uses undefined symbol '" + c + "'");
+                    }
+                    unused.remove(c);
+                }
+            }
+            if (!unused.isEmpty()) {
+                throw new IllegalStateException(
+                        "Ingredients are defined but not used in pattern for recipe " + recipeId);
+            }
         }
     }
 }

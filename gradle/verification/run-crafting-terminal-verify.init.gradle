@@ -1,0 +1,13 @@
+// 隔离验证 B29 终端 / B30 连接器：runServer 游戏目录指到干净目录。
+// 注入 -Davaritia.crafting_terminal.selftest=true：开服后自动跑真实动力出货、失败/取消/退款等回归并 halt。
+// 断言数与通过与否以 latest.log 中 crafting-terminal-selftest 的 RESULT/DONE 为准；不要沿用旧版 8 条口径。
+// 用法： ./gradlew runServer --offline --init-script gradle/verification/run-crafting-terminal-verify.init.gradle
+gradle.projectsEvaluated {
+    def task = rootProject.tasks.findByName('runServer')
+    if (task != null) {
+        task.gameDirectory = rootProject.file('run/verification/crafting-terminal')
+        // 防止 Windows 停服后 AWT 非守护线程吊住 JVM
+        task.jvmArgs('-Djava.awt.headless=true')
+        task.jvmArgs('-Davaritia.crafting_terminal.selftest=true')
+    }
+}

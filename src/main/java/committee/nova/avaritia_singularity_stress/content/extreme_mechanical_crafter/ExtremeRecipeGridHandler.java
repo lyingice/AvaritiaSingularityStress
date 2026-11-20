@@ -11,9 +11,12 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.Nullable;
 
 import com.google.common.base.Predicates;
+import committee.nova.avaritia_singularity_stress.content.blaze_cube_crafter.BlazeCubeCrafterBlock;
 import committee.nova.avaritia_singularity_stress.content.extreme_smithing_crafter.ExtremeSmithingCrafterBlock;
+import committee.nova.avaritia_singularity_stress.content.recipes.BlazeCubeCraftingRecipe;
 import committee.nova.avaritia_singularity_stress.content.recipes.ExtremeKineticCraftingInput;
 import committee.nova.avaritia_singularity_stress.content.recipes.ExtremeKineticCraftingRecipe;
 import committee.nova.avaritia_singularity_stress.content.recipes.ExtremeKineticSmithingInput;
@@ -23,6 +26,9 @@ import committee.nova.mods.avaritia.api.common.crafting.ITierCraftingRecipe;
 import committee.nova.mods.avaritia.api.common.crafting.TierInput;
 import committee.nova.mods.avaritia.common.crafting.input.ExtremeSmithingRecipeInput;
 import committee.nova.mods.avaritia.common.crafting.recipe.ExtremeSmithingRecipe;
+import committee.nova.mods.avaritia.common.crafting.recipe.NoConsumeCatalystShapedRecipe;
+import committee.nova.mods.avaritia.common.crafting.recipe.ShapedTableCraftingRecipe;
+import committee.nova.mods.avaritia.common.crafting.recipe.ShapelessTableCraftingRecipe;
 import committee.nova.mods.avaritia.init.registry.ModRecipeTypes;
 
 import net.createmod.catnip.data.Iterate;
@@ -30,12 +36,16 @@ import net.createmod.catnip.math.Pointing;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -43,9 +53,10 @@ import net.minecraft.world.level.block.state.BlockState;
  * 终焉合成器的配方链与网格处理。
  * <p>
  * 算法完整复制原版 {@code RecipeGridHandler}（链路 BFS、目标/前置判定、网格聚合、
- * 坐标变换），唯一的差异在 {@link #tryToApplyRecipe}：
- * <b>终焉合成器只匹配无尽贪婪（Avaritia）分级配方</b>，
- * 不再匹配工作台配方，也不匹配 {@code create:mechanical_crafting}。
+ * 坐标变换），配方权限由 {@link #tryToApplyRecipe} 区分：
+ * 终焉系列支持专属动能、B31 炽骨子类型与 Avaritia 配方，B26 炽骨系列支持
+ * B31 炽骨专属类型与 Avaritia 前两档工作台。
+ * 两个系列独立组网，均不匹配普通工作台与 {@code create:mechanical_crafting}。
  */
 public class ExtremeRecipeGridHandler {
 
@@ -127,7 +138,7 @@ public class ExtremeRecipeGridHandler {
         }
 
         BlockState targetState = targetBE.getBlockState();
-        if (!ExtremeCrafterHelper.isCrafter(targetState)) {
+        if (!ExtremeCrafterHelper.canConnect(state, targetState)) {
             return null;
         }
         if (state.getValue(HORIZONTAL_FACING) != targetState.getValue(HORIZONTAL_FACING)) {
@@ -162,8 +173,11 @@ public class ExtremeRecipeGridHandler {
             }
 
             BlockPos neighbourPos = pos.relative(facing);
+            if (!world.isLoaded(neighbourPos)) {
+                continue; // 不因链检查主动加载区块
+            }
             BlockState neighbourState = world.getBlockState(neighbourPos);
-            if (!ExtremeCrafterHelper.isCrafter(neighbourState)) {
+            if (!ExtremeCrafterHelper.canConnect(blockState, neighbourState)) {
                 continue;
             }
             if (ExtremeMechanicalCrafterBlock.getTargetDirection(neighbourState) != facing.getOpposite()) {
@@ -186,24 +200,15 @@ public class ExtremeRecipeGridHandler {
     /**
      * 尝试在聚合网格上匹配配方。
      * <p>
-     * 两条通路,按优先级:
-     * <ol>
-     *   <li><b>终焉锻造配方</b> —— 当整条合成链中出现终焉锻造器时启用。
-     *       锻造配方需要 5 个输入,正好对应「中心锻造器 + 四向 4 个合成器」的十字布局。</li>
-     *   <li><b>无尽贪婪分级配方</b> —— 原有通路,作为回落。</li>
-     * </ol>
-     * 注意终焉合成器<b>不</b>匹配工作台配方,也<b>不</b>匹配 {@code create:mechanical_crafting}。
-     */
-    /**
-     * 尝试在聚合网格上匹配配方。
-     * <p>
      * 匹配优先级(专属优先,无尽贪婪回退):
      * <ol>
      *   <li>链含终焉锻造器 → <b>本模组终焉动能锻造</b>(extreme_kinetic_smithing);</li>
      *   <li>链含终焉锻造器 → 回落无尽贪婪终焉锻造(avaritia:extreme_smithing);</li>
      *   <li><b>本模组终焉动能合成</b>(extreme_kinetic_crafting);</li>
+     *   <li><b>B31 炽骨立方子类型</b>(blaze_cube_crafting,终焉动力兼容);</li>
      *   <li>回落无尽贪婪分级配方(crafting_table_recipe)。</li>
      * </ol>
+     * 炽骨立方合成器：B31 专属类型优先，回落仅 Avaritia 前两档。
      * 终焉合成器<b>不</b>匹配工作台配方,也<b>不</b>匹配 {@code create:mechanical_crafting}。
      */
     public static ItemStack tryToApplyRecipe(Level level, ExtremeMechanicalCrafterBlockEntity crafter) {
@@ -212,6 +217,16 @@ public class ExtremeRecipeGridHandler {
         }
         GroupedItems items = crafter.getGroupedItems();
         items.calcStats();
+
+        // B26：在所有专属合成/锻造通路之前返回，不能仅过滤最后的工作台回退。
+        if (crafter.getBlockState().getBlock() instanceof BlazeCubeCrafterBlock) {
+            // B31 炽骨专属子类型优先于 Avaritia 前两档回退。
+            ItemStack blazeCube = tryBlazeCubeCrafting(level, items);
+            if (blazeCube != null && !blazeCube.isEmpty()) {
+                return blazeCube;
+            }
+            return tryAvaritiaRecipe(level, items, recipe -> recipe.getTier() == 1 || recipe.getTier() == 2);
+        }
 
         if (chainHasSmithingCrafter(crafter)) {
             // ① 本模组专属终焉动能锻造
@@ -232,8 +247,142 @@ public class ExtremeRecipeGridHandler {
             return kineticCrafting;
         }
 
+        // ③.5 B31 炽骨立方子类型(终焉动力合成器兼容)
+        ItemStack blazeCubeCrafting = tryBlazeCubeCrafting(level, items);
+        if (blazeCubeCrafting != null && !blazeCubeCrafting.isEmpty()) {
+            return blazeCubeCrafting;
+        }
+
         // ④ 回落无尽贪婪分级配方
-        return tryAvaritiaRecipe(level, items);
+        return tryAvaritiaRecipe(level, items, Predicates.alwaysTrue());
+    }
+
+    /**
+     * B29 终端自动合成支持范围（服务端真源）。
+     * <p>
+     * 只接受两类可稳定由公开 {@link Recipe#getIngredients()} 推导的配方：
+     * 终焉动能合成、Avaritia 分级工作台的有序/无序基础配方。
+     * {@code NoConsumeCatalystShapedRecipe} 仅额外覆写 {@code getRemainingItems}，
+     * 可沿原生返还路径支持。
+     * <p>
+     * 明确拒绝当前 Avaritia 中带隐藏匹配条件的特殊子类：
+     * {@code FullMatterClusterRecipe}（要求物质团 contents ≥ 4096）、
+     * {@code EternalSingularityCraftRecipe} / 默认组 {@code InfinityCatalystCraftRecipe}
+     * （普通 Ingredient 不区分同一奇点物品的组件）。这些配方无法从公开 ingredients
+     * 稳定推导候选，必须在列表/起工前过滤，不能先投料再发现不匹配。
+     */
+    public static boolean supportsAutoCraft(Recipe<?> recipe) {
+        if (recipe instanceof ExtremeKineticCraftingRecipe || recipe instanceof BlazeCubeCraftingRecipe) {
+            return true;
+        }
+        Class<?> type = recipe.getClass();
+        return type == ShapedTableCraftingRecipe.class
+                || type == NoConsumeCatalystShapedRecipe.class
+                || type == ShapelessTableCraftingRecipe.class;
+    }
+
+    /**
+     * 按网络品类收窄准入（B31 后续：终端支持炽骨网络）。
+     * 炽骨网络只放行 B31 专属类型与 Avaritia 前两档；终焉网络放行全部基础白名单。
+     * 合法单链必为单一品类（canConnect 跨系列断链），故按根品类一刀切即可。
+     */
+    public static boolean supportsAutoCraftFor(Recipe<?> recipe, boolean blazeNetwork) {
+        if (!supportsAutoCraft(recipe)) {
+            return false;
+        }
+        if (!blazeNetwork) {
+            return true;
+        }
+        if (recipe instanceof BlazeCubeCraftingRecipe) {
+            return true;
+        }
+        return recipe instanceof ITierCraftingRecipe tier
+                && (tier.getTier() == 1 || tier.getTier() == 2);
+    }
+
+    /**
+     * B29 根完成聚合时按终端任务记录的 recipeId 精确匹配，绝不回退其它配方。
+     * 返回结果与 {@code getRemainingItems} 返还物；不匹配返回 null。
+     */
+    @Nullable
+    public static TerminalCraftOutcome tryToApplyTerminalRecipe(
+            Level level, GroupedItems items, @Nullable ResourceLocation recipeId) {
+        if (level == null || level.isClientSide || recipeId == null) {
+            return null;
+        }
+        RecipeHolder<?> holder = level.getRecipeManager().byKey(recipeId).orElse(null);
+        if (holder == null || !supportsAutoCraft(holder.value())) {
+            return null;
+        }
+        items.calcStats();
+        Recipe<?> recipe = holder.value();
+
+        if (recipe instanceof ShapedTableCraftingRecipe shaped) {
+            TierInput input = createTierInput(items, shaped.getTier());
+            return matchAndAssembleTier(level, shaped, input);
+        }
+        if (recipe instanceof ShapelessTableCraftingRecipe shapeless) {
+            TierInput input = createTierInput(items, shapeless.getTier());
+            return matchAndAssembleTier(level, shapeless, input);
+        }
+        if (recipe instanceof ExtremeKineticCraftingRecipe kinetic) {
+            return matchKineticLike(level, items, kinetic);
+        }
+        if (recipe instanceof BlazeCubeCraftingRecipe blazeCube) {
+            return matchKineticLike(level, items, blazeCube);
+        }
+        return null;
+    }
+
+    /** 动能合成与 B31 炽骨子类型共用紧凑网格匹配/装配/返还路径。 */
+    @Nullable
+    private static TerminalCraftOutcome matchKineticLike(Level level, GroupedItems items, ShapedRecipe recipe) {
+        if (items.onlyEmptyItems()) {
+            return null;
+        }
+        CraftingInput input = ExtremeKineticCraftingInput.of(items);
+        if (!recipe.matches(input, level)) {
+            return null;
+        }
+        ItemStack result = recipe.assemble(input, level.registryAccess());
+        if (result == null || result.isEmpty()) {
+            return null;
+        }
+        return new TerminalCraftOutcome(result, recipe.getRemainingItems(input));
+    }
+
+    private static TerminalCraftOutcome matchAndAssembleTier(
+            Level level, ITierCraftingRecipe recipe, TierInput input) {
+        if (!recipe.matches(input, level)) {
+            return null;
+        }
+        ItemStack result = recipe.assemble(input, level.registryAccess());
+        if (result == null || result.isEmpty()) {
+            return null;
+        }
+        return new TerminalCraftOutcome(result, recipe.getRemainingItems(input));
+    }
+
+    /** B29 精确匹配/根合成共用的 TierInput 构造：与聚合网格行序完全一致。 */
+    public static TierInput createTierInput(GroupedItems items, int tier) {
+        items.calcStats();
+        int width = items.width;
+        int height = items.height;
+        List<ItemStack> stacks = new ArrayList<>(Math.max(0, width * height));
+        if (width > 0 && height > 0) {
+            for (int row = 0; row < height; row++) {
+                int y = items.maxY - row;
+                for (int col = 0; col < width; col++) {
+                    ItemStack stack = items.grid.get(Pair.of(items.minX + col, y));
+                    stacks.add(stack == null ? ItemStack.EMPTY : stack);
+                }
+            }
+        }
+        return TierInput.of(Math.max(0, width), Math.max(0, height), stacks, tier);
+    }
+
+    /** 终端精确配方的产物与返还物。 */
+    public record TerminalCraftOutcome(ItemStack result, NonNullList<ItemStack> remaining) {
     }
 
     /**
@@ -249,6 +398,28 @@ public class ExtremeRecipeGridHandler {
                 .getAllRecipesFor(ModExtremeRecipeTypes.EXTREME_KINETIC_CRAFTING_TYPE.get());
         for (RecipeHolder<ExtremeKineticCraftingRecipe> holder : recipes) {
             ExtremeKineticCraftingRecipe recipe = holder.value();
+            if (!recipe.matches(input, level)) {
+                continue;
+            }
+            ItemStack result = recipe.assemble(input, level.registryAccess());
+            if (result != null && !result.isEmpty()) {
+                return result;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 匹配 B31 炽骨立方专属配方(blaze_cube_crafting)。
+     * 与 tryKineticCrafting 同构:紧凑网格 + 手动遍历专属 RecipeType 分桶。
+     * 炽骨立方合成器与终焉动力合成器共用此通路;原版工作台不在该分桶内,天然不可做。
+     */
+    private static ItemStack tryBlazeCubeCrafting(Level level, GroupedItems items) {
+        CraftingInput input = ExtremeKineticCraftingInput.of(items);
+        List<RecipeHolder<BlazeCubeCraftingRecipe>> recipes = level.getRecipeManager()
+                .getAllRecipesFor(ModExtremeRecipeTypes.BLAZE_CUBE_CRAFTING_TYPE.get());
+        for (RecipeHolder<BlazeCubeCraftingRecipe> holder : recipes) {
+            BlazeCubeCraftingRecipe recipe = holder.value();
             if (!recipe.matches(input, level)) {
                 continue;
             }
@@ -406,7 +577,8 @@ public class ExtremeRecipeGridHandler {
         return null;
     }
 
-    private static ItemStack tryAvaritiaRecipe(Level level, GroupedItems items) {
+    private static ItemStack tryAvaritiaRecipe(Level level, GroupedItems items,
+                                                Predicate<ITierCraftingRecipe> allowedRecipe) {
         Map<Pair<Integer, Integer>, ItemStack> grid = items.grid;
         if (grid.isEmpty()) {
             return null;
@@ -418,24 +590,19 @@ public class ExtremeRecipeGridHandler {
             return null;
         }
 
-        // 世界网格的 y 越大越高；配方第一行是最上面一行，
-        // 因此按 maxY 递减填充，使列表行 0 对应世界最高一行。
-        List<ItemStack> stacks = new ArrayList<>(width * height);
-        for (int row = 0; row < height; row++) {
-            int y = items.maxY - row;
-            for (int col = 0; col < width; col++) {
-                ItemStack stack = grid.get(Pair.of(items.minX + col, y));
-                stacks.add(stack == null ? ItemStack.EMPTY : stack);
-            }
-        }
-
         List<RecipeHolder<ITierCraftingRecipe>> recipes = level.getRecipeManager()
                 .getAllRecipesFor(ModRecipeTypes.CRAFTING_TABLE_RECIPE.get());
 
         for (RecipeHolder<ITierCraftingRecipe> holder : recipes) {
             ITierCraftingRecipe recipe = holder.value();
-            // 用配方自身的等级构造输入，使终焉合成器可以处理无尽贪婪的全部等级
-            TierInput input = TierInput.of(width, height, stacks, recipe.getTier());
+            // Avaritia 1.4.1 的 getTier 会为未指定等级的配方按尺寸/材料数推导等级，
+            // 所以必须先过滤，再用配方等级构造输入，不能把所有 tier=0 的大配方直接放行。
+            if (!allowedRecipe.test(recipe)) {
+                continue;
+            }
+            // 世界网格的 y 越大越高；配方第一行是最上面一行，
+            // 因此按 maxY 递减填充，使列表行 0 对应世界最高一行。
+            TierInput input = createTierInput(items, recipe.getTier());
             if (!recipe.matches(input, level)) {
                 continue;
             }
