@@ -1,4 +1,14 @@
-# Avaritia Singularity Stress · 无尽贪婪：奇点应力
+<h1 align="center">Avaritia Singularity Stress · 无尽贪婪：奇点应力</h1>
+
+<p align="center">把无尽贪婪的终焉级机器、奇点应力与自动合成网络，装进 Create 的动力体系。</p>
+
+<p align="center">
+  <img alt="Minecraft 1.21.1" src="https://img.shields.io/static/v1?label=Minecraft&message=1.21.1&color=62b47a">
+  <img alt="NeoForge 21.1" src="https://img.shields.io/static/v1?label=NeoForge&message=21.1&color=ffa100">
+  <img alt="Create 6.x" src="https://img.shields.io/static/v1?label=Create&message=6.x&color=8b5cf6">
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/static/v1?label=license&message=MIT&color=4c9a2a"></a>
+  <a href="LICENSE-ASSETS"><img alt="Assets: CC BY-NC-SA 4.0" src="https://img.shields.io/static/v1?label=assets&message=CC%20BY-NC-SA%204.0&color=ef9421"></a>
+</p>
 
 A Minecraft **1.21.1 / NeoForge** mod and **Create** addon themed around *Avaritia* (Re-Avaritia).
 It adds a singularity-stress (SSU) economy, extreme-tier kinetic machines, and a connector-networked
